@@ -7,7 +7,7 @@ pas de « DNS » avant que ce soit nécessaire.
 - **Catégorie :** Outils
 - **Site web :** https://github.com/Ofanon/adzero
 - **Politique de confidentialité :** https://github.com/Ofanon/adzero/blob/main/PRIVACY.md
-- **Contact :** EMAIL_A_REMPLIR
+- **Contact :** contact.gameskar@gmail.com
 - **Licence :** GPL-3.0
 - **Prix :** gratuit, sans achat intégré, sans publicité
 - **Version :** 1.0 (versionCode 2) · Android 7.0 et plus
