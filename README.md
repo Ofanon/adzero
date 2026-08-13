@@ -28,10 +28,16 @@ a minute of spinner.
 
 ## How it works
 
-A local `VpnService` — no remote server, nothing leaves the device. The trick
-is the routing: **only the tunnel's DNS address is routed into the app**, so
-every other packet leaves normally. No userspace TCP/IP stack to maintain, and
-no measurable battery cost.
+A local `VpnService` — no remote server, and nothing AdZero learns leaves the
+device. The trick is the routing: **only the tunnel's DNS address is routed
+into the app**, so every other packet leaves normally. No userspace TCP/IP
+stack to maintain, and no measurable battery cost.
+
+A question that is *not* for an ad server still has to be answered, so AdZero
+passes it to the resolver the phone was already using — your ISP's, your
+router's, whatever the network hands out — and sends it over that same network.
+It does not redirect your DNS anywhere. A public resolver is used only if the
+phone declines to name one at all; see [PRIVACY.md](PRIVACY.md).
 
 For an ad-network domain, the app simply does not answer.
 

@@ -6,6 +6,9 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
 import android.net.VpnService
 import android.os.Build
 import android.os.ParcelFileDescriptor
@@ -14,6 +17,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.net.DatagramPacket
 import java.net.DatagramSocket
+import java.net.Inet4Address
 import java.net.InetAddress
 import java.util.concurrent.Executors
 
@@ -64,7 +68,95 @@ class SilenceVpnService : VpnService() {
 
         private const val LOCAL_IP = "10.111.222.1"
         private const val DNS_IP = "10.111.222.2"
-        private const val UPSTREAM_DNS = "1.1.1.1"
+
+        /**
+         * Used only when the phone will not say what its own resolvers are.
+         *
+         * Every legitimate query used to go here unconditionally, which was
+         * wrong twice over. It made the app's one promise false — the domain
+         * names of everything the phone does were leaving the device to a
+         * company nobody had been told about — and it broke any network that
+         * runs its own resolver, because a school's or a company's internal
+         * names mean nothing to a public one. "The wifi stops working when
+         * AdZero is on" would have been the bug report.
+         */
+        private const val FALLBACK_DNS = "1.1.1.1"
+    }
+
+    /**
+     * Where a legitimate question gets sent, and over which network.
+     *
+     * Re-read periodically rather than once at startup: the answer changes the
+     * moment the phone leaves wifi for mobile data, and a resolver belonging to
+     * a network no longer attached answers nothing at all.
+     */
+    @Volatile private var route: Pair<Network, InetAddress>? = null
+    @Volatile private var routeReadAt = 0L
+
+    private fun upstream(): Pair<Network?, InetAddress> {
+        val now = System.currentTimeMillis()
+        if (now - routeReadAt > 10_000L || route == null) {
+            routeReadAt = now
+            val fresh = findRoute()
+            // Logged when it changes, never per query. Which resolver AdZero
+            // hands questions to is the one claim in the privacy policy that
+            // somebody might reasonably want to check for themselves, and
+            // "read the source" is a worse answer than "run one command".
+            if (fresh?.second != route?.second) {
+                Log.i(TAG, "resolver: " + (fresh?.second?.hostAddress ?: "$FALLBACK_DNS (fallback)"))
+            }
+            route = fresh
+        }
+        return route ?: (null to InetAddress.getByName(FALLBACK_DNS))
+    }
+
+    /**
+     * A network that is not our tunnel, and the resolver that belongs to it.
+     *
+     * The two have to be chosen together, and the socket has to be bound to the
+     * network afterwards. A phone commonly has wifi and mobile data up at the
+     * same time, each with its own resolver, and an ISP's resolver is only
+     * reachable from inside that ISP's network. Picking the mobile resolver
+     * while the traffic leaves over wifi does not fail fast — it hangs until
+     * the timeout, on every single query, which would look exactly like the
+     * silence AdZero reserves for ad servers.
+     */
+    private fun findRoute(): Pair<Network, InetAddress>? = try {
+        val cm = getSystemService(ConnectivityManager::class.java)
+
+        fun usable(n: Network): Boolean {
+            val caps = cm.getNetworkCapabilities(n) ?: return false
+            return !caps.hasTransport(NetworkCapabilities.TRANSPORT_VPN) &&
+                    caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        }
+
+        // The network the phone would be using by itself. Before the tunnel is
+        // up that is simply the active one; afterwards the active one is the
+        // tunnel, so the ranking below stands in for the choice the system had
+        // already made — a validated network first, wifi ahead of mobile data.
+        val active = cm.activeNetwork
+        val candidates: List<Network> =
+            if (active != null && usable(active)) listOf(active)
+            else cm.allNetworks.filter { usable(it) }.sortedBy { network ->
+                val caps = cm.getNetworkCapabilities(network)
+                val validated = caps?.hasCapability(
+                    NetworkCapabilities.NET_CAPABILITY_VALIDATED
+                ) == true
+                val wifi = caps?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true
+                (if (validated) 0 else 2) + (if (wifi) 0 else 1)
+            }
+
+        candidates.firstNotNullOfOrNull { network ->
+            // IPv4 first: the tunnel is v4-only, and a v6 resolver on a network
+            // whose v6 does not actually work is another silent timeout.
+            cm.getLinkProperties(network)?.dnsServers
+                ?.sortedBy { if (it is Inet4Address) 0 else 1 }
+                ?.firstOrNull()
+                ?.let { network to it }
+        }
+    } catch (e: Exception) {
+        Log.d(TAG, "no system resolver available", e)
+        null
     }
 
     private var attribution: Attribution? = null
@@ -280,8 +372,11 @@ class SilenceVpnService : VpnService() {
                     // Without protect(), the answer would loop back through the tunnel.
                     protect(socket)
                     socket.soTimeout = 5000
-                    val upstream = InetAddress.getByName(UPSTREAM_DNS)
-                    socket.send(DatagramPacket(question, question.size, upstream, 53))
+                    val (network, server) = upstream()
+                    // Bound to the network the resolver belongs to, so the
+                    // question leaves by the door it can be answered through.
+                    network?.bindSocket(socket)
+                    socket.send(DatagramPacket(question, question.size, server, 53))
 
                     val back = ByteArray(4096)
                     val packet = DatagramPacket(back, back.size)
