@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The diagonal bar of Oscar's AdZeroLogoV3, on the 108dp adaptive-icon canvas.
+
+  From (115.987, 96) to (395, 416) of 512 with a 65 stroke, same 72/445 fit as
+  the ring. Both ends fall inside the ring's band, so nothing sticks out
+  whichever of the two is drawn on top.
+
+  In V3 this comes last, over the megaphone: that is what turns a loudspeaker
+  into a loudspeaker being refused.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <path
+        android:pathData="M31.35,28.11 L76.49,79.89"
+        android:strokeWidth="10.52">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="54" android:startY="21.56"
+                android:endX="54" android:endY="90.0"
+                android:startColor="#D8FF4A"
+                android:endColor="#6FD84A" />
+        </aapt:attr>
+    </path>
+</vector>

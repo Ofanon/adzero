@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The count, what it bought, and one button.
+
+  It used to be the count alone, which answers "how many" and nothing else. A
+  number with no unit is a score; the two figures under it are what the number
+  actually gave back, and they are the reason to keep the widget on a home
+  screen rather than glance at it once.
+
+  Still no third row: this has to stay readable at a glance, on a two-by-two
+  cell, over any wallpaper.
+
+  No android:text on anything with words in it. A widget is drawn by the
+  launcher, not by AdZero, so a @string here is resolved with the launcher's
+  configuration — the system language, never the one chosen inside the app.
+  Every label is filled from code instead, from a context that carries the
+  app's own locale.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/widget_bg"
+    android:padding="14dp"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/widget_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="34sp"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="#F2F5EE"
+        android:shadowColor="#99C9F73D"
+        android:shadowRadius="18"
+        android:shadowDx="0"
+        android:shadowDy="0" />
+
+    <TextView
+        android:id="@+id/widget_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="11sp"
+        android:letterSpacing="0.06"
+        android:textColor="#8A9382"
+        android:layout_marginBottom="10dp" />
+
+    <!-- Two columns rather than two lines: side by side they read as one fact
+         with two halves, stacked they read as a list that needs going through. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/widget_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 s"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="#F2F5EE" />
+
+            <TextView
+                android:id="@+id/widget_time_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="9sp"
+                android:letterSpacing="0.04"
+                android:textColor="#525B4C" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/widget_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 Mo"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="#F2F5EE" />
+
+            <TextView
+                android:id="@+id/widget_data_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="9sp"
+                android:letterSpacing="0.04"
+                android:textColor="#525B4C" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/widget_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="11dp"
+        android:paddingBottom="11dp"
+        android:textSize="12sp"
+        android:fontFamily="sans-serif-medium"
+        android:letterSpacing="0.05"
+        android:textColor="#8A9382"
+        android:background="@drawable/widget_pill_off" />
+</LinearLayout>

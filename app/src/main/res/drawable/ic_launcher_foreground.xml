@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Oscar's AdZeroLogoV3, stacked in the order the SVG stacks it: ring, then
+  megaphone, then bar over both.
+
+  The ring and the bar are the same geometry V2 already shipped, so they stay
+  vectors. The megaphone is new, and Oscar's export delivers it as an embedded
+  bitmap behind a <pattern> rather than as paths — a VectorDrawable has no way
+  to hold that, so it ships as one. It is pre-rotated and pre-positioned into
+  this exact canvas (see the script that generated it), which is why no inset
+  or rotation is needed here: all three layers already agree on where 54,54 is.
+
+  White, as in the SVG. Drawing it in the ring's lime instead was tried and it
+  disappeared — the megaphone and the bar crossing it became one lime blob,
+  and the shape stopped being readable at launcher size.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/ic_launcher_ring" />
+    <item>
+        <bitmap
+            android:src="@drawable/ic_launcher_mark"
+            android:gravity="fill" />
+    </item>
+    <item android:drawable="@drawable/ic_launcher_bar" />
+</layer-list>

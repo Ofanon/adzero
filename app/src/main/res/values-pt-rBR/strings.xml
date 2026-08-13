@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AdZero</string>
+
+    <string name="tab_home">Início</string>
+    <string name="tab_stats">Dados</string>
+    <string name="tab_apps">Apps</string>
+
+    <string name="state_on">PROTEGIDO</string>
+    <string name="state_off">SEM PROTEÇÃO</string>
+    <string name="tap_to_start">Toque para ativar</string>
+    <string name="tap_to_stop">Toque para desativar</string>
+
+    <string name="stat_ads">Anúncios bloqueados</string>
+    <string name="stat_time">Tempo ganho</string>
+    <string name="stat_apps">Apps vigiados</string>
+    <string name="stat_trackers">Rastreadores bloqueados</string>
+
+    <string name="home_hint_off">Ative o AdZero e jogue. Os anúncios param de aparecer.</string>
+    <string name="home_hint_on">Os anúncios morrem enquanto tentam carregar.</string>
+
+    <string name="bubble_allow">Mostrar um contador flutuante</string>
+    <string name="bubble_on">Contador flutuante · ligado</string>
+    <string name="bubble_off">Contador flutuante · desligado</string>
+    <string name="bubble_killed">eliminados</string>
+    <string name="widget_hint">Adicione o widget do AdZero à tela inicial para ativar com um toque.</string>
+
+    <string name="section_leaderboard">OS PIORES</string>
+    <string name="leaderboard_empty">Nada ainda. Ative o AdZero e abra um jogo.</string>
+    <string name="leaderboard_line">%1$d anúncios eliminados</string>
+
+    <string name="section_learned">NOVOS SERVIDORES DE ANÚNCIOS</string>
+    <string name="learned_hint">Vistos em vários apps sem relação, então provavelmente são anúncios. Toque para bloquear.</string>
+    <string name="learned_empty">Nada novo. Jogue vários jogos diferentes e o AdZero vai achar
+        os servidores que eles têm em comum.</string>
+    <string name="learned_need_usage">O AdZero precisa saber qual app está perguntando, para separar
+        os anúncios do resto. Toque aqui para permitir.</string>
+    <string name="learned_line">Visto em %1$d apps · %2$s</string>
+    <string name="action_block">BLOQUEAR</string>
+
+    <string name="section_custom">BLOQUEADOS POR VOCÊ</string>
+    <string name="custom_empty">Nada ainda. Os servidores que você bloquear aparecem aqui, para poder desfazer.</string>
+    <string name="action_unblock">DESBLOQUEAR</string>
+
+    <string name="section_domains">SERVIDORES MAIS BLOQUEADOS</string>
+    <string name="domains_empty">Nada ainda. Ative o AdZero e abra um jogo.</string>
+
+    <string name="warn_private_dns">O DNS privado está ligado (%1$s)\n\nSeu celular envia as
+        consultas direto para um servidor externo, então o AdZero não consegue vê-las. Desligue em
+        Configurações &gt; Rede e Internet &gt; DNS privado.</string>
+    <string name="error_no_tunnel">O AdZero não conseguiu iniciar. Provavelmente há outro app de VPN
+        ativo: o Android só permite um por vez.</string>
+
+    <string name="notification_channel">Proteção</string>
+    <string name="notification_text">Eliminando anúncios antes de carregarem</string>
+    <string name="notification_live">%1$d anúncios eliminados até agora</string>
+    <string name="notification_paused">Em pausa: os anúncios estão passando</string>
+    <string name="tile_on">Protegido</string>
+    <string name="tile_off">Desligado</string>
+
+    <string name="duration_hm">%1$d h %2$d min</string>
+    <string name="duration_m">%1$d min</string>
+    <string name="duration_s">%1$d s</string>
+
+    <string name="banner_title">Anúncios bloqueados em %1$s</string>
+    <string name="banner_sub">%1$d anúncios eliminados até agora</string>
+    <string name="banner_allow">Permitir avisos na tela</string>
+    <string name="banner_on">Avisos na tela · ligados</string>
+    <string name="banner_off">Avisos na tela · desligados</string>
+
+    <string name="action_pause">Pausa 5 min</string>
+    <string name="action_resume">Retomar</string>
+    <string name="action_stop_short">Parar</string>
+    <string name="paused_for">Em pausa · faltam %1$s</string>
+
+    <string name="apps_all">Todos os apps estão protegidos. Toque em um app para proteger só os que você escolher.</string>
+    <string name="apps_some">%1$d apps protegidos</string>
+    <string name="apps_reset">Proteger tudo de novo</string>
+    <string name="apps_restart_note">As mudanças valem quando a proteção reiniciar.</string>
+    <string name="apps_master_on">Todos os apps estão protegidos</string>
+    <string name="apps_master_off">Só os apps que você escolheu</string>
+    <string name="apps_master_hint">Toque para escolher você mesmo</string>
+    <string name="apps_loading">Carregando seus apps…</string>
+    <string name="apps_search">Procure um app</string>
+    <string name="apps_with_ads">COM ANÚNCIOS</string>
+    <string name="apps_others">TODO O RESTO</string>
+
+    <string name="section_history">ÚLTIMOS 7 DIAS</string>
+    <string name="best_day">Melhor dia · %1$d anúncios</string>
+    <string name="streak_days">%1$d dias seguidos</string>
+    <string name="advanced_show">Ver detalhes técnicos</string>
+    <string name="advanced_hide">Ocultar detalhes técnicos</string>
+
+    <string name="setup_title">TERMINAR A CONFIGURAÇÃO</string>
+    <string name="setup_grant">PERMITIR</string>
+    <string name="setup_done">Está tudo configurado.</string>
+    <string name="setup_vpn">Ativar a proteção</string>
+    <string name="setup_vpn_why">O Android pergunta uma vez. Nada sai do seu celular.</string>
+    <string name="setup_alerts">Avisos na tela</string>
+    <string name="setup_alerts_why">Mostra um aviso quando anúncios são eliminados num jogo.</string>
+    <string name="setup_usage">Reconhecer seus jogos</string>
+    <string name="setup_usage_why">Os anúncios são bloqueados de qualquer jeito. Sem isso, nada diz de qual jogo eles vieram, e suas estatísticas não têm nome nenhum.</string>
+
+    <string name="detail_networks">Servidores de anúncios que ele usa</string>
+    <string name="detail_none">Nenhum servidor identificado ainda.</string>
+
+    <string name="ob_skip">Pular</string>
+    <string name="ob_next">Continuar</string>
+    <string name="ob_start">Ativar a proteção</string>
+
+    <string name="ob1_title">O AdZero tira todos os anúncios</string>
+    <string name="ob1_body">Nos seus jogos e na internet. Eles não aparecem mais, e você não espera mais eles acabarem.</string>
+    <string name="ob1_p1">Sem mais vídeos pra aguentar</string>
+    <string name="ob1_p2">Sem mais banners atrapalhando</string>
+    <string name="ob1_p3">Nada pra pagar, nenhuma conta pra criar</string>
+
+    <string name="ob2_title">Algumas permissões</string>
+    <string name="ob2_body">O Android vai perguntar se você concorda. É normal: sem sua permissão, nenhum app pode filtrar nada.</string>
+    <string name="ob2_ready">Não falta mais nada para permitir.</string>
+
+    <string name="ob3_title">É isso</string>
+    <string name="ob3_body">Aperte o botão e vá jogar.</string>
+    <string name="ob3_p1">Conta os anúncios tirados</string>
+    <string name="ob3_p2">Acha anúncios novos sem atualização</string>
+    <string name="ob3_p3">Um botão na sua tela inicial</string>
+    <string name="language">Idioma</string>
+    <string name="language_system">Idioma do aparelho</string>
+    <string name="tab_settings">Ajustes</string>
+    <string name="section_permissions">PERMISSÕES</string>
+    <string name="section_display">TELA</string>
+    <string name="section_general">GERAL</string>
+    <string name="apps_excluded">%1$d apps de fora</string>
+    <string name="apps_off_badge">DESLIGADO</string>
+    <string name="apps_pick_hint">Toque num app para parar de protegê-lo</string>
+    <string name="banner_sub_first">Eles não vão carregar</string>
+    <string name="home_browser">Seu navegador também</string>
+    <string name="level_none">Sem impacto</string>
+    <string name="level_ads">Mostra anúncios pra você</string>
+    <string name="level_bad">Melhor evitar</string>
+    <string name="level_none_text">Este servidor não tem nada a ver com publicidade. O AdZero deixa passar.</string>
+    <string name="level_ads_text">Este servidor serve para entregar anúncios. O AdZero não responde a ele, então o anúncio nunca chega.</string>
+    <string name="level_bad_text">Este servidor registra o que você faz, ou tenta te enganar. O AdZero bloqueia.</string>
+    <string name="kind_mediation">O buscador de anúncios</string>
+    <string name="kind_network">O fornecedor de anúncios</string>
+    <string name="kind_bidding">Sua atenção, vendida</string>
+    <string name="kind_tracker">Um rastreador</string>
+    <string name="kind_shady">Um golpe</string>
+    <string name="kind_engine">O próprio jogo</string>
+    <string name="kind_unknown">Nada a ver com anúncios</string>
+    <string name="explain_mediation">É ele que sai atrás dos anúncios. Quando um jogo quer te mostrar um, ele chama esse servidor, que passa por todos os vendedores até um ter alguma coisa. O AdZero nunca responde: o jogo espera e desiste.</string>
+    <string name="explain_network">Esse guarda o anúncio: o vídeo, a imagem, o X falso de fechar. Se ele não responde, não tem nada pra te mostrar.</string>
+    <string name="explain_bidding">Enquanto o jogo carrega, esse servidor leiloa sua atenção. Anunciantes pagam pelos segundos seguintes. Tudo acontece em um décimo de segundo, antes de você ver qualquer coisa.</string>
+    <string name="explain_tracker">Ele não te mostra nada. Ele anota o que você faz — qual app, quando, por quanto tempo — e revende.</string>
+    <string name="explain_shady">Um site falso, montado às pressas e abandonado algumas semanas depois. É daí que vêm os anúncios que dizem que seu celular está com vírus. O AdZero achou sozinho.</string>
+    <string name="explain_engine">Não é anúncio. É o programa em que o jogo foi feito, e ele precisa disso pra funcionar. O AdZero deixa passar.</string>
+    <string name="explain_unknown">Nada a declarar. Um servidor normal, como os que fazem suas mensagens ou seus mapas funcionarem.</string>
+    <string name="explain_blocked">Bloqueado</string>
+    <string name="explain_allowed">Deixado passar</string>
+    <string name="explain_close">Fechar</string>
+    <string name="explain_hint">Toque num servidor pra ver o que é</string>
+    <string name="ads_caption">Anúncios, não requisições</string>
+    <string name="ads_explained">Um anúncio = uma vez que um jogo tentou te mostrar alguma coisa. Pra mostrar um único anúncio, seu celular precisa contatar uma dúzia de servidores de uma vez — por isso a lista mais abaixo é sempre bem maior que esse número. O AdZero agrupa tudo: o que você vê aqui são anúncios.</string>
+    <string name="report_action">Passou um anúncio?</string>
+    <string name="report_title">O que acabou de aparecer?</string>
+    <string name="report_body">Isto é o que o %1$s contatou pouco antes. O mais provável está no topo — bloqueie e esse anúncio não volta.</string>
+    <string name="report_empty">Nada a relatar nos últimos minutos. O AdZero guarda os cinco últimos: relate um anúncio pouco depois de vê-lo.</string>
+    <string name="report_block">Bloquear</string>
+    <string name="report_blocked">Bloqueado</string>
+    <string name="report_seen">%1$d vezes agora há pouco</string>
+    <string name="verdict_high">Muito provavelmente o anúncio</string>
+    <string name="verdict_medium">Talvez o anúncio</string>
+    <string name="verdict_low">Provavelmente não é o anúncio</string>
+    <string name="verdict_known_safe">Não bloqueie este servidor</string>
+    <string name="reason_near_ads">Visto bem ao lado de um anúncio em %1$d dos seus apps</string>
+    <string name="reason_cheap_tld">Endereço terminado em .%1$s, uma extensão de poucos euros por ano</string>
+    <string name="reason_ad_word">A palavra “%1$s” está no endereço dele</string>
+    <string name="reason_random">Um nome gerado automaticamente, não uma palavra de verdade</string>
+    <string name="reason_once">Contatado uma única vez, bem quando o anúncio apareceu</string>
+    <string name="reason_nothing">Nada de suspeito nele</string>
+    <string name="report_channel">Avisos de anúncios</string>
+    <string name="report_others">Ver os outros</string>
+    <string name="report_done_title">Bloqueado</string>
+    <string name="report_done_body">%1$s não vai mais receber resposta. Se alguma coisa parar de funcionar, você pode desbloquear nas configurações.</string>
+    <string name="report_setting_on">Avisos de anúncios · ativados</string>
+    <string name="report_setting_off">Avisos de anúncios · desativados</string>
+    <string name="setup_notices">Notificações</string>
+    <string name="setup_notices_why">Para o AdZero poder te avisar que passou um anúncio e deixar você bloquear sem sair do jogo.</string>
+    <string name="broken_action">Um jogo parou de funcionar?</string>
+    <string name="broken_title">Qual app não está funcionando?</string>
+    <string name="broken_pick">Escolha e o AdZero mostra o que ele bloqueou para esse app.</string>
+    <string name="broken_empty">O AdZero ainda não bloqueou nada para nenhum app, então não foi ele.</string>
+    <string name="broken_release">O app provavelmente precisa de um destes. Libere e tente de novo.</string>
+    <string name="broken_none_recent">Nada bloqueado para esse app nos últimos minutos. Abra ele, deixe falhar e volte — ou simplesmente pare de protegê-lo aqui embaixo.</string>
+    <string name="broken_unblock">Liberar</string>
+    <string name="broken_unblocked">Liberado</string>
+    <string name="broken_stop_protecting">Parar de proteger esse app</string>
+    <string name="broken_already_off">Esse app não está mais protegido</string>
+    <string name="shield_on">Escudo de rajada · ativado</string>
+    <string name="shield_off">Escudo de rajada · desativado</string>
+    <string name="banner_desc">Uma faixa aparece sobre o jogo quando o AdZero começa a matar os anúncios dele.</string>
+    <string name="bubble_desc">Um contador pequeno fica na tela por cima dos seus jogos.</string>
+    <string name="report_desc">Adiciona um botão na notificação para bloquear um anúncio que passou, sem sair do jogo.</string>
+    <string name="shield_desc">Nos segundos em que um anúncio carrega, silencia servidores que nem este app nem nenhum outro jamais usou. É isso que pega os anúncios que nenhuma lista conhece.</string>
+    <string name="language_desc">Por padrão, a do seu celular.</string>
+    <string name="pause_hint">Deixa anúncios passarem por 5 minutos sem desligar nada. Para quando um jogo te dá um bônus se você assistir um.</string>
+    <string name="pause_hint_active">Os anúncios estão passando. Toque para proteger de novo.</string>
+    <string name="section_shield">PEGOS PELO ESCUDO</string>
+    <string name="shield_empty">Nada ainda. O escudo precisa ter visto seus apps funcionando normalmente antes de poder julgar qualquer coisa.</string>
+    <string name="shield_caught_hint">Silenciados porque apareceram enquanto um anúncio carregava, vindos de um app que nunca os tinha usado. Toque para ver o que é, ou libere.</string>
+    <string name="data_saved">Cerca de %1$s de anúncios nunca baixados</string>
+    <string name="unit_mb">MB</string>
+    <string name="unit_gb">GB</string>
+    <string name="test_action">Verificar se funciona</string>
+    <string name="test_title">O AdZero funciona mesmo?</string>
+    <string name="test_running">Testando na rede de verdade. Alguns segundos.</string>
+    <string name="test_service_ok">A proteção está rodando</string>
+    <string name="test_service_ok_why">O túnel está ativo agora, não só anotado como ativo.</string>
+    <string name="test_service_bad">A proteção não está rodando</string>
+    <string name="test_service_bad_why">O AdZero achava que estava te protegendo e nada estava rodando. Desligue e ligue no botão grande.</string>
+    <string name="test_normal_ok">O resto da internet funciona</string>
+    <string name="test_normal_ok_why">Um endereço comum respondeu normalmente: nada mais está quebrado.</string>
+    <string name="test_normal_bad">Nenhum endereço responde</string>
+    <string name="test_normal_bad_why">Nem os endereços comuns responderam. Confira sua conexão e reinicie o AdZero.</string>
+    <string name="test_block_ok">Os anúncios estão sendo mortos</string>
+    <string name="test_block_ok_why">Um servidor de anúncios real foi consultado e não respondeu nada. É exatamente o que um jogo recebe.</string>
+    <string name="test_block_bad">Os anúncios estão passando</string>
+    <string name="test_block_bad_why">Um servidor de anúncios real respondeu normalmente. A proteção não está chegando aos seus apps.</string>
+    <string name="test_dns_bad">O DNS privado atrapalha</string>
+    <string name="test_dns_bad_why">Seu celular manda as consultas direto para outro servidor por HTTPS, onde o AdZero nunca as vê. Desligue o DNS privado nas configurações do Android, em Rede.</string>
+    <string name="share_action">Enviar o AdZero para alguém</string>
+    <string name="share_desc">Envia só o instalador. WhatsApp, Quick Share, Telegram e Drive aceitam; o Gmail recusa esse tipo de anexo.</string>
+    <string name="share_message">🚫 Baixa o AdZero — ele tira os anúncios dos jogos e da internet. Abra o arquivo anexado para instalar. O Android vai avisar que ele não vem da Play Store: é verdade e é normal, toque em instalar mesmo assim. Nada para pagar, nenhuma conta para criar.\n\n📱 Funciona em todo jogo.  🎮 Sem vídeos, sem banners.  🔒 Nada sai do seu celular.</string>
+    <string name="share_failed">Não deu para preparar o arquivo.</string>
+    <string name="share_subject">Baixa o AdZero</string>
+    <string name="setup_battery">Continuar ativo em segundo plano</string>
+    <string name="setup_battery_why">O Android para apps em segundo plano para economizar bateria, e em alguns celulares isso corta a proteção depois de algumas horas, sem avisar.</string>
+    <string name="learned_ignore">Ignorar</string>
+    <string name="bubble_time">%1$d min ganhos</string>
+    <string name="stats_empty_title">Ainda não há nada para mostrar</string>
+    <string name="stats_empty_body">Ligue a proteção e jogue alguns minutos. O que foi bloqueado, em qual jogo, e quanto tempo você ganhou vai aparecer aqui.</string>
+    <string name="money_saved">Entre %1$s e %2$s que as redes de anúncios não receberam</string>
+    <string name="money_title">De onde vem esse número?</string>
+    <string name="money_explained">Um anúncio paga ao app que o mostrou entre três e doze dólares por mil — um vídeo premiado no topo, um banner embaixo, e varia com o país e a época. Por isso é uma faixa, não um total: o mínimo supõe que todo anúncio evitado era do tipo mais barato. Ninguém fora das redes sabe o número real, este app incluído.</string>
+    <string name="test_cache">Jogos já abertos guardam os endereços antigos</string>
+    <string name="test_cache_why">Um jogo que pediu o endereço de um servidor de anúncios antes de a proteção começar guarda esse endereço na própria memória por um tempo e se conecta direto. Feche seus jogos abertos e abra de novo; tudo que abrir daqui em diante está coberto.</string>
+    <string name="restart_games">Feche e abra seus jogos de novo: os que já estão abertos guardam os endereços antigos.</string>
+    <string name="help_action">Algum problema?</string>
+    <string name="help_title">Algum problema?</string>
+    <string name="help_report">Bloqueie o servidor que acabou de te mostrar um anúncio.</string>
+    <string name="help_broken">Libere o que está impedindo um jogo de funcionar.</string>
+    <string name="help_test">Verifique a proteção na rede de verdade.</string>
+    <string name="banner_stale_title">%1$s já estava aberto</string>
+    <string name="banner_stale_sub">Feche e abra de novo — os anúncios dele já estão carregados.</string>
+    <string name="setup_restricted">Acinzentado? O Android protege esse ajuste para apps instalados fora de uma loja. Segure o ícone do AdZero → Informações do app → ⋮ → Permitir configurações restritas, e volte.</string>
+    <string name="repair_intro">O AdZero silenciou %1$d servidores para esse app. Ele vai liberar um por um, começando pelo que esse jogo mais provavelmente precisa, até voltar a funcionar.</string>
+    <string name="repair_start">Achar o culpado</string>
+    <string name="repair_testing">TENTATIVA %1$d DE %2$d</string>
+    <string name="repair_testing_body">Esse está liberado. Feche o jogo, abra de novo e teste. Depois volte aqui.</string>
+    <string name="repair_worked">Funciona</string>
+    <string name="repair_still">Ainda quebrado</string>
+    <string name="repair_done">Resolvido. %1$s fica liberado para todos os apps.</string>
+    <string name="repair_exhausted">Não era nenhum deles, então provavelmente não é o AdZero. Tudo foi restaurado.</string>
+    <string name="filter_all">Tudo</string>
+    <string name="filter_games">Jogos</string>
+    <string name="filter_with_ads">Com anúncios</string>
+    <string name="filter_unprotected">Desativados</string>
+    <string name="filter_empty">Nada corresponde.</string>
+    <string name="firm_section">A empresa</string>
+    <string name="firm_home">Sede</string>
+    <string name="firm_listed">Listada</string>
+    <string name="firm_parent">Pertence a</string>
+    <string name="firstparty_title">Esses não dá para bloquear</string>
+    <string name="firstparty_video">Os anúncios do %1$s vêm do mesmo servidor que os próprios vídeos. Não existe um endereço separado para silenciar — um só endereço para os dois, e bloqueá-lo impediria qualquer reprodução.</string>
+    <string name="firstparty_feed">As publicações patrocinadas do %1$s chegam no mesmo feed que as reais, do servidor da própria empresa. Nada as diferencia de fora.</string>
+    <string name="firstparty_why">O AdZero tira anúncios que vêm de servidores feitos só para isso, o que é quase toda a publicidade nos jogos. Ele não consegue tirar anúncios que uma empresa serve ela mesma, junto do próprio conteúdo. Nenhum bloqueador de DNS consegue, e quem dissesse o contrário estaria mentindo.</string>
+    <string name="banner_firstparty_title">%1$s serve os próprios anúncios</string>
+    <string name="banner_firstparty_sub">Aqui só os rastreadores são bloqueados.</string>
+    <string name="firstparty_title_partly">Aqui, só em parte</string>
+    <string name="firstparty_mixed">Os anúncios dos sites que você abre pelo %1$s são removidos como em qualquer lugar. Os que estão dentro dos resultados de busca, não: eles vêm do mesmo servidor que os resultados, então nada permite distingui-los.</string>
+    <string name="tour_step">%1$d DE %2$d</string>
+    <string name="tour_next">Próximo</string>
+    <string name="tour_done">Entendi</string>
+    <string name="tour_skip">Pular a visita</string>
+    <string name="tour1_title">O único botão que importa</string>
+    <string name="tour1_body">Aperte para proteger, aperte de novo para parar. É todo o app.</string>
+    <string name="tour2_title">A prova, quando quiser</string>
+    <string name="tour2_body">Aperte este selo e ele verifica na rede de verdade, na sua frente.</string>
+    <string name="tour3_title">O que você recuperou</string>
+    <string name="tour3_body">Anúncios bloqueados, tempo sem assisti-los, rastreadores parados.</string>
+    <string name="tour4_title">Quando algo dá errado</string>
+    <string name="tour4_body">Passou um anúncio, um jogo parou de funcionar: está tudo aqui.</string>
+    <string name="tour5_title">As estatísticas</string>
+    <string name="tour5_body">Quais jogos insistem mais e quais empresas estão atrás dos anúncios deles.</string>
+    <string name="tour6_title">Seus apps</string>
+    <string name="tour6_body">Onde parar de proteger um app, se ele precisar.</string>
+    <string name="tour7_title">As configurações</string>
+    <string name="tour7_body">Idioma, avisos na tela e enviar o app para alguém.</string>
+    <string name="tour_again">Ver a visita guiada de novo</string>
+    <string name="tour_again_desc">Mostra cada botão da tela inicial, um por um.</string>
+    <string name="shield_by_shape">pego pela forma</string>
+    <string name="shield_by_name">pego ao lado de um servidor de anúncios conhecido</string>
+    <string name="shape_on">Rajadas sem nome · ativado</string>
+    <string name="shape_off">Rajadas sem nome · desativado</string>
+    <string name="shape_desc">Age também quando um app pede de uma vez seis servidores que nunca usou, mesmo que nenhum seja um servidor de anúncios conhecido. É a mais recente das duas regras — desligue se um jogo começar a falhar, sem perder o resto do escudo.</string>
+    <string name="test_guard_ok">Nada essencial está bloqueado</string>
+    <string name="test_guard_ok_why">%1$s endereços do dia a dia verificados — bancos, mensagens, serviços do celular. Todos passam.</string>
+    <string name="test_guard_bad">Algo essencial está bloqueado</string>
+    <string name="test_guard_bad_why">Isso nunca deveria ser silenciado: %1$s. Libere em Estatísticas → detalhes técnicos, ou avise quem te deu o app.</string>
+    <string name="card_share">Compartilhar meus números</string>
+    <string name="card_data">Dados</string>
+    <string name="card_footer">Sem anúncios, sem conta, nada sai do celular.</string>
+    <string name="card_caption">O AdZero bloqueia os anúncios dos jogos. Me pede.</string>
+    <string name="promo_share">Enviar a imagem de apresentação</string>
+    <string name="promo_desc">Uma imagem que explica o AdZero, para enviar antes do arquivo.</string>
+    <string name="repair_manual">Escolher eu mesmo</string>
+    <string name="repair_manual_body">Libere o que você acha que é o culpado. Mesma ordem: primeiro o que o jogo provavelmente precisa.</string>
+</resources>

@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AdZero</string>
+
+    <string name="tab_home">Ana sayfa</string>
+    <string name="tab_stats">Veriler</string>
+    <string name="tab_apps">Uygulamalar</string>
+
+    <string name="state_on">KORUMA AÇIK</string>
+    <string name="state_off">KORUMA KAPALI</string>
+    <string name="tap_to_start">Açmak için dokun</string>
+    <string name="tap_to_stop">Kapatmak için dokun</string>
+
+    <string name="stat_ads">Engellenen reklamlar</string>
+    <string name="stat_time">Kazanılan süre</string>
+    <string name="stat_apps">İzlenen uygulama</string>
+    <string name="stat_trackers">Engellenen izleyiciler</string>
+
+    <string name="home_hint_off">AdZero\'yu aç ve oyna. Reklamlar artık çıkmaz.</string>
+    <string name="home_hint_on">Reklamlar yüklenmeye çalışırken engelleniyor.</string>
+
+    <string name="bubble_allow">Yüzen sayaç göster</string>
+    <string name="bubble_on">Yüzen sayaç · açık</string>
+    <string name="bubble_off">Yüzen sayaç · kapalı</string>
+    <string name="bubble_killed">engellendi</string>
+    <string name="widget_hint">Tek dokunuşla açmak için AdZero widget\'ını ana ekrana ekle.</string>
+
+    <string name="section_leaderboard">EN KÖTÜLER</string>
+    <string name="leaderboard_empty">Henüz bir şey yok. AdZero\'yu aç ve bir oyun başlat.</string>
+    <string name="leaderboard_line">%1$d reklam engellendi</string>
+
+    <string name="section_learned">YENİ REKLAM SUNUCULARI</string>
+    <string name="learned_hint">Birbiriyle ilgisiz birkaç uygulamada görüldü, muhtemelen reklam. Engellemek için dokun.</string>
+    <string name="learned_empty">Yeni bir şey yok. Birkaç farklı oyun oyna, AdZero ortak
+        sunucuları kendisi bulacak.</string>
+    <string name="learned_need_usage">AdZero, reklamı diğerlerinden ayırmak için hangi uygulamanın
+        sorduğunu bilmeli. İzin vermek için buraya dokun.</string>
+    <string name="learned_line">%1$d uygulamada görüldü · %2$s</string>
+    <string name="action_block">ENGELLE</string>
+
+    <string name="section_custom">SENİN ENGELLEDİKLERİN</string>
+    <string name="custom_empty">Henüz bir şey yok. Engellediğin sunucular burada görünür, geri alabilirsin.</string>
+    <string name="action_unblock">ENGELİ KALDIR</string>
+
+    <string name="section_domains">EN ÇOK ENGELLENENLER</string>
+    <string name="domains_empty">Henüz bir şey yok. AdZero\'yu aç ve bir oyun başlat.</string>
+
+    <string name="warn_private_dns">Özel DNS açık (%1$s)\n\nTelefonun sorgularını doğrudan dış bir
+        sunucuya gönderiyor, bu yüzden AdZero onları göremiyor. Şuradan kapat:
+        Ayarlar &gt; Ağ ve internet &gt; Özel DNS.</string>
+    <string name="error_no_tunnel">AdZero başlatılamadı. Muhtemelen başka bir VPN uygulaması açık —
+        Android aynı anda yalnızca birine izin verir.</string>
+
+    <string name="notification_channel">Koruma</string>
+    <string name="notification_text">Reklamlar yüklenmeden engelleniyor</string>
+    <string name="notification_live">Şu ana kadar %1$d reklam engellendi</string>
+    <string name="notification_paused">Duraklatıldı — reklamlar geçiyor</string>
+    <string name="tile_on">Koruma açık</string>
+    <string name="tile_off">Kapalı</string>
+
+    <string name="duration_hm">%1$d sa %2$d dk</string>
+    <string name="duration_m">%1$d dk</string>
+    <string name="duration_s">%1$d sn</string>
+
+    <string name="banner_title">%1$s içinde reklamlar engellendi</string>
+    <string name="banner_sub">Şu ana kadar %1$d reklam engellendi</string>
+    <string name="banner_allow">Ekran bildirimlerine izin ver</string>
+    <string name="banner_on">Ekran bildirimleri · açık</string>
+    <string name="banner_off">Ekran bildirimleri · kapalı</string>
+
+    <string name="action_pause">5 dk ara ver</string>
+    <string name="action_resume">Devam et</string>
+    <string name="action_stop_short">Durdur</string>
+    <string name="paused_for">Ara verildi · %1$s kaldı</string>
+
+    <string name="apps_all">Tüm uygulamalar korunuyor. Yalnızca seçtiklerini korumak için bir uygulamaya dokun.</string>
+    <string name="apps_some">%1$d uygulama korunuyor</string>
+    <string name="apps_reset">Yine hepsini koru</string>
+    <string name="apps_restart_note">Değişiklikler koruma yeniden başlayınca geçerli olur.</string>
+    <string name="apps_master_on">Tüm uygulamalar korunuyor</string>
+    <string name="apps_master_off">Yalnızca seçtiğin uygulamalar</string>
+    <string name="apps_master_hint">Kendin seçmek için dokun</string>
+    <string name="apps_loading">Uygulamaların yükleniyor…</string>
+    <string name="apps_search">Uygulama ara</string>
+    <string name="apps_with_ads">REKLAM GÖSTERENLER</string>
+    <string name="apps_others">DİĞER HEPSİ</string>
+
+    <string name="section_history">SON 7 GÜN</string>
+    <string name="best_day">En iyi gün · %1$d reklam</string>
+    <string name="streak_days">%1$d gün üst üste</string>
+    <string name="advanced_show">Teknik ayrıntıları göster</string>
+    <string name="advanced_hide">Teknik ayrıntıları gizle</string>
+
+    <string name="setup_title">KURULUMU TAMAMLA</string>
+    <string name="setup_grant">İZİN VER</string>
+    <string name="setup_done">Her şey hazır.</string>
+    <string name="setup_vpn">Korumayı aç</string>
+    <string name="setup_vpn_why">Android bir kez sorar. Telefonundan hiçbir şey çıkmaz.</string>
+    <string name="setup_alerts">Ekran bildirimleri</string>
+    <string name="setup_alerts_why">Bir oyunda reklam engellendiğinde küçük bir not gösterir.</string>
+    <string name="setup_usage">Oyunlarını tanımak</string>
+    <string name="setup_usage_why">Reklamlar her hâlükârda engellenir. Bu olmadan hangi oyundan geldikleri bilinemez ve istatistiklerinde hiçbir isim çıkmaz.</string>
+
+    <string name="detail_networks">Kullandığı reklam sunucuları</string>
+    <string name="detail_none">Henüz reklam sunucusu belirlenmedi.</string>
+
+    <string name="ob_skip">Atla</string>
+    <string name="ob_next">Devam</string>
+    <string name="ob_start">Korumayı aç</string>
+
+    <string name="ob1_title">AdZero bütün reklamları kaldırır</string>
+    <string name="ob1_body">Oyunlarında ve internette. Artık çıkmıyorlar, bitmelerini de beklemiyorsun.</string>
+    <string name="ob1_p1">İzlenecek video yok</string>
+    <string name="ob1_p2">Önünü kapatan banner yok</string>
+    <string name="ob1_p3">Ödenecek bir şey yok, açılacak hesap yok</string>
+
+    <string name="ob2_title">Birkaç izin</string>
+    <string name="ob2_body">Android sana onay verip vermediğini soracak. Bu normal: iznin olmadan hiçbir uygulama bir şey filtreleyemez.</string>
+    <string name="ob2_ready">İzin verilecek bir şey kalmadı.</string>
+
+    <string name="ob3_title">Hepsi bu</string>
+    <string name="ob3_body">Düğmeye bas ve oynamaya git.</string>
+    <string name="ob3_p1">Kaldırılan reklamları sayar</string>
+    <string name="ob3_p2">Yeni reklamları güncelleme olmadan bulur</string>
+    <string name="ob3_p3">Ana ekranında tek bir düğme</string>
+    <string name="language">Dil</string>
+    <string name="language_system">Cihaz dili</string>
+    <string name="tab_settings">Ayarlar</string>
+    <string name="section_permissions">İZİNLER</string>
+    <string name="section_display">GÖRÜNÜM</string>
+    <string name="section_general">GENEL</string>
+    <string name="apps_excluded">%1$d uygulama hariç</string>
+    <string name="apps_off_badge">KAPALI</string>
+    <string name="apps_pick_hint">Korumayı kaldırmak için bir uygulamaya dokun</string>
+    <string name="banner_sub_first">Yüklenmeyecekler</string>
+    <string name="home_browser">Tarayıcın da</string>
+    <string name="level_none">Etkisi yok</string>
+    <string name="level_ads">Sana reklam gösterir</string>
+    <string name="level_bad">Uzak durulmalı</string>
+    <string name="level_none_text">Bu sunucunun reklamla bir ilgisi yok. AdZero geçmesine izin veriyor.</string>
+    <string name="level_ads_text">Bu sunucu reklam dağıtmak için var. AdZero ona cevap vermiyor, yani reklam hiç gelmiyor.</string>
+    <string name="level_bad_text">Bu sunucu ne yaptığını kaydediyor ya da seni yanıltmaya çalışıyor. AdZero onu engelliyor.</string>
+    <string name="kind_mediation">Reklam arayıcı</string>
+    <string name="kind_network">Reklam sağlayıcı</string>
+    <string name="kind_bidding">Dikkatin, satılıyor</string>
+    <string name="kind_tracker">Bir izleyici</string>
+    <string name="kind_shady">Bir dolandırıcılık</string>
+    <string name="kind_engine">Oyunun kendisi</string>
+    <string name="kind_unknown">Reklamla ilgisi yok</string>
+    <string name="explain_mediation">Reklamları aramaya giden bu. Bir oyun sana reklam göstermek istediğinde bu sunucuyu arar, o da elinde bir şey olan çıkana kadar bütün satıcıları dolaşır. AdZero ona hiç cevap vermez: oyun bekler, sonra vazgeçer.</string>
+    <string name="explain_network">Reklamın kendisi bunda: video, görsel, kapatmak için konan sahte çarpı. Cevap vermezse sana gösterecek bir şey kalmaz.</string>
+    <string name="explain_bidding">Oyun yüklenirken bu sunucu dikkatini açık artırmaya çıkarır. Reklamverenler sonraki saniyeler için para öder. Hepsi sen hiçbir şey görmeden, saniyenin onda birinde olur.</string>
+    <string name="explain_tracker">Sana hiçbir şey göstermez. Ne yaptığını — hangi uygulama, ne zaman, ne kadar süre — not eder ve satar.</string>
+    <string name="explain_shady">Alelacele kurulup birkaç hafta sonra bırakılmış sahte bir site. Telefonunda virüs olduğunu söyleyen reklamlar buradan gelir. AdZero bunu kendi kendine yakaladı.</string>
+    <string name="explain_engine">Reklam değil. Oyunun üzerine kurulduğu program bu ve çalışmak için ona ihtiyacı var. AdZero geçmesine izin veriyor.</string>
+    <string name="explain_unknown">Not edilecek bir şey yok. Mesajlarını ya da haritalarını çalıştıranlar gibi sıradan bir sunucu.</string>
+    <string name="explain_blocked">Engellendi</string>
+    <string name="explain_allowed">Geçmesine izin verildi</string>
+    <string name="explain_close">Kapat</string>
+    <string name="explain_hint">Ne olduğunu görmek için bir sunucuya dokun</string>
+    <string name="ads_caption">Reklamlar, istekler değil</string>
+    <string name="ads_explained">Bir reklam = bir oyunun sana bir şey göstermeye çalıştığı bir an. Tek bir reklam için telefonunun aynı anda bir düzine sunucuya bağlanması gerekir — aşağıdaki liste bu yüzden hep bu sayıdan çok daha uzun. AdZero onları bir araya topluyor: burada gördüğün şey reklamlar.</string>
+    <string name="report_action">Reklam mı geçti?</string>
+    <string name="report_title">Az önce ne çıktı?</string>
+    <string name="report_body">%1$s hemen öncesinde bunlara bağlandı. En olası olan en üstte — engelle, o reklam bir daha gelmez.</string>
+    <string name="report_empty">Son dakikalarda bildirilecek bir şey yok. AdZero son beş dakikayı tutuyor: reklamı gördükten kısa süre sonra bildir.</string>
+    <string name="report_block">Engelle</string>
+    <string name="report_blocked">Engellendi</string>
+    <string name="report_seen">az önce %1$d kez</string>
+    <string name="verdict_high">Büyük ihtimalle reklam bu</string>
+    <string name="verdict_medium">Belki reklam budur</string>
+    <string name="verdict_low">Muhtemelen reklam bu değil</string>
+    <string name="verdict_known_safe">Bu sunucuyu engelleme</string>
+    <string name="reason_near_ads">%1$d uygulamanda bir reklamın hemen yanında görüldü</string>
+    <string name="reason_cheap_tld">.%1$s ile biten adres, yıllığı birkaç euroluk bir uzantı</string>
+    <string name="reason_ad_word">Adresinde “%1$s” kelimesi geçiyor</string>
+    <string name="reason_random">Otomatik üretilmiş bir isim, gerçek bir kelime değil</string>
+    <string name="reason_once">Tam reklam çıktığı anda, bir kez bağlanıldı</string>
+    <string name="reason_nothing">Şüpheli bir yanı yok</string>
+    <string name="report_channel">Reklam bildirimleri</string>
+    <string name="report_others">Diğerlerini gör</string>
+    <string name="report_done_title">Engellendi</string>
+    <string name="report_done_body">%1$s artık cevap almayacak. Bir şey çalışmaz olursa ayarlardan engeli kaldırabilirsin.</string>
+    <string name="report_setting_on">Reklam bildirimleri · açık</string>
+    <string name="report_setting_off">Reklam bildirimleri · kapalı</string>
+    <string name="setup_notices">Bildirimler</string>
+    <string name="setup_notices_why">AdZero sana bir reklamın geçtiğini söyleyebilsin ve oyundan çıkmadan engelleyebilesin diye.</string>
+    <string name="broken_action">Bir oyun artık çalışmıyor mu?</string>
+    <string name="broken_title">Hangi uygulama çalışmıyor?</string>
+    <string name="broken_pick">Seç ki AdZero o uygulama için neyi susturduğunu göstersin.</string>
+    <string name="broken_empty">AdZero henüz hiçbir uygulama için bir şey susturmadı, yani sorun ondan değil.</string>
+    <string name="broken_release">Uygulamanın muhtemelen bunlardan birine ihtiyacı var. Serbest bırak ve tekrar dene.</string>
+    <string name="broken_none_recent">Son dakikalarda bu uygulama için engellenen bir şey yok. Uygulamayı aç, hata vermesini bekle ve geri gel — ya da aşağıdan korumayı tamamen kaldır.</string>
+    <string name="broken_unblock">Serbest bırak</string>
+    <string name="broken_unblocked">Serbest bırakıldı</string>
+    <string name="broken_stop_protecting">Bu uygulamayı artık koruma</string>
+    <string name="broken_already_off">Bu uygulama artık korunmuyor</string>
+    <string name="shield_on">Yaylım kalkanı · açık</string>
+    <string name="shield_off">Yaylım kalkanı · kapalı</string>
+    <string name="banner_desc">AdZero bir oyunun reklamlarını öldürmeye başladığında oyunun üstünde bir şerit çıkar.</string>
+    <string name="bubble_desc">Oyunlarının üzerinde küçük bir sayac ekranda kalır.</string>
+    <string name="report_desc">Geçen bir reklamı oyundan çıkmadan engelleyebilmen için bildirime bir düğme ekler.</string>
+    <string name="shield_desc">Bir reklam yüklenirken, ne bu uygulamanın ne de başka bir uygulamanın hiç kullanmadığı sunucuları susturur. Hiçbir listenin bilmediği reklamları yakalayan şey budur.</string>
+    <string name="language_desc">Varsayılan olarak telefonunun dili.</string>
+    <string name="pause_hint">Hiçbir şeyi kapatmadan 5 dakika boyunca reklamları geçirir. Bir oyun izlediğin için sana bonus verdiğinde işe yarar.</string>
+    <string name="pause_hint_active">Reklamlar geçiyor. Korumaya dönmek için dokun.</string>
+    <string name="section_shield">KALKANIN YAKALADIKLARI</string>
+    <string name="shield_empty">Henüz bir şey yok. Kalkanın bir şey hakkında karar verebilmesi için önce uygulamalarını normal çalışırken görmesi gerekir.</string>
+    <string name="shield_caught_hint">Bir reklam yüklenirken, o zamana kadar hiç kullanılmamış oldukları halde ortaya çıktıkları için susturuldular. Ne olduklarını görmek için dokun ya da serbest bırak.</string>
+    <string name="data_saved">Yaklaşık %1$s reklam hiç indirilmedi</string>
+    <string name="unit_mb">MB</string>
+    <string name="unit_gb">GB</string>
+    <string name="test_action">Çalışıyor mu diye bak</string>
+    <string name="test_title">AdZero gerçekten çalışıyor mu?</string>
+    <string name="test_running">Gerçek ağda test ediliyor. Birkaç saniye.</string>
+    <string name="test_service_ok">Koruma çalışıyor</string>
+    <string name="test_service_ok_why">Tünel şu anda gerçekten açık, sadece açık diye kayıtlı değil.</string>
+    <string name="test_service_bad">Koruma çalışmıyor</string>
+    <string name="test_service_bad_why">AdZero seni koruduğunu sanıyordu ama hiçbir şey çalışmıyordu. Büyük düğmeyle kapatıp aç.</string>
+    <string name="test_normal_ok">İnternetin geri kalanı çalışıyor</string>
+    <string name="test_normal_ok_why">Sıradan bir adres normal cevap verdi, başka bir şey bozulmuyor.</string>
+    <string name="test_normal_bad">Hiçbir adres cevap vermiyor</string>
+    <string name="test_normal_bad_why">Sıradan adresler bile cevap vermedi. Bağlantını kontrol et, sonra AdZero uygulamasını kapatıp aç.</string>
+    <string name="test_block_ok">Reklamlar öldürülüyor</string>
+    <string name="test_block_ok_why">Gerçek bir reklam sunucusu soruldu ve hiç cevap vermedi. Bir oyunun aldığı şey tam olarak bu.</string>
+    <string name="test_block_bad">Reklamlar geçiyor</string>
+    <string name="test_block_bad_why">Gerçek bir reklam sunucusu normal cevap verdi. Koruma uygulamalarına ulaşmıyor.</string>
+    <string name="test_dns_bad">Özel DNS engel oluyor</string>
+    <string name="test_dns_bad_why">Telefonun sorgularını HTTPS üzerinden doğrudan başka bir sunucuya gönderiyor, AdZero onları hiç görmüyor. Android ayarlarında Ağ bölümünden özel DNS ayarını kapat.</string>
+    <string name="share_action">AdZero’yu birine gönder</string>
+    <string name="share_desc">Yalnızca kurulum dosyasını gönderir. WhatsApp, Quick Share, Telegram ve Drive kabul eder; Gmail bu tür eki reddeder.</string>
+    <string name="share_message">🚫 AdZero’yu indir — oyunlardaki ve internetteki reklamları kaldırır. Kurmak için ekteki dosyayı aç. Android, Play Store’dan gelmediği konusunda uyaracak: bu doğru ve normal, yine de kur’a bas. Ödenecek bir şey yok, açılacak hesap yok.\n\n📱 Her oyunda çalışır.  🎮 Video yok, banner yok.  🔒 Telefonundan hiçbir şey çıkmaz.</string>
+    <string name="share_failed">Dosya hazırlanamadı.</string>
+    <string name="share_subject">AdZero’yu indir</string>
+    <string name="setup_battery">Arka planda çalışmaya devam etsin</string>
+    <string name="setup_battery_why">Android pil tasarrufu için arka plandaki uygulamaları durdurur; bazı telefonlarda bu, birkaç saat sonra korumayı hiç haber vermeden kesiyor.</string>
+    <string name="learned_ignore">Yoksay</string>
+    <string name="bubble_time">%1$d dk kazanıldı</string>
+    <string name="stats_empty_title">Henüz gösterilecek bir şey yok</string>
+    <string name="stats_empty_body">Korumayı aç ve birkaç dakika oyna. Neyin engellendiği, hangi oyunda ve ne kadar zaman kazandığın burada görünecek.</string>
+    <string name="money_saved">Reklam ağlarının alamadığı %1$s ile %2$s arası</string>
+    <string name="money_title">Bu rakam nereden geliyor?</string>
+    <string name="money_explained">Bir reklam, onu gösteren uygulamaya binde üç ile on iki dolar arası kazandırır — ödüllü video üstte, banner altta, ülkeye ve mevsime göre de değişir. Bu yüzden bir aralık, toplam değil: alt uç, kaçırdığın her reklamın en ucuz türden olduğunu varsayar. Gerçek rakamı reklam ağlarının dışında kimse bilmiyor, bu uygulama dahil.</string>
+    <string name="test_cache">Zaten açık oyunlar eski adresleri tutuyor</string>
+    <string name="test_cache_why">Koruma başlamadan önce bir reklam sunucusunun adresini sormuş bir oyun, o adresi bir süre kendi belleğinde tutar ve doğrudan bağlanır. Açık oyunlarını kapat ve yeniden aç; bundan sonra açtığın her şey kapsam altında.</string>
+    <string name="restart_games">Oyunlarını kapatıp yeniden aç: zaten açık olanlar eski adresleri bellekte tutuyor.</string>
+    <string name="help_action">Bir sorun mu var?</string>
+    <string name="help_title">Bir sorun mu var?</string>
+    <string name="help_report">Az önce sana reklam gösteren sunucuyu engelle.</string>
+    <string name="help_broken">Bir oyunun çalışmasını engelleyen şeyi serbest bırak.</string>
+    <string name="help_test">Korumayı gerçek ağda kontrol et.</string>
+    <string name="banner_stale_title">%1$s zaten açıktı</string>
+    <string name="banner_stale_sub">Kapatıp yeniden aç — reklamları zaten yüklenmiş durumda.</string>
+    <string name="setup_restricted">Soluk mu görünüyor? Android bu ayarı mağaza dışından kurulan uygulamalara karşı koruyor. AdZero simgesine uzun bas → Uygulama bilgisi → ⋮ → Kısıtlı ayarlara izin ver, sonra geri dön.</string>
+    <string name="repair_intro">AdZero bu uygulama için %1$d sunucuyu susturdu. Bu oyunun en olası ihtiyacı olandan başlayarak birer birer serbest bırakacak, oyun yeniden çalışana kadar.</string>
+    <string name="repair_start">Suçluyu bul</string>
+    <string name="repair_testing">DENEME %1$d / %2$d</string>
+    <string name="repair_testing_body">Bu serbest bırakıldı. Oyunu kapat, yeniden aç ve dene. Sonra buraya dön.</string>
+    <string name="repair_worked">Çalışıyor</string>
+    <string name="repair_still">Hâlâ bozuk</string>
+    <string name="repair_done">Çözüldü. %1$s bütün uygulamalar için serbest kalıyor.</string>
+    <string name="repair_exhausted">Hiçbiri değilmiş, yani sorun muhtemelen AdZero değil. Her şey geri alındı.</string>
+    <string name="filter_all">Tümü</string>
+    <string name="filter_games">Oyunlar</string>
+    <string name="filter_with_ads">Reklamlı</string>
+    <string name="filter_unprotected">Kapalı</string>
+    <string name="filter_empty">Eşleşen yok.</string>
+    <string name="firm_section">Şirket</string>
+    <string name="firm_home">Merkez</string>
+    <string name="firm_listed">Borsada</string>
+    <string name="firm_parent">Sahibi</string>
+    <string name="firstparty_title">Bunlar engellenemez</string>
+    <string name="firstparty_video">%1$s reklamları videoların kendisiyle aynı sunucudan geliyor. Susturulacak ayrı bir adres yok — ikisi için tek adres var ve onu engellemek hiçbir şeyin oynamamasına yol açardı.</string>
+    <string name="firstparty_feed">%1$s içindeki sponsorlu gönderiler, gerçek gönderilerle aynı akışta, şirketin kendi sunucusundan geliyor. Dışarıdan hiçbir şey onları ayırt etmiyor.</string>
+    <string name="firstparty_why">AdZero yalnızca reklam için kurulmuş sunuculardan gelen reklamları kaldırır; oyunlardaki reklamların neredeyse tamamı böyledir. Bir şirketin kendi içeriğinin yanında kendi sunduğu reklamları kaldıramaz. Hiçbir DNS engelleyici kaldıramaz ve aksini iddia eden sana yalan söylüyor demektir.</string>
+    <string name="banner_firstparty_title">%1$s reklamlarını kendi sunuyor</string>
+    <string name="banner_firstparty_sub">Burada yalnızca izleyicileri engellenir.</string>
+    <string name="firstparty_title_partly">Burada yalnızca kısmen</string>
+    <string name="firstparty_mixed">%1$s üzerinden açtığın sitelerdeki reklamlar her yerde olduğu gibi kaldırılır. Arama sonuçlarının içindekiler kaldırılmaz: onlar sonuçlarla aynı sunucudan geliyor, bu yüzden ayırt edilemiyorlar.</string>
+    <string name="tour_step">%1$d / %2$d</string>
+    <string name="tour_next">İleri</string>
+    <string name="tour_done">Anladım</string>
+    <string name="tour_skip">Turu geç</string>
+    <string name="tour1_title">Tek önemli düğme</string>
+    <string name="tour1_body">Bas, koruma başlar; yine bas, durur. Uygulamanın tamamı bu.</string>
+    <string name="tour2_title">İstediğinde kanıt</string>
+    <string name="tour2_body">Bu etikete bas, gerçek ağda, gözünün önünde kontrol eder.</string>
+    <string name="tour3_title">Geri kazandıkların</string>
+    <string name="tour3_body">Engellenen reklamlar, izlemediğin süre, durdurulan izleyiciler.</string>
+    <string name="tour4_title">Bir şey ters gittiğinde</string>
+    <string name="tour4_body">Reklam geçti, oyun çalışmıyor: hepsi burada.</string>
+    <string name="tour5_title">İstatistikler</string>
+    <string name="tour5_body">Hangi oyunlar en çok zorluyor ve reklamlarının arkasında hangi şirketler var.</string>
+    <string name="tour6_title">Uygulamaların</string>
+    <string name="tour6_body">Gerekirse bir uygulamanın korumasını kaldırdığın yer.</string>
+    <string name="tour7_title">Ayarlar</string>
+    <string name="tour7_body">Dil, ekrandaki uyarılar ve uygulamayı birine gönderme.</string>
+    <string name="tour_again">Turu tekrar izle</string>
+    <string name="tour_again_desc">Ana ekrandaki her düğmeyi tek tek gösterir.</string>
+    <string name="shield_by_shape">biçiminden yakalandı</string>
+    <string name="shield_by_name">bilinen bir reklam sunucusunun yanında yakalandı</string>
+    <string name="shape_on">İsimsiz yayılımlar · açık</string>
+    <string name="shape_off">İsimsiz yayılımlar · kapalı</string>
+    <string name="shape_desc">Bir uygulama daha önce hiç kullanmadığı altı sunucuyu bir anda istediğinde de devreye girer, hiçbiri bilinen bir reklam sunucusu olmasa bile. İki kuraldan daha yenisi — bir oyun bozulmaya başlarsa kalkanın geri kalanını kaybetmeden bunu kapat.</string>
+    <string name="test_guard_ok">Temel hiçbir şey engellenmiyor</string>
+    <string name="test_guard_ok_why">%1$s günlük adres kontrol edildi — bankalar, mesajlaşma, telefonun kendi servisleri. Hepsi geçiyor.</string>
+    <string name="test_guard_bad">Temel bir şey engelleniyor</string>
+    <string name="test_guard_bad_why">Bunlar asla susturulmamalı: %1$s. İstatistikler → teknik detaylar bölümünden serbest bırak ya da uygulamayı sana veren kişiye haber ver.</string>
+    <string name="card_share">Sayılarımı paylaş</string>
+    <string name="card_data">Veri</string>
+    <string name="card_footer">Reklam yok, hesap yok, telefondan hiçbir şey çıkmıyor.</string>
+    <string name="card_caption">AdZero oyunlardaki reklamları engelliyor. Benden iste.</string>
+    <string name="promo_share">Tanıtım resmini gönder</string>
+    <string name="promo_desc">AdZero’yu anlatan bir resim; dosyadan hemen önce gönder.</string>
+    <string name="repair_manual">Kendim seçeyim</string>
+    <string name="repair_manual_body">Suçlu olduğunu düşündüğünü serbest bırak. Aynı sıra: önce oyunun en çok ihtiyaç duyduğu.</string>
+</resources>

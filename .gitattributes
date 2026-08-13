@@ -1,0 +1,9 @@
+# Le depot est en LF, quelle que soit la machine qui commite. Sans ca, un
+# projet ecrit sous Windows arrive sur GitHub avec des fins de ligne CRLF et
+# le moindre outil qui touche un fichier le reecrit en entier.
+* text=auto eol=lf
+
+# Binaires : ne jamais convertir.
+*.png binary
+*.jks binary
+*.ttf binary

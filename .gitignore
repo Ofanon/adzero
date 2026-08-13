@@ -1,0 +1,25 @@
+# La cle de signature et ses mots de passe. Rien d'autre dans ce fichier n'a
+# la meme importance : quelqu'un qui recupere adzero-release.jks peut signer
+# une fausse mise a jour d'AdZero que les telephones accepteront comme la
+# vraie, et ca ne se revoque pas. Une cle perdue ou fuitee ne se remplace pas
+# non plus : il faudrait publier l'app sous un autre nom et demander a tout le
+# monde de desinstaller l'ancienne.
+*.jks
+*.keystore
+keystore.properties
+
+# Chemins du SDK, propres a cette machine.
+local.properties
+
+# Produits de compilation.
+build/
+.gradle/
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# Editeurs.
+.idea/
+*.iml
+.DS_Store
