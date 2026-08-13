@@ -81,8 +81,9 @@ Requires JDK 17 and Android SDK 36. Create `local.properties` with your own
 
 ## Localisation
 
-English is the default; French ships in `values-fr`. A new translation only
-needs a `values-<code>/strings.xml` — no code changes.
+English is the default. French, German, Spanish, Italian, Brazilian Portuguese
+and Turkish ship alongside it. A new translation only needs a
+`values-<code>/strings.xml` — no code changes.
 
 Note for translators: Android requires apostrophes to be escaped as `\'` even
 when written as the `&#39;` XML entity, which is decoded *before* the escaping
@@ -94,7 +95,15 @@ The measurements above came from a separate mitmproxy harness that can silence,
 block, or pass ad hosts on demand and record the verdict of each trial. It
 lives in `../ad-timeout-test` and is what turned a hunch into a number.
 
+## Privacy
+
+AdZero has no server, no account and no analytics. Nothing it learns about you
+leaves the device; a DNS question that is not for an ad server is passed to the
+resolver your network already provides, and to nobody else. The details, and
+the reasoning, are in [PRIVACY.md](PRIVACY.md).
+
 ## License
 
-Not chosen yet. GPL would keep forks open, which is the convention in this
-corner (NetGuard, Blokada); MIT would let anyone close it.
+[GPL-3.0](LICENSE). A fork has to stay open, which is the convention in this
+corner — NetGuard, AdAway and uBlock Origin are all GPL — and it is the point
+of an app whose whole claim is that you can check what it does.
