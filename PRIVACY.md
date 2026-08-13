@@ -97,4 +97,4 @@ source history.
 
 ## Contact
 
-EMAIL_A_REMPLIR
+contact.gameskar@gmail.com
