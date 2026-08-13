@@ -75,7 +75,7 @@ object Report {
             .setContentTitle(verdict)
             .setContentText(reason)
             .setStyle(Notification.BigTextStyle().bigText("$reason\n\n${suspect.domain}"))
-            .setSmallIcon(R.drawable.ic_shield)
+            .setSmallIcon(R.drawable.ic_mark)
             .setAutoCancel(true)
             .setContentIntent(openApp(ctx))
             .addAction(
@@ -111,7 +111,7 @@ object Report {
             .setContentTitle(title)
             .setContentText(body)
             .setStyle(Notification.BigTextStyle().bigText(body))
-            .setSmallIcon(R.drawable.ic_shield)
+            .setSmallIcon(R.drawable.ic_mark)
             .setAutoCancel(true)
             .setContentIntent(openApp(ctx))
             .build()

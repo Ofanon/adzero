@@ -424,7 +424,7 @@ class SilenceVpnService : VpnService() {
         return Notification.Builder(this, CHANNEL)
             .setContentTitle(getString(R.string.app_name))
             .setContentText(text)
-            .setSmallIcon(R.drawable.ic_shield)
+            .setSmallIcon(R.drawable.ic_mark)
             .setContentIntent(open)
             .setOngoing(true)
             .addAction(
