@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Le logo V4 d'Oscar. Un rendu avec ombres et degrades, donc une image : ses
+  2440 teintes distinctes ne se decrivent pas en tracés vectoriels, et essayer
+  de les approcher aurait donne un dessin qui ressemble au logo sans etre le
+  logo.
+
+  La couche avant est ramenee a 72 dp sur les 108 dp du canevas. Un lanceur
+  peut y appliquer un masque rond, et le V4 remplit son carre presque
+  entierement : a taille reelle, l'anneau aurait ete rogne.
+
+  La couche monochrome, elle, reste vectorielle et plate — voir le fichier
+  qu'elle designe.
+-->
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
     <background android:drawable="@drawable/ic_launcher_background" />
     <foreground android:drawable="@drawable/ic_launcher_foreground" />
-    <monochrome android:drawable="@drawable/ic_launcher_foreground" />
+    <monochrome android:drawable="@drawable/ic_launcher_mono" />
 </adaptive-icon>

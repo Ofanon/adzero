@@ -183,7 +183,21 @@ object Card {
         return out
     }
 
-    /** The ring, the megaphone and the bar, the same mark as the launcher icon. */
+    /**
+     * The logo, at the size the caller was already asking for.
+     *
+     * This used to compose the mark by hand — a lime circle, then the
+     * megaphone, then a diagonal over it — which was the only way to draw
+     * something that existed as vector paths. The logo is now a single
+     * rendered image with its own shading, so redrawing it here would mean
+     * maintaining a second, worse copy of it that drifts every time Oscar
+     * exports a new one.
+     *
+     * [r] stays what it always was, the ring's mid radius, so every call site
+     * keeps its layout. In the artwork that ring sits at 1.17 r from the
+     * centre and the file extends to 512/444 of it, which is where the box
+     * below comes from.
+     */
     private fun drawMark(
         ctx: Context,
         canvas: Canvas,
@@ -192,26 +206,22 @@ object Card {
         cy: Float,
         r: Float,
     ) {
+        val half = r * 1.17f * (512f / 444f)
+        val logo = logoBitmap(ctx)
+        if (logo != null) {
+            canvas.drawBitmap(
+                logo, null, RectF(cx - half, cy - half, cx + half, cy + half),
+                Paint(Paint.FILTER_BITMAP_FLAG)
+            )
+            return
+        }
+        // The image failing to decode must not cost the card its mark: a ring
+        // and a bar are still recognisably AdZero.
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = r * 0.34f
         paint.strokeCap = Paint.Cap.ROUND
         paint.color = Ui.LIME_A
         canvas.drawCircle(cx, cy, r, paint)
-
-        // The megaphone is baked into the icon's 108dp canvas, where the ring
-        // has a radius of 31.43 and sits at the centre. Asking for a box of
-        // 108/31.43 radii puts it back in proportion whatever size the card
-        // draws the mark at, rather than re-deriving a placement that is
-        // already correct in the file.
-        val half = r * (54f / 31.43f)
-        markBitmap(ctx)?.let {
-            canvas.drawBitmap(it, null, RectF(cx - half, cy - half, cx + half, cy + half), null)
-        }
-
-        // Top-left to bottom-right, the direction the logo has always used. It
-        // was drawn the other way here and nobody could tell, a ring and a
-        // diagonal being symmetrical enough; the megaphone underneath is not,
-        // and a bar sloping the wrong way now reads as a mistake.
         val d = r * 0.62f
         canvas.drawLine(cx - d, cy - d, cx + d, cy + d, paint)
         paint.style = Paint.Style.FILL
@@ -220,17 +230,20 @@ object Card {
     /**
      * Decoded once and kept: both cards draw it, and a card can be rendered
      * repeatedly in a session.
+     *
+     * Taken from the launcher's own icon rather than the adaptive foreground,
+     * which carries the empty margin that keeps a round mask from biting into
+     * the ring. On a card there is no mask, and that margin would just be a
+     * logo drawn smaller than asked for.
      */
-    private var mark: Bitmap? = null
+    private var logo: Bitmap? = null
 
-    private fun markBitmap(ctx: Context): Bitmap? {
-        mark?.let { return it }
+    private fun logoBitmap(ctx: Context): Bitmap? {
+        logo?.let { return it }
         return try {
-            BitmapFactory.decodeResource(ctx.resources, R.drawable.ic_launcher_mark)
-                .also { mark = it }
+            BitmapFactory.decodeResource(ctx.resources, R.mipmap.ic_launcher)
+                .also { logo = it }
         } catch (_: Exception) {
-            // A card without the megaphone is still a card; one that throws is
-            // a share button that does nothing.
             null
         }
     }

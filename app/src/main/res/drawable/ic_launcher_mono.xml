@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  La version themee de l'icone, celle qu'Android teinte lui-meme quand le
+  telephone applique la couleur du fond d'ecran a toutes les icones.
+
+  Elle reste vectorielle et volontairement plate, alors que l'icone normale est
+  le rendu ombre d'Oscar. Une couche monochrome est teintee d'une seule
+  couleur : les degrades et les reliefs du V4 y deviendraient une tache pleine
+  ou le megaphone ne se distinguerait plus de l'anneau. Ne garder que l'anneau
+  et la barre donne une silhouette qui se lit encore a 48 dp.
+
+  Meme geometrie que le logo : anneau de rayon median 31.43 et barre de
+  (31.35, 28.11) a (76.49, 79.89), sur le canevas de 108 dp.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <path
+        android:pathData="M54,22.57 a31.43,31.43 0 1,1 -0.01,0"
+        android:strokeWidth="9.14"
+        android:strokeColor="#FFFFFF" />
+
+    <path
+        android:pathData="M31.35,28.11 L76.49,79.89"
+        android:strokeWidth="10.52"
+        android:strokeColor="#FFFFFF" />
+</vector>

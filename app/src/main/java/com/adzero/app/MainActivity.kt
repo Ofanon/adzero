@@ -253,13 +253,13 @@ class MainActivity : Activity() {
         // pointless here where the app's background is already that colour,
         // and it read as a dark square around the logo.
         //
-        // The foreground layer is drawn inside the 66dp safe zone of a 108dp
-        // canvas, so on its own it comes out about a third smaller than the
-        // space it occupies; the scale gives that back.
+        // The classic icon is the logo edge to edge on transparency, which is
+        // exactly what is wanted here. The adaptive foreground was used before
+        // and had to be scaled back up by hand, because it carries the empty
+        // margin that stops a round mask biting into the ring — a margin this
+        // header has no use for.
         header.addView(ImageView(this).apply {
-            setImageResource(R.drawable.ic_launcher_foreground)
-            scaleX = 1.5f
-            scaleY = 1.5f
+            setImageResource(R.mipmap.ic_launcher)
             layoutParams = LinearLayout.LayoutParams(d(30), d(30))
                 .apply { marginEnd = d(12) }
         })
