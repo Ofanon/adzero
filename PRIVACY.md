@@ -98,3 +98,7 @@ source history.
 ## Contact
 
 contact.gameskar@gmail.com
+
+Or open an issue at https://github.com/Ofanon/adzero/issues — for anything about
+what the app does with your data, a public answer is worth more than a private
+one, since whoever asks next can read it too.
