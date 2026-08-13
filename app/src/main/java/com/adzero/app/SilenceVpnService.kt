@@ -6,7 +6,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.drawable.Icon
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
@@ -425,15 +424,15 @@ class SilenceVpnService : VpnService() {
         return Notification.Builder(this, CHANNEL)
             .setContentTitle(getString(R.string.app_name))
             .setContentText(text)
-            // Two icons, because Android uses them for two different things.
-            // The small one is stamped into the status bar and tinted a single
-            // colour whatever it contains, so it can only ever be a
-            // silhouette. The large one is shown in the shade at full colour,
-            // and that is where the logo itself belongs — this notification is
-            // permanent while protection runs, which makes it the longest look
-            // anyone gets at the app.
+            // The silhouette of the V4, and nothing else. A large icon was
+            // tried here and taken back out: the shade already draws the app's
+            // own icon in the header, so the notification carried the same
+            // logo twice, side by side.
+            //
+            // Small icons are tinted a single colour by the system, so this
+            // one can only be a silhouette — which is why the megaphone in it
+            // is held apart from the ring by a gap rather than by colour.
             .setSmallIcon(R.drawable.ic_mark)
-            .setLargeIcon(Icon.createWithResource(this, R.drawable.ic_logo))
             .setContentIntent(open)
             .setOngoing(true)
             .addAction(

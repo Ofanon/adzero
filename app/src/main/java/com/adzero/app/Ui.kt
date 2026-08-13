@@ -4,6 +4,9 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
@@ -281,5 +284,47 @@ object Ui {
     fun display(ctx: Context) = TextView(ctx).apply {
         setTextColor(TEXT)
         typeface = Ui.MEDIUM
+    }
+
+    /**
+     * The two touches the app answers with.
+     *
+     * They lived as private methods of MainActivity, which is why the tour —
+     * a view of its own — went through seven steps in complete silence while
+     * every other button in the app replied. Moved here rather than copied
+     * there: two implementations of the same feel drift apart, and the whole
+     * point is that a tick means the same thing everywhere.
+     *
+     * Predefined effects wherever they exist. The manufacturer has tuned them
+     * for that particular motor, and they obey the phone's own haptic setting
+     * instead of ignoring it.
+     */
+    fun tick(ctx: Context) {
+        val v = ctx.getSystemService(Vibrator::class.java) ?: return
+        if (!v.hasVibrator()) return
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            v.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK))
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(VibrationEffect.createOneShot(16, 160))
+        } else {
+            @Suppress("DEPRECATION") v.vibrate(16)
+        }
+    }
+
+    fun buzz(ctx: Context) {
+        val v = ctx.getSystemService(Vibrator::class.java) ?: return
+        if (!v.hasVibrator()) return
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            v.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(
+                VibrationEffect.createWaveform(
+                    longArrayOf(0, 20, 50, 30),
+                    intArrayOf(0, 200, 0, 255), -1
+                )
+            )
+        } else {
+            @Suppress("DEPRECATION") v.vibrate(40)
+        }
     }
 }

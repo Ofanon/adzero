@@ -101,13 +101,28 @@ class Tour(
         addView(card, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
 
         next.setOnClickListener { advance() }
-        skip.setOnClickListener { finish() }
+        skip.setOnClickListener { Ui.tick(context); finish() }
         paint()
     }
 
+    /**
+     * Every way forward passes through here, which is why the haptics live
+     * here and not on the button: the tour also advances when the lit area
+     * itself is tapped, and half the steps invite exactly that.
+     *
+     * A tick for a step, the heavier click for the end. The tour is seven
+     * screens long and the difference is what tells a hand that the last one
+     * was the last one.
+     */
     private fun advance() {
         index++
-        if (index >= steps.size) finish() else paint()
+        if (index >= steps.size) {
+            Ui.buzz(context)
+            finish()
+        } else {
+            Ui.tick(context)
+            paint()
+        }
     }
 
     private fun finish() {

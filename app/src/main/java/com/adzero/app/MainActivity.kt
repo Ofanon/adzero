@@ -1448,17 +1448,7 @@ class MainActivity : Activity() {
      * manufacturer has tuned them for that particular motor, and they follow
      * the phone's own haptic setting instead of ignoring it.
      */
-    private fun tick() {
-        val v = getSystemService(Vibrator::class.java) ?: return
-        if (!v.hasVibrator()) return
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            v.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK))
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            v.vibrate(VibrationEffect.createOneShot(16, 160))
-        } else {
-            @Suppress("DEPRECATION") v.vibrate(16)
-        }
-    }
+    private fun tick() = Ui.tick(this)
 
     private fun showPage(which: Int, slideFrom: Int = 0) {
         // Pressing the tab you are already on is not a navigation. It used to
@@ -1971,22 +1961,7 @@ class MainActivity : Activity() {
 
     /** A short double tap of haptics: the switch should be felt, not just seen. */
     /** The firmer one, for a decision rather than a navigation. */
-    private fun buzz() {
-        val v = getSystemService(Vibrator::class.java) ?: return
-        if (!v.hasVibrator()) return
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            v.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            v.vibrate(
-                VibrationEffect.createWaveform(
-                    longArrayOf(0, 20, 50, 30),
-                    intArrayOf(0, 200, 0, 255), -1
-                )
-            )
-        } else {
-            @Suppress("DEPRECATION") v.vibrate(40)
-        }
-    }
+    private fun buzz() = Ui.buzz(this)
 
     override fun onActivityResult(code: Int, result: Int, data: Intent?) {
         super.onActivityResult(code, result, data)
