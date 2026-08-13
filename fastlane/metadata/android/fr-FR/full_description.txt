@@ -1,0 +1,29 @@
+AdZero est un bloqueur de publicites gratuit concu pour une seule chose : les pubs qui interrompent vos jeux.
+
+Vous la connaissez. La video de 30 secondes avant de pouvoir continuer a jouer. La fausse croix qui se derobe quand on veut la toucher. La "recompense" qu'il faut gagner en regardant la partie de quelqu'un d'autre.
+
+AdZero fait en sorte qu'elle ne se charge jamais.
+
+<b>3 jeux testes. 0 pub passee.</b>
+
+Dix essais chacun. Pas une seule pub n'est arrivee a l'ecran.
+
+<b>Voyez ce que vous economisez</b>
+
+Chaque pub que vous n'avez pas eu a regarder, comptee. Le temps recupere. Les donnees epargnees. Et quel jeu vous en servait le plus.
+
+<b>Sachez qui est derriere</b>
+
+Touchez n'importe quelle adresse bloquee et AdZero vous dit a qui elle appartient et ce qu'elle voulait. Sans jargon.
+
+<b>Vos regles</b>
+
+Choisissez exactement quelles applications sont protegees. Activez ou coupez depuis un widget ou la tuile des reglages rapides.
+
+<b>Rien ne quitte votre telephone</b>
+
+Aucun compte. Aucune inscription. Aucune statistique, aucun traceur, pas une seule bibliotheque tierce. Ce qu'AdZero apprend reste sur votre appareil, et la desinstallation l'emporte avec elle.
+
+<b>Ce qu'il ne peut pas faire</b>
+
+Les pubs de YouTube et d'Instagram passent : elles arrivent par les memes serveurs que les videos, donc les bloquer casserait les applications. Si votre telephone utilise un DNS prive, AdZero est contourne et vous le dit.

@@ -1,0 +1,10 @@
+First release.
+
+AdZero stops the ads that interrupt your games, before they ever load.
+
+- Blocks game ads at the source
+- Counts every ad you didn't have to watch
+- Tells you which app was serving them, and who owns it
+- Pick which apps are protected
+- Home screen widget and Quick Settings tile
+- No account, no tracking, fully open source

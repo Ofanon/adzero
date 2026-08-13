@@ -1,0 +1,33 @@
+AdZero is a free adblock built for one thing: the ads that interrupt your games.
+
+You know the one. The 30-second video before you can keep playing. The fake close button that moves when you reach for it. The "reward" you have to earn by watching someone else's game.
+
+AdZero makes sure it never even loads.
+
+<b>3 games tested. 0 ads got through.</b>
+
+Ten attempts each. Not a single ad made it to the screen.
+
+<b>See what you're saving</b>
+
+Every ad you didn't have to watch, counted. The time you got back. The data you didn't burn. And which game was serving you the most.
+
+<b>Know who's behind it</b>
+
+Tap any blocked address and AdZero tells you who owns it and what it wanted. No jargon, just plain words.
+
+<b>Your rules</b>
+
+Pick exactly which apps are protected. Turn it on and off from a home screen widget or the Quick Settings tile.
+
+<b>Nothing leaves your phone</b>
+
+No account. No sign-up. No analytics, no trackers, not one third-party library. What AdZero learns stays on your device, and uninstalling takes it with it.
+
+<b>How it works</b>
+
+A local VPN that never leaves your device carries DNS and nothing else. Most blockers refuse an ad request, which tells the game to try the next ad company until one answers. AdZero simply does not answer, and the chain stalls.
+
+<b>What it cannot do</b>
+
+YouTube and Instagram ads get through: they arrive over the same servers as the videos themselves, so blocking them would break the apps. If your phone uses Private DNS, AdZero is bypassed and will tell you so.

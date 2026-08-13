@@ -1,0 +1,3 @@
+Premiere version.
+
+AdZero arrete les pubs qui interrompent vos jeux, avant meme qu'elles se chargent.
