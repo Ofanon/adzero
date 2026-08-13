@@ -253,13 +253,13 @@ class MainActivity : Activity() {
         // pointless here where the app's background is already that colour,
         // and it read as a dark square around the logo.
         //
-        // The classic icon is the logo edge to edge on transparency, which is
-        // exactly what is wanted here. The adaptive foreground was used before
-        // and had to be scaled back up by hand, because it carries the empty
-        // margin that stops a round mask biting into the ring — a margin this
-        // header has no use for.
+        // ic_logo, and not R.mipmap.ic_launcher: that name resolves to the
+        // adaptive icon, which brings its own background layer along and put
+        // the dark square straight back. Not the adaptive foreground either —
+        // it carries the margin that stops a round mask biting into the ring,
+        // which is why this used to be scaled up by 1.5 to cancel it out.
         header.addView(ImageView(this).apply {
-            setImageResource(R.mipmap.ic_launcher)
+            setImageResource(R.drawable.ic_logo)
             layoutParams = LinearLayout.LayoutParams(d(30), d(30))
                 .apply { marginEnd = d(12) }
         })

@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Icon
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
@@ -424,7 +425,15 @@ class SilenceVpnService : VpnService() {
         return Notification.Builder(this, CHANNEL)
             .setContentTitle(getString(R.string.app_name))
             .setContentText(text)
+            // Two icons, because Android uses them for two different things.
+            // The small one is stamped into the status bar and tinted a single
+            // colour whatever it contains, so it can only ever be a
+            // silhouette. The large one is shown in the shade at full colour,
+            // and that is where the logo itself belongs — this notification is
+            // permanent while protection runs, which makes it the longest look
+            // anyone gets at the app.
             .setSmallIcon(R.drawable.ic_mark)
+            .setLargeIcon(Icon.createWithResource(this, R.drawable.ic_logo))
             .setContentIntent(open)
             .setOngoing(true)
             .addAction(

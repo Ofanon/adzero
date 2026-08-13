@@ -231,17 +231,23 @@ object Card {
      * Decoded once and kept: both cards draw it, and a card can be rendered
      * repeatedly in a session.
      *
-     * Taken from the launcher's own icon rather than the adaptive foreground,
-     * which carries the empty margin that keeps a round mask from biting into
-     * the ring. On a card there is no mask, and that margin would just be a
-     * logo drawn smaller than asked for.
+     * A drawable of its own, not R.mipmap.ic_launcher. That name resolves to
+     * the adaptive icon — an XML document on Android 8 and up — which
+     * BitmapFactory cannot decode at all: it returns null without throwing,
+     * and the card silently fell back to the hand-drawn mark this was meant to
+     * replace. It also carries the near-black plate, which a card does not
+     * want.
+     *
+     * Filed under drawable-nodpi so decodeResource leaves it at its native
+     * size. The card is 1080 px on every phone, so scaling the logo by the
+     * screen's density would make it a different size on each one.
      */
     private var logo: Bitmap? = null
 
     private fun logoBitmap(ctx: Context): Bitmap? {
         logo?.let { return it }
         return try {
-            BitmapFactory.decodeResource(ctx.resources, R.mipmap.ic_launcher)
+            BitmapFactory.decodeResource(ctx.resources, R.drawable.ic_logo)
                 .also { logo = it }
         } catch (_: Exception) {
             null
