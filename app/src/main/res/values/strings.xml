@@ -341,4 +341,12 @@
     <string name="culprit_none">Nothing recorded in the last five minutes. Open the app, let it do its thing, then come straight back.</string>
     <string name="culprit_pick_app">Which app is it?</string>
     <string name="culprit_seen">%1$d times</string>
+    <string name="session_title">%1$s: session over</string>
+    <string name="session_body">%1$d ads blocked while you played, over %2$d minutes</string>
+    <string name="session_saved">About %1$d minutes you did not spend watching them</string>
+    <string name="session_share">Share</string>
+    <string name="setting_session">Report after each session</string>
+    <string name="setting_session_body">A notice when you close a game, with what AdZero stopped while you played.</string>
+    <string name="card_session_ads">ads blocked</string>
+    <string name="card_session_played">played</string>
 </resources>

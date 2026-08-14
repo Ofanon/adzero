@@ -136,6 +136,7 @@ class MainActivity : Activity() {
     private lateinit var shareStatsRow: TextView
     private lateinit var troubleCard: LinearLayout
     private lateinit var reportRow: TextView
+    private lateinit var sessionRow: TextView
     private lateinit var shieldRow: TextView
     private lateinit var shapeRow: TextView
     private lateinit var trackerValue: TextView
@@ -160,6 +161,11 @@ class MainActivity : Activity() {
 
     companion object {
         /** Sent by the notification action while a game is in the foreground. */
+        const val ACTION_SESSION_CARD = "com.adzero.app.SESSION_CARD"
+        const val EXTRA_SESSION_APP = "session_app"
+        const val EXTRA_SESSION_ADS = "session_ads"
+        const val EXTRA_SESSION_MINUTES = "session_minutes"
+
         const val ACTION_REPORT = "com.adzero.app.REPORT"
 
         /** Survives the recreation that a language change causes. */
@@ -237,6 +243,7 @@ class MainActivity : Activity() {
         // Cold start straight from the notification action. Posted rather than
         // called: the views have no size yet, and the sheet measures itself.
         if (intent?.action == ACTION_REPORT && Stats.onboarded) root.post { showReport() }
+        if (intent?.action == ACTION_SESSION_CARD) root.post { shareSession(intent) }
     }
 
     // ------------------------------------------------------------------ build
@@ -459,6 +466,32 @@ class MainActivity : Activity() {
      * one thing in this app somebody is about to send to a friend — a dropped
      * frame here is worse than anywhere else.
      */
+    /** La carte d'une partie, fabriquee a la demande depuis la notification. */
+    private fun shareSession(from: Intent) {
+        val pkg = from.getStringExtra(EXTRA_SESSION_APP) ?: return
+        val ads = from.getIntExtra(EXTRA_SESSION_ADS, 0)
+        val minutes = from.getIntExtra(EXTRA_SESSION_MINUTES, 0)
+        if (ads <= 0) return
+        val label = appLabel(pkg)
+        Thread({
+            val file = try {
+                Card.renderSession(this, label, ads, minutes)
+            } catch (_: Exception) {
+                null
+            }
+            runOnUiThread {
+                if (isFinishing || isDestroyed || file == null) return@runOnUiThread
+                val send = Intent(Intent.ACTION_SEND).apply {
+                    type = "image/png"
+                    putExtra(Intent.EXTRA_STREAM, ApkProvider.uriFor(file))
+                    putExtra(Intent.EXTRA_TEXT, getString(R.string.card_caption))
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+                startActivity(Intent.createChooser(send, getString(R.string.card_share)))
+            }
+        }, "session-card").start()
+    }
+
     private fun shareCard() {
         Thread({
             val file = try {
@@ -1531,6 +1564,12 @@ class MainActivity : Activity() {
         ), getString(R.string.bubble_desc))
         tintRow(bubbleButton, if (bubbleOn) Ui.LIME_A else Ui.GREY)
 
+        sessionRow.text = rowText(
+            getString(R.string.setting_session),
+            getString(R.string.setting_session_body)
+        )
+        tintRow(sessionRow, if (Stats.sessionReports) Ui.LIME_A else Ui.GREY)
+
         reportRow.text = rowText(
             getString(
                 if (Stats.reportWanted) R.string.report_setting_on else R.string.report_setting_off
@@ -1665,6 +1704,15 @@ class MainActivity : Activity() {
         bubbleButton = settingRow(R.drawable.ic_bubble) { toggleBubble() }
         body.addView(bubbleButton, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
         body.addView(Ui.spacer(this, 8))
+        // Le rapport de fin de partie. Coupable ici, sinon les gens le
+        // coupent au niveau d'Android et perdent aussi les alertes utiles.
+        sessionRow = settingRow(R.drawable.ic_clock) {
+            Stats.sessionReports = !Stats.sessionReports
+            paintToggles()
+        }
+        body.addView(sessionRow, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+        body.addView(Ui.spacer(this, 8))
+
         reportRow = settingRow(R.drawable.ic_flag) {
             Stats.rememberReport(!Stats.reportWanted)
             paintToggles()
@@ -1908,6 +1956,7 @@ class MainActivity : Activity() {
         super.onNewIntent(intent)
         setIntent(intent)
         if (intent?.action == ACTION_REPORT) root.post { showReport() }
+        if (intent?.action == ACTION_SESSION_CARD) root.post { shareSession(intent) }
     }
 
     override fun onSaveInstanceState(out: Bundle) {

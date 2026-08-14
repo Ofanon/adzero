@@ -314,6 +314,7 @@ class SilenceVpnService : VpnService() {
             // Kept for a few seconds only, so that if an ad slips through the
             // user can point at it while the evidence is still around.
             Recent.note(host, app, isAd)
+            Session.note(this, app, isAd && !ownAds)
 
             if (isAd) {
                 // Silence is the whole point: we do not answer.
@@ -469,6 +470,8 @@ class SilenceVpnService : VpnService() {
     }
 
     private fun stopEverything() {
+        // Une partie en cours doit etre racontee avant que tout s'arrete.
+        Session.flush(this)
         running = false
         alive = false
         Persist.stopAutosave()

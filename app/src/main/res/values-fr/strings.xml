@@ -343,4 +343,12 @@
     <string name="culprit_none">Rien depuis cinq minutes. Ouvre l\'app, laisse-la faire, puis reviens tout de suite ici.</string>
     <string name="culprit_pick_app">C\'est quelle app ?</string>
     <string name="culprit_seen">%1$d fois</string>
+    <string name="session_title">%1$s : partie terminée</string>
+    <string name="session_body">%1$d pubs bloquées pendant que tu jouais, en %2$d minutes</string>
+    <string name="session_saved">Environ %1$d minutes que tu n\'as pas passées à les regarder</string>
+    <string name="session_share">Partager</string>
+    <string name="setting_session">Rapport après chaque partie</string>
+    <string name="setting_session_body">Un message quand tu fermes un jeu, avec ce qu\'AdZero a stoppé pendant que tu jouais.</string>
+    <string name="card_session_ads">pubs bloquées</string>
+    <string name="card_session_played">jouées</string>
 </resources>

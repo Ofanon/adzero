@@ -71,6 +71,13 @@ object Stats {
      * On by default, because the people who need it are exactly the ones who
      * would never go looking for it in the settings.
      */
+    /** Le rapport de fin de partie. Actif par defaut : c'est la nouveaute. */
+    var sessionReports: Boolean = true
+        set(value) {
+            field = value
+            prefs?.edit()?.putBoolean("session_reports", value)?.apply()
+        }
+
     var reportWanted: Boolean = true
         private set
 
@@ -144,6 +151,7 @@ object Stats {
         bubbleWanted = prefs?.getBoolean(KEY_BUBBLE, false) ?: false
         bannerWanted = prefs?.getBoolean(KEY_BANNER, true) ?: true
         reportWanted = prefs?.getBoolean(KEY_REPORT, true) ?: true
+        sessionReports = prefs!!.getBoolean("session_reports", true)
         shieldWanted = prefs?.getBoolean(KEY_SHIELD, true) ?: true
         onboarded = prefs?.getBoolean(KEY_ONBOARDED, false) ?: false
         toured = prefs?.getBoolean(KEY_TOURED, false) ?: false

@@ -95,6 +95,71 @@ object Card {
     }
 
     /**
+     * La carte d'une partie : un jeu, une duree, un nombre.
+     *
+     * Le partage general dit "j'ai bloque 2 431 pubs", ce qui impressionne
+     * sans rien vouloir dire. Celle-ci dit "23 pubs pendant mes 42 minutes sur
+     * MyHotel" — un chiffre que la personne en face peut rapporter a sa propre
+     * soiree, et qui nomme le jeu coupable.
+     */
+    fun renderSession(ctx: Context, label: String, ads: Int, minutes: Int): File {
+        Ui.initFonts(ctx)
+        val bitmap = Bitmap.createBitmap(SIZE, SIZE, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        val s = SIZE.toFloat()
+
+        paint.shader = LinearGradient(
+            0f, 0f, 0f, s, Ui.BG_TOP, Ui.BG_BOTTOM, Shader.TileMode.CLAMP
+        )
+        canvas.drawRect(0f, 0f, s, s, paint)
+        paint.shader = RadialGradient(
+            s / 2f, s * 0.3f, s * 0.55f,
+            intArrayOf(0x33C9F73D, 0x00000000), null, Shader.TileMode.CLAMP
+        )
+        canvas.drawRect(0f, 0f, s, s, paint)
+        paint.shader = null
+
+        drawMark(ctx, canvas, paint, s / 2f, s * 0.145f, s * 0.048f)
+
+        paint.textAlign = Paint.Align.CENTER
+        paint.typeface = Ui.BOLD
+        paint.color = Ui.TEXT
+        paint.textSize = s * 0.052f
+        canvas.drawText(label, s / 2f, s * 0.275f, paint)
+
+        paint.textSize = s * 0.235f
+        paint.color = Ui.LIME_A
+        canvas.drawText(ads.toString(), s / 2f, s * 0.50f, paint)
+
+        paint.typeface = Ui.REGULAR
+        paint.textSize = s * 0.042f
+        paint.color = Ui.GREY
+        canvas.drawText(
+            ctx.getString(R.string.card_session_ads), s / 2f, s * 0.555f, paint
+        )
+
+        pair(
+            canvas, paint, s,
+            leftValue = minutes.toString() + " min",
+            leftLabel = ctx.getString(R.string.card_session_played),
+            rightValue = formatDuration(ads * Leaderboard.SECONDS_PER_AD),
+            rightLabel = ctx.getString(R.string.stat_time),
+        )
+
+        paint.typeface = Ui.REGULAR
+        paint.textAlign = Paint.Align.CENTER
+        paint.textSize = s * 0.031f
+        paint.color = Ui.DIM
+        canvas.drawText(ctx.getString(R.string.card_footer), s / 2f, s * 0.93f, paint)
+
+        val file = File(ApkProvider.shareDir(ctx), "AdZero-session.png")
+        file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        bitmap.recycle()
+        return file
+    }
+
+    /**
      * The card that travels with the installer.
      *
      * An APK arrives in a messaging app as a document with a grey file icon and
