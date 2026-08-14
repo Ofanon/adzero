@@ -43,6 +43,18 @@ object Remote {
     private var file: File? = null
     private var stampFile: File? = null
 
+    /**
+     * Quand la liste a ete rafraichie pour la derniere fois.
+     *
+     * Affichee dans les reglages : une fonctionnalite qui travaille en silence
+     * ressemble a une fonctionnalite qui ne marche pas. "Mise a jour il y a
+     * deux heures" coute une ligne et repond a la seule question qu'on se pose
+     * devant un interrupteur allume.
+     */
+    @Volatile private var updatedAt = 0L
+
+    fun lastUpdate(): Long = updatedAt
+
     fun init(ctx: Context) {
         if (file != null) return
         val dir = ctx.applicationContext.filesDir
@@ -56,6 +68,9 @@ object Remote {
         if (!f.exists()) return
         try {
             AdNetworks.setRemote(f.readLines().mapNotNull { clean(it) })
+            updatedAt = stampFile
+                ?.takeIf { it.exists() }
+                ?.readText()?.trim()?.toLongOrNull() ?: 0L
         } catch (_: Exception) {
         }
     }
@@ -97,7 +112,8 @@ object Remote {
 
                 AdNetworks.setRemote(lines)
                 file?.writeText(lines.joinToString("\n", postfix = "\n"))
-                stamp.writeText(System.currentTimeMillis().toString())
+                updatedAt = System.currentTimeMillis()
+                stamp.writeText(updatedAt.toString())
             } catch (_: Exception) {
                 // Pas de reseau, pas de GitHub, pas de probleme : la liste
                 // integree et l'apprentissage local continuent seuls.

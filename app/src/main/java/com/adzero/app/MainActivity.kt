@@ -179,6 +179,7 @@ class MainActivity : Activity() {
         Ui.initFonts(this)
         Stats.init(this)
         AdNetworks.init(this)
+        Remote.init(this)
         Learning.init(this)
         Leaderboard.init(this)
 
@@ -1617,9 +1618,18 @@ class MainActivity : Activity() {
         ), getString(R.string.bubble_desc))
         tintRow(bubbleButton, if (bubbleOn) Ui.LIME_A else Ui.GREY)
 
+        // Une date relative plutot qu'un horodatage : "il y a deux heures"
+        // se lit, "14/08 21:47" se dechiffre. Android la traduit lui-meme dans
+        // les sept langues de l'app.
+        val updated = Remote.lastUpdate()
+        val since = if (updated <= 0L) getString(R.string.remote_never)
+        else android.text.format.DateUtils.getRelativeTimeSpanString(
+            updated, System.currentTimeMillis(),
+            android.text.format.DateUtils.MINUTE_IN_MILLIS
+        ).toString()
         remoteRow.text = rowText(
             getString(R.string.setting_remote),
-            getString(R.string.setting_remote_body, AdNetworks.remoteCount())
+            getString(R.string.setting_remote_body, AdNetworks.remoteCount(), since)
         )
         tintRow(remoteRow, if (Stats.remoteList) Ui.LIME_A else Ui.GREY)
 
