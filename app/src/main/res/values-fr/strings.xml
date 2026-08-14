@@ -146,7 +146,7 @@
     <string name="kind_tracker">Un traqueur</string>
     <string name="kind_shady">Une arnaque</string>
     <string name="kind_engine">Le jeu lui-même</string>
-    <string name="kind_unknown">Rien à voir avec la pub</string>
+    <string name="kind_unknown">Non reconnu</string>
     <string name="explain_mediation">Ce serveur va chercher les pubs. Quand un jeu veut t’en montrer une, il s’adresse ici, et ce serveur interroge chaque vendeur à la suite jusqu’à ce que l’un ait quelque chose. Rien ne lui répond jamais : le jeu attend, puis abandonne.</string>
     <string name="explain_network">Ce serveur stocke la pub elle-même : la vidéo, l’image, la fausse croix pour fermer. S’il ne répond pas, il n’y a rien à te montrer.</string>
     <string name="explain_bidding">Pendant que le jeu charge, ce serveur met ton attention aux enchères. Des annonceurs paient pour les secondes qui suivent. Tout se passe en un dixième de seconde, avant que tu voies quoi que ce soit.</string>
@@ -326,4 +326,6 @@
     <string name="fix_broken_body">Choisis-le dans la liste et AdZero cherchera quoi laisser passer, un serveur à la fois.</string>
     <string name="fix_leaked_title">Une pub est passée</string>
     <string name="fix_leaked_body">Dis-le maintenant, tant qu\'AdZero se souvient de ce que cette app vient de demander.</string>
+    <string name="level_unknown">Non reconnu</string>
+    <string name="level_unknown_text">AdZero n\'a jamais vu ce serveur. Il peut être inoffensif, ou un serveur de pub que personne n\'a encore répertorié. Si une pub est passée, commence par là.</string>
 </resources>

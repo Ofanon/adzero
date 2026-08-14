@@ -26,11 +26,18 @@ object Explain {
      * anything. Three levels do: it leaves you alone, it shows you ads, or it
      * is working against you. Colour first, words second, detail last.
      */
-    enum class Level { NONE, ADS, BAD }
+    /**
+     * NONE et UNKNOWN sont deux choses differentes, et les confondre etait un
+     * mensonge : le premier est un verdict, le second son absence.
+     */
+    enum class Level { NONE, UNKNOWN, ADS, BAD }
 
     fun levelOf(kind: Kind): Level = when (kind) {
         // Not advertising at all. The game needs these to run.
-        Kind.ENGINE, Kind.UNKNOWN -> Level.NONE
+        Kind.ENGINE -> Level.NONE
+        // Never seen before. Might be innocent, might be an ad server nobody
+        // has listed yet — saying either would be inventing an answer.
+        Kind.UNKNOWN -> Level.UNKNOWN
         // Advertising: annoying, and it costs you time and data, nothing worse.
         Kind.MEDIATION, Kind.NETWORK, Kind.BIDDING -> Level.ADS
         // Follows you, or lies to you. A tracker shows you nothing at all,
@@ -40,6 +47,9 @@ object Explain {
 
     fun levelColour(level: Level): Int = when (level) {
         Level.NONE -> Ui.LIME_A
+        // Gris, et surtout pas vert : la couleur qui dit "tout va bien" est
+        // exactement celle qu'il ne faut pas donner a une absence de reponse.
+        Level.UNKNOWN -> Ui.GREY
         Level.ADS -> android.graphics.Color.parseColor("#F2B43D")
         Level.BAD -> Ui.RED_A
     }
@@ -47,6 +57,7 @@ object Explain {
     fun levelLabel(ctx: Context, level: Level): String = ctx.getString(
         when (level) {
             Level.NONE -> R.string.level_none
+            Level.UNKNOWN -> R.string.level_unknown
             Level.ADS -> R.string.level_ads
             Level.BAD -> R.string.level_bad
         }
@@ -55,6 +66,7 @@ object Explain {
     fun levelText(ctx: Context, level: Level): String = ctx.getString(
         when (level) {
             Level.NONE -> R.string.level_none_text
+            Level.UNKNOWN -> R.string.level_unknown_text
             Level.ADS -> R.string.level_ads_text
             Level.BAD -> R.string.level_bad_text
         }

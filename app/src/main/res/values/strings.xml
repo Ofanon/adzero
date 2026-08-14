@@ -144,7 +144,7 @@
     <string name="kind_tracker">A tracker</string>
     <string name="kind_shady">A scam</string>
     <string name="kind_engine">The game itself</string>
-    <string name="kind_unknown">Nothing to do with ads</string>
+    <string name="kind_unknown">Not recognised</string>
     <string name="explain_mediation">This server goes looking for ads. When a game wants to show you one, it calls here, and this server asks each seller in turn until one has something. Nothing ever answers, so the game waits and gives up.</string>
     <string name="explain_network">This server stores the ad itself: the video, the picture, the fake close button. If it does not answer, there is nothing to show you.</string>
     <string name="explain_bidding">While the game loads, this server puts your attention up for auction. Advertisers pay for the seconds that follow. It all happens in a tenth of a second, before you see anything.</string>
@@ -324,4 +324,6 @@
     <string name="fix_broken_body">Pick it in the list and AdZero will find what to let through, one server at a time.</string>
     <string name="fix_leaked_title">An ad got through</string>
     <string name="fix_leaked_body">Tell AdZero now, while it still remembers what that app just asked for.</string>
+    <string name="level_unknown">Not recognised</string>
+    <string name="level_unknown_text">AdZero has never seen this server. It may be harmless, or an ad server nobody has listed yet. If an ad got through, start here.</string>
 </resources>
