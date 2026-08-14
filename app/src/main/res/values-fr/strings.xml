@@ -320,7 +320,6 @@
     <string name="promo_desc">Une image qui explique AdZero, à envoyer juste avant le fichier.</string>
     <string name="repair_manual">Choisir moi-même</string>
     <string name="repair_manual_body">Relâche celui que tu penses fautif. Même ordre : le plus probablement nécessaire au jeu en premier.</string>
-    <string name="tab_fix">Régler</string>
     <string name="fix_trouble">UN PROBLÈME ?</string>
     <string name="fix_broken_title">Un jeu ne marche plus</string>
     <string name="fix_broken_body">Choisis-le dans la liste et AdZero cherchera quoi laisser passer, un serveur à la fois.</string>

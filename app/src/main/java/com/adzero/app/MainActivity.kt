@@ -76,7 +76,6 @@ class MainActivity : Activity() {
     private lateinit var tourRow: TextView
     private lateinit var promoRow: TextView
     private lateinit var settingsPage: ScrollView
-    private lateinit var fixPage: ScrollView
     private lateinit var setupDone: TextView
     private var advancedOpen = false
     private var appsBatch = 0
@@ -186,12 +185,10 @@ class MainActivity : Activity() {
         homePage = buildHome()
         statsPage = buildStats()
         appsPage = buildApps()
-        fixPage = buildFix()
         settingsPage = buildSettings()
         pages.addView(homePage, LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT))
         pages.addView(statsPage, LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT))
         pages.addView(appsPage, LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT))
-        pages.addView(fixPage, LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT))
         pages.addView(settingsPage, LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT))
         root.addView(pages, LinearLayout.LayoutParams(MATCH_PARENT, 0, 1f))
 
@@ -295,8 +292,8 @@ class MainActivity : Activity() {
                 tick()
                 // Settings arrive from the right and leave to the left, so the
                 // gear feels like a place you go to and come back from.
-                val goingBack = page == 4
-                showPage(if (goingBack) 0 else 4, slideFrom = if (goingBack) -1 else 1)
+                val goingBack = page == 3
+                showPage(if (goingBack) 0 else 3, slideFrom = if (goingBack) -1 else 1)
             }
         }
         header.addView(gear, LinearLayout.LayoutParams(d(44), d(44)).apply { marginStart = d(6) })
@@ -1281,6 +1278,93 @@ class MainActivity : Activity() {
         }
         statsContent.addView(leaderboardList)
 
+        statsContent.addView(Ui.sectionLabel(this, getString(R.string.fix_trouble)))
+        statsContent.addView(Ui.spacer(this, 10))
+        statsContent.addView(troubleRow(R.drawable.ic_bug, R.string.fix_broken_title,
+                                      R.string.fix_broken_body) {
+            showCulprit(broken = true)
+        })
+        statsContent.addView(Ui.spacer(this, 8))
+        statsContent.addView(troubleRow(R.drawable.ic_no_banner, R.string.fix_leaked_title,
+                                      R.string.fix_leaked_body) {
+            showCulprit(broken = false)
+        })
+
+        // Everything below is server names and domains. Nobody outside this
+        // project knows what that means, so it hides behind one line.
+        // What the learning found, in front of the technical fold rather
+        // than behind it. The app watches every app on the phone and works out
+        // which servers behave like ad networks; filing that where nobody
+        // looks meant the work produced nothing.
+        statsContent.addView(wave())
+        statsContent.addView(Ui.sectionLabel(this, getString(R.string.section_learned)))
+        statsContent.addView(Ui.spacer(this, 4))
+        candidateHint = Ui.body(this, getString(R.string.learned_hint)).apply { textSize = 12f }
+        statsContent.addView(candidateHint)
+        statsContent.addView(Ui.spacer(this, 10))
+        candidateList = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutTransition = android.animation.LayoutTransition().apply {
+                enableTransitionType(android.animation.LayoutTransition.CHANGING)
+                setDuration(220)
+            }
+        }
+        statsContent.addView(candidateList)
+
+        // The shield acts on its own judgement rather than on a list, so it
+        // owes the user an account of what it decided. Without this it silences
+        // names nobody ever sees, which is exactly the behaviour people fear
+        // from an app holding their DNS.
+        statsContent.addView(wave())
+        statsContent.addView(Ui.sectionLabel(this, getString(R.string.section_shield)))
+        statsContent.addView(Ui.spacer(this, 10))
+        shieldList = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutTransition = android.animation.LayoutTransition().apply {
+                enableTransitionType(android.animation.LayoutTransition.CHANGING)
+                setDuration(220)
+            }
+        }
+        statsContent.addView(shieldList)
+
+        statsContent.addView(wave())
+        advancedToggle = TextView(this).apply {
+            textSize = 13f
+            typeface = Ui.BOLD
+            gravity = Gravity.CENTER
+            setTextColor(Ui.GREY)
+            setPadding(0, d(13), 0, d(13))
+            background = Ui.softPill(this@MainActivity)
+            setOnClickListener {
+                tick()
+                advancedOpen = !advancedOpen
+                paint()
+            }
+        }
+        statsContent.addView(advancedToggle, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+
+        advancedBox = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        statsContent.addView(advancedBox)
+
+        advancedBox.addView(wave())
+        advancedBox.addView(Ui.sectionLabel(this, getString(R.string.section_custom)))
+        advancedBox.addView(Ui.spacer(this, 10))
+        customList = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        advancedBox.addView(customList)
+
+        advancedBox.addView(wave())
+        advancedBox.addView(Ui.sectionLabel(this, getString(R.string.section_domains)))
+        advancedBox.addView(Ui.spacer(this, 4))
+        advancedBox.addView(Ui.body(this, getString(R.string.explain_hint)).apply {
+            textSize = 12f
+            setTextColor(Ui.DIM)
+        })
+        advancedBox.addView(Ui.spacer(this, 8))
+        domainList = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        advancedBox.addView(domainList)
+
+
+
         return ScrollView(this).apply {
             addView(body)
             isVerticalScrollBarEnabled = false
@@ -1307,104 +1391,6 @@ class MainActivity : Activity() {
      * une page qui commence par un graphique de fierte ne se lit pas quand on
      * cherche pourquoi un jeu ne demarre plus.
      */
-    private fun buildFix(): ScrollView {
-        val fixContent = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(d(16), d(8), d(16), d(16))
-        }
-
-        fixContent.addView(Ui.sectionLabel(this, getString(R.string.fix_trouble)))
-        fixContent.addView(Ui.spacer(this, 10))
-        fixContent.addView(troubleRow(R.drawable.ic_bug, R.string.fix_broken_title,
-                                      R.string.fix_broken_body) {
-            showCulprit(broken = true)
-        })
-        fixContent.addView(Ui.spacer(this, 8))
-        fixContent.addView(troubleRow(R.drawable.ic_no_banner, R.string.fix_leaked_title,
-                                      R.string.fix_leaked_body) {
-            showCulprit(broken = false)
-        })
-
-        // Everything below is server names and domains. Nobody outside this
-        // project knows what that means, so it hides behind one line.
-        // What the learning found, in front of the technical fold rather
-        // than behind it. The app watches every app on the phone and works out
-        // which servers behave like ad networks; filing that where nobody
-        // looks meant the work produced nothing.
-        fixContent.addView(wave())
-        fixContent.addView(Ui.sectionLabel(this, getString(R.string.section_learned)))
-        fixContent.addView(Ui.spacer(this, 4))
-        candidateHint = Ui.body(this, getString(R.string.learned_hint)).apply { textSize = 12f }
-        fixContent.addView(candidateHint)
-        fixContent.addView(Ui.spacer(this, 10))
-        candidateList = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutTransition = android.animation.LayoutTransition().apply {
-                enableTransitionType(android.animation.LayoutTransition.CHANGING)
-                setDuration(220)
-            }
-        }
-        fixContent.addView(candidateList)
-
-        // The shield acts on its own judgement rather than on a list, so it
-        // owes the user an account of what it decided. Without this it silences
-        // names nobody ever sees, which is exactly the behaviour people fear
-        // from an app holding their DNS.
-        fixContent.addView(wave())
-        fixContent.addView(Ui.sectionLabel(this, getString(R.string.section_shield)))
-        fixContent.addView(Ui.spacer(this, 10))
-        shieldList = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutTransition = android.animation.LayoutTransition().apply {
-                enableTransitionType(android.animation.LayoutTransition.CHANGING)
-                setDuration(220)
-            }
-        }
-        fixContent.addView(shieldList)
-
-        fixContent.addView(wave())
-        advancedToggle = TextView(this).apply {
-            textSize = 13f
-            typeface = Ui.BOLD
-            gravity = Gravity.CENTER
-            setTextColor(Ui.GREY)
-            setPadding(0, d(13), 0, d(13))
-            background = Ui.softPill(this@MainActivity)
-            setOnClickListener {
-                tick()
-                advancedOpen = !advancedOpen
-                paint()
-            }
-        }
-        fixContent.addView(advancedToggle, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
-
-        advancedBox = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        fixContent.addView(advancedBox)
-
-        advancedBox.addView(wave())
-        advancedBox.addView(Ui.sectionLabel(this, getString(R.string.section_custom)))
-        advancedBox.addView(Ui.spacer(this, 10))
-        customList = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        advancedBox.addView(customList)
-
-        advancedBox.addView(wave())
-        advancedBox.addView(Ui.sectionLabel(this, getString(R.string.section_domains)))
-        advancedBox.addView(Ui.spacer(this, 4))
-        advancedBox.addView(Ui.body(this, getString(R.string.explain_hint)).apply {
-            textSize = 12f
-            setTextColor(Ui.DIM)
-        })
-        advancedBox.addView(Ui.spacer(this, 8))
-        domainList = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        advancedBox.addView(domainList)
-
-
-        return ScrollView(this).apply {
-            addView(fixContent)
-            isVerticalScrollBarEnabled = false
-        }
-    }
-
     /** Une grande ligne cliquable : une icone, un titre, une explication. */
     private fun troubleRow(
         icon: Int, title: Int, body: Int, onTap: () -> Unit,
@@ -1453,7 +1439,6 @@ class MainActivity : Activity() {
             makeTab(R.drawable.ic_tab_home, getString(R.string.tab_home), 0),
             makeTab(R.drawable.ic_tab_stats, getString(R.string.tab_stats), 1),
             makeTab(R.drawable.ic_tab_apps, getString(R.string.tab_apps), 2),
-            makeTab(R.drawable.ic_bug, getString(R.string.tab_fix), 3),
         )
         for (t in tabs) bar.addView(t, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f))
         return bar
@@ -1501,7 +1486,7 @@ class MainActivity : Activity() {
         for ((i, cell) in tabs.withIndex()) {
             // The settings page keeps the bar visible but with nothing lit, so
             // the gear never looks like a fourth tab.
-            val on = i == page && page != 4
+            val on = i == page && page != 3
             cell.background =
                 if (on) Ui.gradientPill(this, Ui.LIME_A, Ui.LIME_B) else null
             val tint = if (on) Ui.BG_TOP else Ui.GREY
@@ -1540,8 +1525,7 @@ class MainActivity : Activity() {
         homePage.visibility = if (which == 0) View.VISIBLE else View.GONE
         statsPage.visibility = if (which == 1) View.VISIBLE else View.GONE
         appsPage.visibility = if (which == 2) View.VISIBLE else View.GONE
-        fixPage.visibility = if (which == 3) View.VISIBLE else View.GONE
-        settingsPage.visibility = if (which == 4) View.VISIBLE else View.GONE
+        settingsPage.visibility = if (which == 3) View.VISIBLE else View.GONE
 
         // Opening the statistics is what marks its suggestions as seen, which
         // is what puts the dot out. Done before painting the tabs so the badge
@@ -1553,8 +1537,7 @@ class MainActivity : Activity() {
         paint()
 
         if (slideFrom != 0) {
-            val target =
-                listOf(homePage, statsPage, appsPage, fixPage, settingsPage)[which]
+            val target = listOf(homePage, statsPage, appsPage, settingsPage)[which]
             target.translationX = slideFrom * d(90).toFloat()
             target.alpha = 0f
             target.animate()
@@ -1958,7 +1941,7 @@ class MainActivity : Activity() {
             override fun onFling(
                 e1: MotionEvent?, e2: MotionEvent, vx: Float, vy: Float
             ): Boolean {
-                if (page == 4) return false
+                if (page == 3) return false
                 val dx = e2.x - (e1?.x ?: return false)
                 val dy = e2.y - e1.y
                 // Clearly horizontal, or the vertical scrolling in Stats and
@@ -1966,7 +1949,7 @@ class MainActivity : Activity() {
                 if (kotlin.math.abs(dx) < d(60)) return false
                 if (kotlin.math.abs(dx) < kotlin.math.abs(dy) * 1.5f) return false
                 val next = if (dx < 0) page + 1 else page - 1
-                if (next !in 0..3) return false
+                if (next !in 0..2) return false
                 tick()
                 showPage(next, slideFrom = if (dx < 0) 1 else -1)
                 return true
@@ -2618,7 +2601,7 @@ class MainActivity : Activity() {
         // look healthy is not a diagnostic.
 
 
-        if (page == 4) {
+        if (page == 3) {
             paintSetup()
             paintLanguages()
             paintWarning()

@@ -318,7 +318,6 @@
     <string name="promo_desc">An image explaining AdZero, to send just before the installer.</string>
     <string name="repair_manual">Release it myself</string>
     <string name="repair_manual_body">Release the one you think is at fault. Ordered the same way: most likely needed by the game first.</string>
-    <string name="tab_fix">Fix</string>
     <string name="fix_trouble">SOMETHING WRONG?</string>
     <string name="fix_broken_title">A game stopped working</string>
     <string name="fix_broken_body">Pick it in the list and AdZero will find what to let through, one server at a time.</string>
