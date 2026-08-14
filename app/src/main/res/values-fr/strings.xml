@@ -356,4 +356,6 @@
     <string name="milestone_title">pubs qui ne te sont jamais arrivées</string>
     <string name="milestone_body">Soit environ %1$s que tu n\'as pas passées à les regarder. Merci de garder AdZero allumé.</string>
     <string name="milestone_share">Partager le chiffre</string>
+    <string name="reward_action">Voir une pub récompensée</string>
+    <string name="reward_live">Pubs autorisées encore %1$d secondes, le temps de récupérer ta récompense</string>
 </resources>

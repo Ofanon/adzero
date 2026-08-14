@@ -56,7 +56,12 @@ class Attribution(private val ctx: Context) {
     }
 
     /** Needs usage access; returns "?" otherwise. */
-    private fun foreground(): String {
+    /**
+     * Publique depuis que la fenetre "voir une pub recompensee" existe : le
+     * service doit savoir a quelle app l'ouvrir, sans attendre qu'une requete
+     * arrive pour l'apprendre.
+     */
+    fun foreground(): String {
         val now = System.currentTimeMillis()
         if (now - lastLookup < 1500) return lastForeground
         lastLookup = now

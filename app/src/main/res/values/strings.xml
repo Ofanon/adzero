@@ -354,4 +354,6 @@
     <string name="milestone_title">ads never shown to you</string>
     <string name="milestone_body">That is roughly %1$s you did not spend watching them. Thanks for keeping AdZero on.</string>
     <string name="milestone_share">Share the number</string>
+    <string name="reward_action">Let one ad through</string>
+    <string name="reward_live">Ads allowed for %1$d more seconds, so you can claim a reward</string>
 </resources>

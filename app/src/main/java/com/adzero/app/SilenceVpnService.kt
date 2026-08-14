@@ -39,6 +39,9 @@ class SilenceVpnService : VpnService() {
         const val ACTION_START = "com.adzero.app.START"
         const val ACTION_STOP = "com.adzero.app.STOP"
         const val ACTION_PAUSE = "com.adzero.app.PAUSE"
+
+        /** "Je veux la recompense" : une pub laissee passer, puis c'est fini. */
+        const val ACTION_REWARD = "com.adzero.app.REWARD"
         const val ACTION_REPORT = "com.adzero.app.REPORT_ASK"
 
         /**
@@ -159,6 +162,25 @@ class SilenceVpnService : VpnService() {
         null
     }
 
+    /**
+     * Jusqu'a quand laisser passer les pubs, et pour quelle app.
+     *
+     * Soixante secondes : une video a recompense dure quinze a trente
+     * secondes, plus le chargement. Assez pour une, trop court pour que la
+     * protection reste ouverte par distraction.
+     *
+     * Limite a l'app en cours, sinon regarder une pub dans un jeu ouvrirait la
+     * porte a toutes les autres apps du telephone pendant une minute.
+     */
+    @Volatile private var rewardUntil = 0L
+    @Volatile private var rewardApp: String? = null
+
+    private fun rewarding(who: String): Boolean {
+        if (System.currentTimeMillis() > rewardUntil) return false
+        val target = rewardApp ?: return true
+        return who == target || who == "?"
+    }
+
     private var attribution: Attribution? = null
     private var tunnel: ParcelFileDescriptor? = null
     private var worker: Thread? = null
@@ -178,6 +200,13 @@ class SilenceVpnService : VpnService() {
                 lastNotice = 0L
                 refreshNotice()
             }
+            return START_STICKY
+        }
+        if (intent?.action == ACTION_REWARD) {
+            rewardApp = attribution?.foreground()
+            rewardUntil = System.currentTimeMillis() + 60_000L
+            lastNotice = 0L
+            refreshNotice()
             return START_STICKY
         }
         if (intent?.action == ACTION_REPORT) {
@@ -302,7 +331,8 @@ class SilenceVpnService : VpnService() {
             val byTiming = kind == AdNetworks.Kind.NONE &&
                     Shield.shouldSilence(app, Stats.rootOf(host))
             // A pause lets everything through without dropping the tunnel.
-            val isAd = kind != AdNetworks.Kind.NONE || byTiming
+            val wanted = rewarding(app)
+            val isAd = (kind != AdNetworks.Kind.NONE || byTiming) && !wanted
 
             // Every query feeds the learning, including the ones we let
             // through: that is precisely where unknown ad networks hide.
@@ -423,7 +453,9 @@ class SilenceVpnService : VpnService() {
             this, 0, Intent(this, MainActivity::class.java),
             PendingIntent.FLAG_IMMUTABLE
         )
-        val text = getString(R.string.notification_live, Leaderboard.totalAttempts())
+        val left = ((rewardUntil - System.currentTimeMillis()) / 1000L).toInt()
+        val text = if (left > 0) getString(R.string.reward_live, left)
+        else getString(R.string.notification_live, Leaderboard.totalAttempts())
 
         return Notification.Builder(this, CHANNEL)
             .setContentTitle(getString(R.string.app_name))
@@ -442,6 +474,13 @@ class SilenceVpnService : VpnService() {
             .addAction(
                 Notification.Action.Builder(
                     null, getString(R.string.action_stop_short), action(ACTION_STOP, 11)
+                ).build()
+            )
+            // Joignable depuis le jeu, ce qui est tout l'interet : personne ne
+            // quitte une partie pour aller chercher un reglage.
+            .addAction(
+                Notification.Action.Builder(
+                    null, getString(R.string.reward_action), action(ACTION_REWARD, 13)
                 ).build()
             )
             // The report has to be reachable from inside a game, and the
