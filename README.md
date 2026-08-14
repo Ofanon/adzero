@@ -79,6 +79,26 @@ For an ad-network domain, the app simply does not answer.
 Requires JDK 17 and Android SDK 36. Create `local.properties` with your own
 `sdk.dir=` — it is deliberately not committed.
 
+## Tests
+
+```bash
+./gradlew testReleaseUnitTest
+```
+
+Sixteen tests, on the two pieces of logic where a mistake would be serious
+rather than annoying: the validation of the downloaded blocklist, and the order
+in which the four blocking sources settle disagreements.
+
+The first exists because a downloaded list is code you run without reading it.
+Its job is to prove that no entry — however it got into the repository — can
+ever touch a bank, a messaging app or the phone's own services. The second
+fixes the rule that a remote list never overrides an explicit choice made by
+the person holding the phone.
+
+JUnit is a `testImplementation` dependency: it compiles and runs the tests on a
+developer's machine and never enters the APK, so the app itself still ships
+with no third-party code at all.
+
 ## Localisation
 
 English is the default. French, German, Spanish, Italian, Brazilian Portuguese

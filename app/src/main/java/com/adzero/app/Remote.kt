@@ -188,7 +188,8 @@ object Remote {
      * un domaine essentiel ne rentre pas, quoi qu'il arrive. C'est ce qui fait
      * qu'un depot compromis ne peut pas couper la banque de quelqu'un.
      */
-    private fun clean(raw: String): String? {
+    @JvmStatic
+    internal fun clean(raw: String): String? {
         val line = raw.trim().lowercase().substringBefore('#').trim()
         if (line.length < 4 || line.length > 80) return null
         // Un marqueur est un fragment de nom d'hote : lettres, chiffres,

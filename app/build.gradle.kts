@@ -77,4 +77,11 @@ android {
 dependencies {
     // Volontairement aucune dependance : l'interface est construite en code,
     // ce qui evite d'embarquer AppCompat/Material pour trois boutons.
+    //
+    // testImplementation est la seule exception, et elle n'en est pas une :
+    // JUnit sert a compiler et lancer les tests sur la machine de developpement.
+    // Rien de tout cela n'entre dans l'APK, donc l'argument "aucune dependance
+    // tierce" — celui qui rend le binaire lisible pour un analyste et le
+    // dossier F-Droid propre — reste exact.
+    testImplementation("junit:junit:4.13.2")
 }
