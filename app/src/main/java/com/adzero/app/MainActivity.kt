@@ -492,6 +492,57 @@ class MainActivity : Activity() {
         }, "session-card").start()
     }
 
+    /**
+     * La celebration d'un palier.
+     *
+     * Retardee de six dixiemes de seconde apres l'ouverture : arriver dans le
+     * meme instant que la page donne l'impression d'un ecran qui a mal charge,
+     * alors qu'une demi-seconde plus tard, c'est une bonne nouvelle.
+     */
+    private fun celebrate() {
+        val step = Milestones.take()
+        if (step <= 0 || isFinishing || isDestroyed) return
+        buzz()
+
+        val box = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER_HORIZONTAL
+            setPadding(d(24), d(28), d(24), d(10))
+        }
+        box.addView(TextView(this).apply {
+            text = step.toString()
+            setTextColor(Ui.LIME_A)
+            textSize = 56f
+            typeface = Ui.BOLD
+        })
+        box.addView(TextView(this).apply {
+            text = getString(R.string.milestone_title)
+            setTextColor(Ui.TEXT)
+            textSize = 19f
+            typeface = Ui.BOLD
+            gravity = Gravity.CENTER
+            setPadding(0, d(6), 0, 0)
+        })
+        box.addView(Ui.spacer(this, 12))
+        box.addView(Ui.body(this, getString(
+            R.string.milestone_body,
+            formatDuration(step * Leaderboard.SECONDS_PER_AD)
+        )).apply { gravity = Gravity.CENTER })
+
+        box.addView(Ui.spacer(this, 20))
+        box.addView(TextView(this).apply {
+            text = getString(R.string.milestone_share)
+            setTextColor(Ui.BG_TOP)
+            textSize = 13f
+            typeface = Ui.BOLD
+            gravity = Gravity.CENTER
+            setPadding(0, d(13), 0, d(13))
+            background = Ui.gradientPill(this@MainActivity, Ui.LIME_A, Ui.LIME_B)
+            setOnClickListener { buzz(); currentSheet?.dismiss(); shareCard() }
+        }, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+        sheet(box)
+    }
+
     private fun shareCard() {
         Thread({
             val file = try {
@@ -1969,6 +2020,7 @@ class MainActivity : Activity() {
         // The user may have granted something in Settings and come back.
         Ui.animating = true
         stack.invalidate()
+        if (Milestones.pending > 0) root.postDelayed({ celebrate() }, 600)
         // The counters kept moving while the app was away, so nothing on the
         // statistics page can be assumed still current. Forgetting what was
         // last drawn makes the next paint rebuild it for real.

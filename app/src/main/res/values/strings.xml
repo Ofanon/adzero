@@ -351,4 +351,7 @@
     <string name="card_session_played">played</string>
     <string name="channel_session">End of session</string>
     <string name="channel_session_body">A notice when you close a game, with what AdZero stopped while you played.</string>
+    <string name="milestone_title">ads never shown to you</string>
+    <string name="milestone_body">That is roughly %1$s you did not spend watching them. Thanks for keeping AdZero on.</string>
+    <string name="milestone_share">Share the number</string>
 </resources>

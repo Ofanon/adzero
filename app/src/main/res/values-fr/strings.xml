@@ -353,4 +353,7 @@
     <string name="card_session_played">jouées</string>
     <string name="channel_session">Fin de partie</string>
     <string name="channel_session_body">Un message quand tu fermes un jeu, avec ce qu\'AdZero a stoppe pendant que tu jouais.</string>
+    <string name="milestone_title">pubs qui ne te sont jamais arrivées</string>
+    <string name="milestone_body">Soit environ %1$s que tu n\'as pas passées à les regarder. Merci de garder AdZero allumé.</string>
+    <string name="milestone_share">Partager le chiffre</string>
 </resources>

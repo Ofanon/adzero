@@ -202,11 +202,13 @@ class SilenceVpnService : VpnService() {
         Leaderboard.init(this)
         History.init(this)
         Shield.init(this)
+        Milestones.init(this)
         Recent.init(this)
         // One ad in the history per ad in the leaderboard, never per request.
         // The same signal arms the shield: a burst means an ad is loading now.
         Leaderboard.onAttempt = { app ->
             History.recordAd()
+            Milestones.check(Leaderboard.totalAttempts())
             Shield.openWindow(app)
         }
         AppFilter.init(this)
