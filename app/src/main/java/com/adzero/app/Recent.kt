@@ -1,5 +1,8 @@
 package com.adzero.app
 
+import android.content.Context
+import java.io.File
+
 /**
  * The last half-minute of DNS, kept in memory so a user can point at an ad.
  *
@@ -24,7 +27,18 @@ object Recent {
      * much larger haystack — which is why [weigh] now scores recency instead of
      * relying on the window to do the filtering.
      */
-    const val WINDOW_MS = 5 * 60_000L
+    /**
+     * Trois heures, pas cinq minutes.
+     *
+     * Personne ne signale une pub pendant la partie : on joue, on ferme, et on
+     * y pense apres. Une fenetre de cinq minutes n'attrapait donc que les gens
+     * qui pensaient a revenir immediatement, c'est-a-dire personne.
+     *
+     * Ce que ca coutait avant : impossible, l'anneau gardait chaque requete.
+     * Depuis que les traces sont repliees par (app, domaine), trois heures
+     * tiennent dans moins de place que cinq minutes n'en prenaient.
+     */
+    const val WINDOW_MS = 3 * 60 * 60_000L
 
     /**
      * Which app was on screen is a question about *now*, not about the last
@@ -33,18 +47,89 @@ object Recent {
     private const val FOREGROUND_MS = 90_000L
 
     /** A ceiling, not a target: a game in a burst can fire hundreds a minute. */
-    private const val CAPACITY = 2500
+    /** Traces distinctes, pas requetes : une partie en produit quelques dizaines. */
+    private const val CAPACITY = 4000
 
-    class Hit(val host: String, val app: String, val at: Long, val blocked: Boolean)
+    /**
+     * Ce qu'une app a demande, replie.
+     *
+     * [hits] compte les requetes, [at] retient la derniere. C'est tout ce que
+     * le scoring lit — il n'a jamais eu besoin de l'horodatage de chacune.
+     */
+    class Hit(val host: String, val app: String, var at: Long, var blocked: Boolean) {
+        var hits: Int = 1
+    }
 
-    private val ring = ArrayDeque<Hit>()
+    private val ring = LinkedHashMap<String, Hit>()
+    private var file: File? = null
+    @Volatile private var dirty = false
+
+    private fun key(app: String, host: String) = app + "|" + Stats.rootOf(host)
 
     fun note(host: String, app: String, blocked: Boolean) {
         val now = System.currentTimeMillis()
         synchronized(ring) {
-            ring.addLast(Hit(host, app, now, blocked))
-            while (ring.size > CAPACITY) ring.removeFirst()
-            while (ring.isNotEmpty() && now - ring.first().at > WINDOW_MS) ring.removeFirst()
+            val k = key(app, host)
+            val seen = ring.remove(k)
+            if (seen != null) {
+                seen.hits++
+                seen.at = now
+                seen.blocked = blocked
+                ring[k] = seen          // remis en queue : le plus recent en dernier
+            } else {
+                ring[k] = Hit(Stats.rootOf(host), app, now, blocked)
+            }
+            dirty = true
+            while (ring.size > CAPACITY) ring.remove(ring.keys.first())
+            val cutoff = now - WINDOW_MS
+            val stale = ring.entries.takeWhile { it.value.at < cutoff }.map { it.key }
+            for (k2 in stale) ring.remove(k2)
+        }
+    }
+
+    /**
+     * Recharge le journal au demarrage.
+     *
+     * Sans ca, fermer l'app effacait la seule chose qui permettait d'expliquer
+     * ce qui venait de se passer — et l'app se ferme precisement quand on lance
+     * un jeu.
+     */
+    fun init(ctx: Context) {
+        if (file != null) return
+        val f = File(ctx.applicationContext.filesDir, "recent.txt")
+        file = f
+        if (!f.exists()) return
+        val cutoff = System.currentTimeMillis() - WINDOW_MS
+        try {
+            f.forEachLine { line ->
+                val parts = line.split("|")
+                if (parts.size == 5) {
+                    val at = parts[3].toLongOrNull() ?: return@forEachLine
+                    if (at < cutoff) return@forEachLine
+                    val hit = Hit(parts[1], parts[0], at, parts[4] == "1")
+                    hit.hits = parts[2].toIntOrNull() ?: 1
+                    synchronized(ring) { ring[parts[0] + "|" + parts[1]] = hit }
+                }
+            }
+        } catch (_: Exception) {
+        }
+    }
+
+    fun save() {
+        val f = file ?: return
+        if (!dirty) return
+        try {
+            val copy = synchronized(ring) { ring.values.toList() }
+            f.bufferedWriter().use { w ->
+                for (h in copy) {
+                    // Un domaine ne contient jamais de barre verticale, ni un
+                    // nom de paquet : le separateur est sur.
+                    w.write(h.app + "|" + h.host + "|" + h.hits + "|" + h.at +
+                            "|" + (if (h.blocked) "1" else "0") + "\n")
+                }
+            }
+            dirty = false
+        } catch (_: Exception) {
         }
     }
 
@@ -61,11 +146,11 @@ object Recent {
         val now = System.currentTimeMillis()
         val counts = HashMap<String, Int>()
         synchronized(ring) {
-            for (h in ring) {
+            for (h in ring.values) {
                 if (now - h.at > WINDOW_MS) continue
                 if (h.app == "?" || h.app == "com.adzero.app") continue
                 if (Shield.isSystemService(h.app)) continue
-                counts[h.app] = (counts[h.app] ?: 0) + 1
+                counts[h.app] = (counts[h.app] ?: 0) + h.hits
             }
         }
         return counts.entries.sortedByDescending { it.value }.take(max).map { it.key }
@@ -75,10 +160,10 @@ object Recent {
         val now = System.currentTimeMillis()
         val counts = HashMap<String, Int>()
         synchronized(ring) {
-            for (h in ring) {
+            for (h in ring.values) {
                 if (now - h.at > FOREGROUND_MS) continue
                 if (h.app == "?" || h.app == "com.adzero.app") continue
-                counts[h.app] = (counts[h.app] ?: 0) + 1
+                counts[h.app] = (counts[h.app] ?: 0) + h.hits
             }
         }
         return counts.maxByOrNull { it.value }?.key
@@ -118,7 +203,7 @@ object Recent {
         val now = System.currentTimeMillis()
         val byDomain = LinkedHashMap<String, MutableList<Hit>>()
         synchronized(ring) {
-            for (h in ring) {
+            for (h in ring.values) {
                 if (now - h.at > WINDOW_MS) continue
                 if (h.blocked) continue
                 if (h.app == "com.adzero.app") continue
@@ -126,7 +211,7 @@ object Recent {
                 // Accusing a CDN of serving the ad is how a blocker ends up
                 // breaking the game it was meant to clean up.
                 if (Learning.isInfrastructure(Stats.rootOf(h.host))) continue
-                byDomain.getOrPut(Stats.rootOf(h.host)) { mutableListOf() }.add(h)
+                byDomain.getOrPut(h.host) { mutableListOf() }.add(h)
             }
         }
         return byDomain.entries
@@ -142,6 +227,9 @@ object Recent {
      * cannot justify is a verdict nobody can act on.
      */
     private fun weigh(domain: String, hits: List<Hit>): Suspect {
+        // Les traces sont repliees : une ligne par app, avec son compteur.
+        // Compter les lignes reviendrait a compter les apps, pas les requetes.
+        val seen = hits.sumOf { it.hits }
         var s = 0
         val why = mutableListOf<Reason>()
 
@@ -181,7 +269,7 @@ object Recent {
         // Contacted once or twice rather than steadily. Over five minutes this
         // separates cleanly: an app's own backend chatters the whole time, an
         // ad server is called when there is an ad to fetch and never again.
-        if (hits.size <= 2) {
+        if (seen <= 2) {
             s += 20
             why.add(Reason(R.string.reason_once))
         }
@@ -193,7 +281,7 @@ object Recent {
         if (age < 60) s += 30 else if (age < 180) s += 15
 
         if (why.isEmpty()) why.add(Reason(R.string.reason_nothing))
-        return Suspect(domain, hits.first().app, s, hits.size, why)
+        return Suspect(domain, hits.first().app, s, seen, why)
     }
 
     private val CHEAP_TLDS = setOf(
@@ -223,20 +311,21 @@ object Recent {
         val now = System.currentTimeMillis()
         val byDomain = LinkedHashMap<String, MutableList<Hit>>()
         synchronized(ring) {
-            for (h in ring) {
+            for (h in ring.values) {
                 if (now - h.at > WINDOW_MS) continue
                 if (!h.blocked) continue
                 if (h.app != app) continue
-                byDomain.getOrPut(Stats.rootOf(h.host)) { mutableListOf() }.add(h)
+                byDomain.getOrPut(h.host) { mutableListOf() }.add(h)
             }
         }
         return byDomain.entries.map { (domain, hits) ->
+            val seen = hits.sumOf { it.hits }
             var score = 0
             val why = mutableListOf<Reason>()
 
-            if (hits.size >= 3) {
-                score += minOf(hits.size, 12) * 6
-                why.add(Reason(R.string.reason_retried, hits.size))
+            if (seen >= 3) {
+                score += minOf(seen, 12) * 6
+                why.add(Reason(R.string.reason_retried, seen))
             }
             if (Learning.isInfrastructure(domain)) {
                 score += 45
@@ -256,7 +345,7 @@ object Recent {
                 why.add(Reason(R.string.reason_engine))
             }
             if (why.isEmpty()) why.add(Reason(R.string.reason_nothing))
-            Suspect(domain, app, score, hits.size, why)
+            Suspect(domain, app, score, seen, why)
         }.sortedByDescending { it.score }.take(max)
     }
 
@@ -264,10 +353,10 @@ object Recent {
         val now = System.currentTimeMillis()
         val counts = LinkedHashMap<String, Int>()
         synchronized(ring) {
-            for (h in ring) {
+            for (h in ring.values) {
                 if (now - h.at > WINDOW_MS || !h.blocked) continue
                 if (h.app == "?" || h.app == "com.adzero.app") continue
-                counts[h.app] = (counts[h.app] ?: 0) + 1
+                counts[h.app] = (counts[h.app] ?: 0) + h.hits
             }
         }
         return counts.entries.sortedByDescending { it.value }.take(max).map { it.key }
@@ -283,7 +372,7 @@ object Recent {
         val now = System.currentTimeMillis()
         val seen = LinkedHashMap<String, Long>()
         synchronized(ring) {
-            for (h in ring) {
+            for (h in ring.values) {
                 if (now - h.at > WINDOW_MS || !h.blocked || h.app != app) continue
                 val root = Stats.rootOf(h.host)
                 seen[root] = maxOf(seen[root] ?: 0L, h.at)
@@ -317,11 +406,13 @@ object Recent {
     fun timesSeen(app: String, root: String): Int {
         val now = System.currentTimeMillis()
         return synchronized(ring) {
-            ring.count {
-                now - it.at <= WINDOW_MS && it.app == app && Stats.rootOf(it.host) == root
-            }
+            // Le nombre de requetes, pas de traces : c'est bien la
+            // repetition qui distingue une dependance d'une pub.
+            ring.values
+                .filter { now - it.at <= WINDOW_MS && it.app == app && it.host == root }
+                .sumOf { it.hits }
         }
     }
 
-    fun clear() = synchronized(ring) { ring.clear() }
+    fun clear() = synchronized(ring) { ring.clear(); dirty = true }
 }

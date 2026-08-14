@@ -35,6 +35,7 @@ object Persist {
         Leaderboard.save()
         History.save()
         Shield.save()
+        Recent.save()
     }
 
     /** Starts the periodic write. Safe to call more than once. */
