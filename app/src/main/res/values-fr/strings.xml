@@ -328,4 +328,6 @@
     <string name="fix_leaked_body">Dis-le maintenant, tant qu\'AdZero se souvient de ce que cette app vient de demander.</string>
     <string name="level_unknown">Non reconnu</string>
     <string name="level_unknown_text">AdZero n\'a jamais vu ce serveur. Il peut être inoffensif, ou un serveur de pub que personne n\'a encore répertorié. Si une pub est passée, commence par là.</string>
+    <string name="leaderboard_no_usage">AdZero bloque bien les pubs, le compteur au-dessus le prouve. Mais il ne peut pas savoir quelle app les demandait, donc cette liste reste vide. Une permission suffit à tout débloquer.</string>
+    <string name="leaderboard_grant">Autoriser AdZero à nommer les apps</string>
 </resources>

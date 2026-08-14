@@ -2783,6 +2783,32 @@ class MainActivity : Activity() {
         pauseAnimation(leaderboardList)
         leaderboardList.removeAllViews()
         if (rows.isEmpty()) {
+            // Sans l'acces aux statistiques d'usage, chaque requete arrive
+            // anonyme : AdZero bloque toujours, mais ne peut nommer personne.
+            // Dire "lance un jeu" a quelqu'un qui vient d'en lancer un est la
+            // pire reponse possible — elle accuse et elle n'aide pas.
+            if (!Attribution.usageAccessGranted(this)) {
+                leaderboardList.addView(Ui.body(this, getString(R.string.leaderboard_no_usage)))
+                leaderboardList.addView(Ui.spacer(this, 12))
+                leaderboardList.addView(TextView(this).apply {
+                    text = getString(R.string.leaderboard_grant)
+                    setTextColor(Ui.BG_TOP)
+                    textSize = 13f
+                    typeface = Ui.BOLD
+                    gravity = Gravity.CENTER
+                    setPadding(0, d(13), 0, d(13))
+                    background = Ui.gradientPill(this@MainActivity, Ui.LIME_A, Ui.LIME_B)
+                    setOnClickListener {
+                        buzz()
+                        // On ouvre le reglage ; c'est l'utilisateur qui accorde.
+                        try {
+                            startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+                        } catch (_: Exception) {
+                        }
+                    }
+                }, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+                return
+            }
             leaderboardList.addView(Ui.body(this, getString(R.string.leaderboard_empty)))
             return
         }
