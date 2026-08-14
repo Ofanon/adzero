@@ -3017,14 +3017,26 @@ class MainActivity : Activity() {
      * une liste ou tout se ressemble redemande a l'utilisateur de faire le tri
      * qu'on venait de faire pour lui.
      */
-    private fun showCulprit(broken: Boolean, app: String? = null) {
-        val target = app
-            ?: if (broken) Recent.silencedApps(1).firstOrNull() else Recent.busiestApp()
+    /** Rouvre le choix de l'app, meme quand une seule est candidate. */
+    private fun showCulpritPicker(broken: Boolean) {
+        forcePicker = true
+        showCulprit(broken)
+        forcePicker = false
+    }
 
-        // Pour un jeu casse, l'utilisateur sait lequel et nous non : plusieurs
-        // apps ont pu etre silencees pendant qu'il jouait.
-        val silenced = if (broken) Recent.silencedApps(6) else emptyList()
-        if (broken && app == null && silenced.size > 1) {
+    private var forcePicker = false
+
+    private fun showCulprit(broken: Boolean, app: String? = null) {
+        // Les candidates : celles qu'on a fait taire pour un jeu casse, celles
+        // qui ont parle pour une pub passee. Jamais un service du systeme.
+        val choices = (if (broken) Recent.silencedApps(6) else Recent.activeApps(6))
+            .filterNot { Shield.isSystemService(it) }
+        val target = app ?: choices.firstOrNull()
+
+        // L'utilisateur sait de quelle app il parle et nous non : plusieurs ont
+        // pu etre actives pendant qu'il jouait. On devine, mais on laisse
+        // toujours corriger.
+        if (app == null && (choices.size > 1 || forcePicker) && choices.isNotEmpty()) {
             val pick = LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL
                 setPadding(d(24), d(22), d(24), d(12))
@@ -3036,7 +3048,7 @@ class MainActivity : Activity() {
                 typeface = Ui.BOLD
             })
             pick.addView(Ui.spacer(this, 14))
-            for (pkg in silenced) {
+            for (pkg in choices) {
                 val row = LinearLayout(this).apply {
                     orientation = LinearLayout.HORIZONTAL
                     gravity = Gravity.CENTER_VERTICAL
@@ -3044,7 +3056,7 @@ class MainActivity : Activity() {
                     setPadding(d(12), d(10), d(12), d(10))
                     isClickable = true
                     setOnClickListener {
-                        buzz(); currentSheet?.dismiss(); showCulprit(true, pkg)
+                        buzz(); currentSheet?.dismiss(); showCulprit(broken, pkg)
                     }
                 }
                 AppsCatalog.iconFor(this, pkg)?.let { icon ->
@@ -3094,11 +3106,19 @@ class MainActivity : Activity() {
         if (target != null) {
             box.addView(Ui.spacer(this, 10))
             box.addView(TextView(this).apply {
-                text = appLabel(target)
+                // Cliquable, et il le montre : c'est une supposition, pas un
+                // constat, et se tromper d'app rend tout l'ecran inutile.
+                text = appLabel(target) + "  \u25BE"
                 setTextColor(Ui.LIME_A)
                 textSize = 13f
                 typeface = Ui.BOLD
-            })
+                setPadding(d(10), d(7), d(10), d(7))
+                background = Ui.softPill(this@MainActivity)
+                isClickable = true
+                setOnClickListener {
+                    buzz(); currentSheet?.dismiss(); showCulpritPicker(broken)
+                }
+            }, LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT))
         }
         box.addView(Ui.spacer(this, 16))
 

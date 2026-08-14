@@ -49,6 +49,28 @@ object Recent {
     }
 
     /** The app that resolved the most names recently: the one on screen. */
+    /**
+     * Les apps qui ont parle recemment, celle qui a le plus parle en tete.
+     *
+     * Les services du systeme en sont exclus. Ils emettent en permanence, donc
+     * ils gagnent tous les classements par volume — et ils n'ont jamais montre
+     * de publicite a personne. Les proposer comme coupable, c'est designer le
+     * temoin le plus bruyant de la piece.
+     */
+    fun activeApps(max: Int = 8): List<String> {
+        val now = System.currentTimeMillis()
+        val counts = HashMap<String, Int>()
+        synchronized(ring) {
+            for (h in ring) {
+                if (now - h.at > WINDOW_MS) continue
+                if (h.app == "?" || h.app == "com.adzero.app") continue
+                if (Shield.isSystemService(h.app)) continue
+                counts[h.app] = (counts[h.app] ?: 0) + 1
+            }
+        }
+        return counts.entries.sortedByDescending { it.value }.take(max).map { it.key }
+    }
+
     fun busiestApp(): String? {
         val now = System.currentTimeMillis()
         val counts = HashMap<String, Int>()

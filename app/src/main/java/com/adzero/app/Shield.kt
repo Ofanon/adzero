@@ -68,6 +68,10 @@ object Shield {
      * fetch ad identifiers, and that stays blocked. This only stops the shield
      * from guessing about names nobody vetted.
      */
+    /** Un service du systeme, jamais une app qu'on ouvre. */
+    fun isSystemService(app: String): Boolean =
+        NEVER_JUDGED.any { app.startsWith(it) }
+
     private val NEVER_JUDGED = listOf(
         "com.google.android.gms",
         "com.google.android.gsf",
