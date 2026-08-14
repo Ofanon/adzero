@@ -354,10 +354,6 @@
     <string name="milestone_title">ads never shown to you</string>
     <string name="milestone_body">That is roughly %1$s you did not spend watching them. Thanks for keeping AdZero on.</string>
     <string name="milestone_share">Share the number</string>
-    <string name="reward_action">Let one ad through</string>
-    <string name="reward_live">Ads allowed for %1$d more seconds, so you can claim a reward</string>
-    <string name="setting_reward">Allow rewarded ads</string>
-    <string name="setting_reward_body">Adds a button to the notice so you can let one ad through when a game offers a reward for it. Off by default.</string>
     <string name="setting_remote">Keep the blocklist up to date</string>
     <string name="setting_remote_body">Downloads the list of ad servers from AdZero\'s public repository once a day. It sends nothing about you, and it can only ever add servers, never unblock one. %1$d added, updated %2$s.</string>
     <string name="remote_never">never yet</string>

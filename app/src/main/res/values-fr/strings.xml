@@ -356,10 +356,6 @@
     <string name="milestone_title">pubs qui ne te sont jamais arrivées</string>
     <string name="milestone_body">Soit environ %1$s que tu n\'as pas passées à les regarder. Merci de garder AdZero allumé.</string>
     <string name="milestone_share">Partager le chiffre</string>
-    <string name="reward_action">Voir une pub récompensée</string>
-    <string name="reward_live">Pubs autorisées encore %1$d secondes, le temps de récupérer ta récompense</string>
-    <string name="setting_reward">Autoriser les pubs à récompense</string>
-    <string name="setting_reward_body">Ajoute un bouton dans la notification pour laisser passer une seule pub quand un jeu offre une récompense. Désactivé par défaut.</string>
     <string name="setting_remote">Garder la liste à jour</string>
     <string name="setting_remote_body">Télécharge une fois par jour la liste des serveurs publicitaires depuis le dépôt public d\'AdZero. Rien te concernant n\'est envoyé, et elle ne peut qu\'ajouter des serveurs, jamais en débloquer un. %1$d ajoutés, mise à jour %2$s.</string>
     <string name="remote_never">jamais encore</string>

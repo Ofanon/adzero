@@ -138,7 +138,6 @@ class MainActivity : Activity() {
     private lateinit var troubleCard: LinearLayout
     private lateinit var reportRow: TextView
     private lateinit var sessionRow: TextView
-    private lateinit var rewardRow: TextView
     private lateinit var remoteRow: TextView
     private lateinit var newsBar: LinearLayout
     private lateinit var newsIcon: ImageView
@@ -1741,12 +1740,6 @@ class MainActivity : Activity() {
         )
         tintRow(remoteRow, if (Stats.remoteList) Ui.LIME_A else Ui.GREY)
 
-        rewardRow.text = rowText(
-            getString(R.string.setting_reward),
-            getString(R.string.setting_reward_body)
-        )
-        tintRow(rewardRow, if (Stats.rewardButton) Ui.LIME_A else Ui.GREY)
-
         sessionRow.text = rowText(
             getString(R.string.setting_session),
             getString(R.string.setting_session_body)
@@ -1889,30 +1882,6 @@ class MainActivity : Activity() {
         body.addView(Ui.spacer(this, 8))
         // Le rapport de fin de partie. Coupable ici, sinon les gens le
         // coupent au niveau d'Android et perdent aussi les alertes utiles.
-        // Eteint par defaut, et decrit sans detour : c'est bien une pub qu'on
-        // laisse passer, pas un reglage de confort.
-        remoteRow = settingRow(R.drawable.ic_globe) {
-            Stats.remoteList = !Stats.remoteList
-            // Allumer le reglage verifie tout de suite : attendre le lendemain
-            // pour qu'il se passe quelque chose donne l'impression que
-            // l'interrupteur ne fait rien.
-            if (Stats.remoteList) Remote.refresh(this, force = true)
-            paintToggles()
-        }
-        body.addView(remoteRow, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
-        body.addView(Ui.spacer(this, 8))
-
-        rewardRow = settingRow(R.drawable.ic_no_video) {
-            Stats.rewardButton = !Stats.rewardButton
-            paintToggles()
-            if (Stats.running) startService(
-                Intent(this, SilenceVpnService::class.java)
-                    .setAction(SilenceVpnService.ACTION_REFRESH)
-            )
-        }
-        body.addView(rewardRow, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
-        body.addView(Ui.spacer(this, 8))
-
         sessionRow = settingRow(R.drawable.ic_clock) {
             Stats.sessionReports = !Stats.sessionReports
             paintToggles()

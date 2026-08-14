@@ -39,9 +39,6 @@ class SilenceVpnService : VpnService() {
         const val ACTION_START = "com.adzero.app.START"
         const val ACTION_STOP = "com.adzero.app.STOP"
         const val ACTION_PAUSE = "com.adzero.app.PAUSE"
-
-        /** "Je veux la recompense" : une pub laissee passer, puis c'est fini. */
-        const val ACTION_REWARD = "com.adzero.app.REWARD"
         const val ACTION_REPORT = "com.adzero.app.REPORT_ASK"
 
         /**
@@ -162,48 +159,6 @@ class SilenceVpnService : VpnService() {
         null
     }
 
-    /**
-     * Jusqu'a quand laisser passer les pubs, et pour quelle app.
-     *
-     * Soixante secondes : une video a recompense dure quinze a trente
-     * secondes, plus le chargement. Assez pour une, trop court pour que la
-     * protection reste ouverte par distraction.
-     *
-     * Limite a l'app en cours, sinon regarder une pub dans un jeu ouvrirait la
-     * porte a toutes les autres apps du telephone pendant une minute.
-     */
-    @Volatile private var rewardUntil = 0L
-    @Volatile private var rewardApp: String? = null
-
-    /**
-     * Combien de serveurs publicitaires la fenetre a deja laisses passer.
-     *
-     * Le chrono seul ne suffit pas, et c'est le defaut qu'Oscar a vu : une
-     * minute de porte ouverte n'est pas "une pub", c'est une minute pendant
-     * laquelle le SDK precharge tout ce qu'il peut. Les interstitielles ainsi
-     * mises en cache se joueront plus tard, alors qu'AdZero a repris son
-     * travail — et seul un redemarrage du jeu vide ce cache.
-     *
-     * On compte donc les requetes autorisees et on referme des qu'un
-     * chargement de pub est passe. Le chrono ne sert plus que de plafond, pour
-     * le cas ou la personne appuie sans qu'aucune pub n'arrive.
-     */
-    @Volatile private var rewardBudget = 0
-
-    /**
-     * Un chargement de pub resout une dizaine de noms : la cascade de
-     * mediation, le gagnant, ses traceurs. Quinze laisse passer la premiere
-     * confortablement et arrete la deuxieme.
-     */
-    private val REWARD_BUDGET = 15
-
-    private fun rewarding(who: String): Boolean {
-        if (System.currentTimeMillis() > rewardUntil) return false
-        if (rewardBudget <= 0) return false
-        val target = rewardApp ?: return true
-        return who == target || who == "?"
-    }
-
     private var attribution: Attribution? = null
     private var tunnel: ParcelFileDescriptor? = null
     private var worker: Thread? = null
@@ -223,14 +178,6 @@ class SilenceVpnService : VpnService() {
                 lastNotice = 0L
                 refreshNotice()
             }
-            return START_STICKY
-        }
-        if (intent?.action == ACTION_REWARD) {
-            rewardApp = attribution?.foreground()
-            rewardUntil = System.currentTimeMillis() + 60_000L
-            rewardBudget = REWARD_BUDGET
-            lastNotice = 0L
-            refreshNotice()
             return START_STICKY
         }
         if (intent?.action == ACTION_REPORT) {
@@ -357,19 +304,7 @@ class SilenceVpnService : VpnService() {
             val byTiming = kind == AdNetworks.Kind.NONE &&
                     Shield.shouldSilence(app, Stats.rootOf(host))
             // A pause lets everything through without dropping the tunnel.
-            val wouldBlock = kind != AdNetworks.Kind.NONE || byTiming
-            val wanted = wouldBlock && rewarding(app)
-            // Chaque serveur publicitaire laisse passer entame le budget. La
-            // fenetre se referme sur la premiere pub, pas sur le chrono.
-            if (wanted) {
-                rewardBudget--
-                if (rewardBudget <= 0) {
-                    rewardUntil = 0L
-                    lastNotice = 0L
-                    refreshNotice()
-                }
-            }
-            val isAd = wouldBlock && !wanted
+            val isAd = kind != AdNetworks.Kind.NONE || byTiming
 
             // Every query feeds the learning, including the ones we let
             // through: that is precisely where unknown ad networks hide.
@@ -490,9 +425,7 @@ class SilenceVpnService : VpnService() {
             this, 0, Intent(this, MainActivity::class.java),
             PendingIntent.FLAG_IMMUTABLE
         )
-        val left = ((rewardUntil - System.currentTimeMillis()) / 1000L).toInt()
-        val text = if (left > 0) getString(R.string.reward_live, left)
-        else getString(R.string.notification_live, Leaderboard.totalAttempts())
+        val text = getString(R.string.notification_live, Leaderboard.totalAttempts())
 
         return Notification.Builder(this, CHANNEL)
             .setContentTitle(getString(R.string.app_name))
@@ -513,17 +446,6 @@ class SilenceVpnService : VpnService() {
                     null, getString(R.string.action_stop_short), action(ACTION_STOP, 11)
                 ).build()
             )
-            // Joignable depuis le jeu, ce qui est tout l'interet : personne ne
-            // quitte une partie pour aller chercher un reglage. Mais absent
-            // tant qu'on ne l'a pas demande : la promesse par defaut reste
-            // "plus de pub", sans echappatoire affichee a cote.
-            .apply {
-                if (Stats.rewardButton) addAction(
-                    Notification.Action.Builder(
-                        null, getString(R.string.reward_action), action(ACTION_REWARD, 13)
-                    ).build()
-                )
-            }
             // The report has to be reachable from inside a game, and the
             // notification shade is the only surface that always is. An ad the
             // user has to remember about until they next open the app is an ad
