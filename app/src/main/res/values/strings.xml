@@ -349,4 +349,6 @@
     <string name="setting_session_body">A notice when you close a game, with what AdZero stopped while you played.</string>
     <string name="card_session_ads">ads blocked</string>
     <string name="card_session_played">played</string>
+    <string name="channel_session">End of session</string>
+    <string name="channel_session_body">A notice when you close a game, with what AdZero stopped while you played.</string>
 </resources>

@@ -1,10 +1,12 @@
 package com.adzero.app
 
 import android.app.Notification
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 
 /**
  * Le rapport de fin de partie.
@@ -31,7 +33,20 @@ import android.content.Intent
  */
 object Session {
 
-    private const val CHANNEL = "adsilence"
+    /**
+     * Son propre canal, et c'est necessaire.
+     *
+     * Le canal du tunnel est en IMPORTANCE_LOW parce qu'une notification
+     * permanente qui sonnerait a chaque demarrage serait insupportable. Mais
+     * un rapport de fin de partie herite alors de la meme discretion : il
+     * atterrit dans les "silencieuses", sans son ni banniere, c'est-a-dire la
+     * ou personne ne le voit.
+     *
+     * Android fige l'importance d'un canal a sa creation : impossible de la
+     * relever ensuite. Il en faut donc un second, et un seul reglage Android
+     * peut alors couper les rapports sans toucher a la notification du VPN.
+     */
+    private const val CHANNEL = "adzero.session"
     private const val ID = 4102
 
     /** En dessous, il n'y a rien a annoncer. */
@@ -110,6 +125,18 @@ object Session {
     private fun notify(ctx: Context, who: String, minutes: Int, blocked: Int) {
         if (!Stats.sessionReports) return
         val manager = ctx.getSystemService(NotificationManager::class.java) ?: return
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            manager.createNotificationChannel(
+                NotificationChannel(
+                    CHANNEL,
+                    ctx.getString(R.string.channel_session),
+                    NotificationManager.IMPORTANCE_DEFAULT
+                ).apply {
+                    description = ctx.getString(R.string.channel_session_body)
+                    setShowBadge(true)
+                }
+            )
+        }
         val label = try {
             val pm = ctx.packageManager
             pm.getApplicationLabel(pm.getApplicationInfo(who, 0)).toString()
