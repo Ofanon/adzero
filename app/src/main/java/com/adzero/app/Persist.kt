@@ -29,6 +29,29 @@ object Persist {
     private val main = Handler(Looper.getMainLooper())
     private var scheduled = false
 
+    /**
+     * L'ecriture ne se fait pas sur le thread qui dessine.
+     *
+     * Le minuteur, lui, y reste : un Handler du Looper principal est la facon
+     * la plus simple de reveiller quelque chose toutes les 90 secondes. Mais
+     * ce qu'il declenche part sur ce fil-ci.
+     *
+     * C'etait deja douteux avec cinq petits fichiers ; le journal des requetes
+     * en ajoute un de plusieurs milliers de lignes, et l'interface s'arretait
+     * le temps de l'ecrire — toutes les 90 secondes, pendant les animations.
+     *
+     * Un seul fil, donc deux sauvegardes ne peuvent pas se chevaucher et
+     * chaque store garde son verrou pour lui seul.
+     */
+    private val disk = java.util.concurrent.Executors.newSingleThreadExecutor { r ->
+        Thread(r, "adzero-disk").apply { isDaemon = true }
+    }
+
+    /**
+     * Synchrone, et elle doit le rester : les deux appels de l'arret du
+     * service se font quelques millisecondes avant que le processus meure, et
+     * une ecriture partie en fond n'aurait pas le temps d'aboutir.
+     */
     fun saveAll() {
         Stats.save()
         Learning.save()
@@ -52,7 +75,9 @@ object Persist {
 
     private val loop = object : Runnable {
         override fun run() {
-            saveAll()
+            // L'ecriture part en fond ; le prochain reveil est reprogramme
+            // tout de suite, sans attendre qu'elle finisse.
+            disk.execute { saveAll() }
             if (scheduled) main.postDelayed(this, EVERY_MS)
         }
     }
