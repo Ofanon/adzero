@@ -45,6 +45,25 @@ You can check which one is in use:
 adb logcat -s AdSilence
 ```
 
+**One deliberate exception, added in 1.1.** Once a day, AdZero downloads the
+list of ad servers from its own public repository on GitHub:
+
+```
+https://raw.githubusercontent.com/Ofanon/adzero/main/blocklist.txt
+```
+
+This is a plain file request, like a browser loading a page. It carries no
+identifier, no account, no cookie, and nothing about you or your apps — GitHub
+sees an IP address and the name of the file, as it would for anyone reading the
+repository in a browser. Nothing is sent about what you block, what you play,
+or what your phone resolves.
+
+The downloaded list can only **add** ad servers. It cannot unblock anything,
+change a setting, or disable a feature. Any entry that would touch an essential
+domain — a bank, a messaging app, the phone's own services — is refused on your
+device before it is ever used. You can switch the whole thing off in the
+settings, and AdZero keeps working with the list built into the app.
+
 **Backups are switched off** (`android:allowBackup="false"`). Android would
 otherwise copy app data to your Google Drive automatically, which would
 contradict everything above.

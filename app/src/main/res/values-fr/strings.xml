@@ -360,4 +360,6 @@
     <string name="reward_live">Pubs autorisées encore %1$d secondes, le temps de récupérer ta récompense</string>
     <string name="setting_reward">Autoriser les pubs à récompense</string>
     <string name="setting_reward_body">Ajoute un bouton dans la notification pour laisser passer une seule pub quand un jeu offre une récompense. Désactivé par défaut.</string>
+    <string name="setting_remote">Garder la liste à jour</string>
+    <string name="setting_remote_body">Télécharge une fois par jour la liste des serveurs publicitaires depuis le dépôt public d\'AdZero. Rien te concernant n\'est envoyé, et elle ne peut qu\'ajouter des serveurs, jamais en débloquer un. %1$d ajoutés jusqu\'ici.</string>
 </resources>

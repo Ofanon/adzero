@@ -86,6 +86,16 @@ object Stats {
      * D'ou un reglage : invisible pour qui l'ignore, disponible pour qui en a
      * besoin.
      */
+    /**
+     * La mise a jour de la liste depuis GitHub. Allumee par defaut : une liste
+     * gelee vieillit des le jour de sa sortie.
+     */
+    var remoteList: Boolean = true
+        set(value) {
+            field = value
+            prefs?.edit()?.putBoolean("remote_list", value)?.apply()
+        }
+
     var rewardButton: Boolean = false
         set(value) {
             field = value
@@ -173,6 +183,7 @@ object Stats {
         reportWanted = prefs?.getBoolean(KEY_REPORT, true) ?: true
         sessionReports = prefs!!.getBoolean("session_reports", true)
         rewardButton = prefs!!.getBoolean("reward_button", false)
+        remoteList = prefs!!.getBoolean("remote_list", true)
         shieldWanted = prefs?.getBoolean(KEY_SHIELD, true) ?: true
         onboarded = prefs?.getBoolean(KEY_ONBOARDED, false) ?: false
         toured = prefs?.getBoolean(KEY_TOURED, false) ?: false

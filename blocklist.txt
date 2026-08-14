@@ -1,0 +1,34 @@
+# AdZero — additional ad servers
+#
+# This file is downloaded by the app once a day. Adding a line here reaches
+# every user tomorrow, without an app update. That is the whole point: an ad
+# network changes domain — Voodoo did it this week — and a list frozen inside
+# the APK starts rotting the day it ships.
+#
+# FORMAT
+#
+# One marker per line. A marker is a fragment of a hostname, matched anywhere
+# inside it, so "applovin" catches ads.applovin.com and applovin-sdk.net alike.
+# Lowercase, letters, digits, dots and hyphens only. Comments start with #.
+#
+# HOW TO PROPOSE ONE
+#
+# Open a pull request. Say which app you saw it in and how you know it serves
+# ads — a screenshot of AdZero's own "worth a look" list is plenty. A domain
+# nobody can attribute does not go in.
+#
+# WHAT THIS FILE CANNOT DO
+#
+# It can only ever ADD servers. Nothing here unblocks anything, disables a
+# feature, or changes a setting. And any line that would touch an essential
+# domain — a bank, a messaging app, the phone's own services — is refused on
+# the device before it is ever used, by comparing against the list in
+# Guard.kt. A compromised repository cannot cut anybody's internet.
+#
+# Keep entries specific. "unity3d.com" would break every Unity game on earth;
+# "unityads.unity3d.com" is what you actually want. When in doubt, narrower.
+
+# ------------------------------------------------------------------ pending
+#
+# Nothing yet. The built-in list in AdNetworks.kt covers what the test bench
+# and real play sessions have found so far; this file carries what comes next.

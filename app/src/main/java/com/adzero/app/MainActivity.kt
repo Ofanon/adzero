@@ -138,6 +138,7 @@ class MainActivity : Activity() {
     private lateinit var reportRow: TextView
     private lateinit var sessionRow: TextView
     private lateinit var rewardRow: TextView
+    private lateinit var remoteRow: TextView
     private lateinit var shieldRow: TextView
     private lateinit var shapeRow: TextView
     private lateinit var trackerValue: TextView
@@ -1616,6 +1617,12 @@ class MainActivity : Activity() {
         ), getString(R.string.bubble_desc))
         tintRow(bubbleButton, if (bubbleOn) Ui.LIME_A else Ui.GREY)
 
+        remoteRow.text = rowText(
+            getString(R.string.setting_remote),
+            getString(R.string.setting_remote_body, AdNetworks.remoteCount())
+        )
+        tintRow(remoteRow, if (Stats.remoteList) Ui.LIME_A else Ui.GREY)
+
         rewardRow.text = rowText(
             getString(R.string.setting_reward),
             getString(R.string.setting_reward_body)
@@ -1766,6 +1773,13 @@ class MainActivity : Activity() {
         // coupent au niveau d'Android et perdent aussi les alertes utiles.
         // Eteint par defaut, et decrit sans detour : c'est bien une pub qu'on
         // laisse passer, pas un reglage de confort.
+        remoteRow = settingRow(R.drawable.ic_globe) {
+            Stats.remoteList = !Stats.remoteList
+            paintToggles()
+        }
+        body.addView(remoteRow, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+        body.addView(Ui.spacer(this, 8))
+
         rewardRow = settingRow(R.drawable.ic_no_video) {
             Stats.rewardButton = !Stats.rewardButton
             paintToggles()

@@ -48,6 +48,17 @@ object Guard {
     class Failure(val host: String, val kind: AdNetworks.Kind)
 
     /** Anything AdZero would currently silence that it must not. Empty is good. */
+    /**
+     * Ce marqueur casserait-il quelque chose d'essentiel ?
+     *
+     * Demande pour chaque ligne d'une liste telechargee, avant de l'accepter.
+     * C'est ce qui fait qu'un depot compromis — ou une pull request malveillante
+     * — ne peut pas couper la banque, la messagerie ou les impots de quelqu'un :
+     * la ligne est refusee sur le telephone, pas ailleurs.
+     */
+    fun wouldBreakEssentials(marker: String): Boolean =
+        MUST_PASS.any { marker in it || it in marker }
+
     fun check(): List<Failure> = MUST_PASS.mapNotNull { host ->
         val kind = AdNetworks.classify(host)
         if (kind == AdNetworks.Kind.NONE) null else Failure(host, kind)

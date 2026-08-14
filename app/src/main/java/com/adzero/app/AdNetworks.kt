@@ -66,6 +66,19 @@ object AdNetworks {
      */
 
     /** Domains confirmed by the user from the suggestions. */
+    /**
+     * Les marqueurs telecharges. Purement additifs : ils ne peuvent que
+     * bloquer davantage, jamais lever un blocage existant.
+     */
+    private var remote: List<String> = emptyList()
+
+    fun setRemote(list: List<String>) {
+        remote = list
+    }
+
+    /** Combien la liste distante en a ajoute, pour le dire dans les reglages. */
+    fun remoteCount(): Int = remote.size
+
     private val custom = mutableSetOf<String>()
     private var file: File? = null
 
@@ -166,6 +179,10 @@ object AdNetworks {
         if (synchronized(allowed) { allowed.any { it in h } }) return Kind.NONE
         if (trackerMarkers.any { it in h }) return Kind.TRACKER
         if (markers.any { it in h }) return Kind.AD
+        // Apres la liste integree, et apres les autorisations de
+        // l'utilisateur : une liste telechargee ne passe jamais devant un
+        // choix explicite.
+        if (remote.any { it in h }) return Kind.AD
         val custom = synchronized(custom) { custom.any { it in h } }
         return if (custom) Kind.AD else Kind.NONE
     }
