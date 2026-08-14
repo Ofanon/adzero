@@ -104,6 +104,11 @@ the reasoning, are in [PRIVACY.md](PRIVACY.md).
 
 ## License
 
-[GPL-3.0](LICENSE). A fork has to stay open, which is the convention in this
-corner — NetGuard, AdAway and uBlock Origin are all GPL — and it is the point
-of an app whose whole claim is that you can check what it does.
+**GPL-3.0-or-later** ([full text](LICENSE)). A fork has to stay open, which is
+the convention in this corner — NetGuard, AdAway and uBlock Origin are all GPL
+— and it is the point of an app whose whole claim is that you can check what it
+does.
+
+Spelled out with the "or later" because "GPL-3.0" alone does not say whether a
+future version of the licence may be used, and the tools that read licences
+automatically need an exact identifier.
