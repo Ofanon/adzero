@@ -137,6 +137,7 @@ class MainActivity : Activity() {
     private lateinit var troubleCard: LinearLayout
     private lateinit var reportRow: TextView
     private lateinit var sessionRow: TextView
+    private lateinit var rewardRow: TextView
     private lateinit var shieldRow: TextView
     private lateinit var shapeRow: TextView
     private lateinit var trackerValue: TextView
@@ -1615,6 +1616,12 @@ class MainActivity : Activity() {
         ), getString(R.string.bubble_desc))
         tintRow(bubbleButton, if (bubbleOn) Ui.LIME_A else Ui.GREY)
 
+        rewardRow.text = rowText(
+            getString(R.string.setting_reward),
+            getString(R.string.setting_reward_body)
+        )
+        tintRow(rewardRow, if (Stats.rewardButton) Ui.LIME_A else Ui.GREY)
+
         sessionRow.text = rowText(
             getString(R.string.setting_session),
             getString(R.string.setting_session_body)
@@ -1757,6 +1764,19 @@ class MainActivity : Activity() {
         body.addView(Ui.spacer(this, 8))
         // Le rapport de fin de partie. Coupable ici, sinon les gens le
         // coupent au niveau d'Android et perdent aussi les alertes utiles.
+        // Eteint par defaut, et decrit sans detour : c'est bien une pub qu'on
+        // laisse passer, pas un reglage de confort.
+        rewardRow = settingRow(R.drawable.ic_no_video) {
+            Stats.rewardButton = !Stats.rewardButton
+            paintToggles()
+            if (Stats.running) startService(
+                Intent(this, SilenceVpnService::class.java)
+                    .setAction(SilenceVpnService.ACTION_REFRESH)
+            )
+        }
+        body.addView(rewardRow, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+        body.addView(Ui.spacer(this, 8))
+
         sessionRow = settingRow(R.drawable.ic_clock) {
             Stats.sessionReports = !Stats.sessionReports
             paintToggles()

@@ -358,4 +358,6 @@
     <string name="milestone_share">Partager le chiffre</string>
     <string name="reward_action">Voir une pub récompensée</string>
     <string name="reward_live">Pubs autorisées encore %1$d secondes, le temps de récupérer ta récompense</string>
+    <string name="setting_reward">Autoriser les pubs à récompense</string>
+    <string name="setting_reward_body">Ajoute un bouton dans la notification pour laisser passer une seule pub quand un jeu offre une récompense. Désactivé par défaut.</string>
 </resources>

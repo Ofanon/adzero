@@ -72,6 +72,26 @@ object Stats {
      * would never go looking for it in the settings.
      */
     /** Le rapport de fin de partie. Actif par defaut : c'est la nouveaute. */
+    /**
+     * Le bouton "voir une pub recompensee", eteint par defaut.
+     *
+     * La promesse d'AdZero est qu'il n'y a plus de pub. Afficher en permanence
+     * un bouton qui en laisse passer une la contredit a chaque coup d'oeil,
+     * pour tout le monde — y compris les gens qui n'en voudront jamais.
+     *
+     * Mais la fonction doit exister, parce que l'alternative n'est pas "zero
+     * pub" : c'est AdZero eteint. Quelqu'un qui ne peut pas recuperer sa
+     * recompense coupe la protection, et reprend alors toutes les pubs.
+     *
+     * D'ou un reglage : invisible pour qui l'ignore, disponible pour qui en a
+     * besoin.
+     */
+    var rewardButton: Boolean = false
+        set(value) {
+            field = value
+            prefs?.edit()?.putBoolean("reward_button", value)?.apply()
+        }
+
     var sessionReports: Boolean = true
         set(value) {
             field = value
@@ -152,6 +172,7 @@ object Stats {
         bannerWanted = prefs?.getBoolean(KEY_BANNER, true) ?: true
         reportWanted = prefs?.getBoolean(KEY_REPORT, true) ?: true
         sessionReports = prefs!!.getBoolean("session_reports", true)
+        rewardButton = prefs!!.getBoolean("reward_button", false)
         shieldWanted = prefs?.getBoolean(KEY_SHIELD, true) ?: true
         onboarded = prefs?.getBoolean(KEY_ONBOARDED, false) ?: false
         toured = prefs?.getBoolean(KEY_TOURED, false) ?: false

@@ -512,12 +512,16 @@ class SilenceVpnService : VpnService() {
                 ).build()
             )
             // Joignable depuis le jeu, ce qui est tout l'interet : personne ne
-            // quitte une partie pour aller chercher un reglage.
-            .addAction(
-                Notification.Action.Builder(
-                    null, getString(R.string.reward_action), action(ACTION_REWARD, 13)
-                ).build()
-            )
+            // quitte une partie pour aller chercher un reglage. Mais absent
+            // tant qu'on ne l'a pas demande : la promesse par defaut reste
+            // "plus de pub", sans echappatoire affichee a cote.
+            .apply {
+                if (Stats.rewardButton) addAction(
+                    Notification.Action.Builder(
+                        null, getString(R.string.reward_action), action(ACTION_REWARD, 13)
+                    ).build()
+                )
+            }
             // The report has to be reachable from inside a game, and the
             // notification shade is the only surface that always is. An ad the
             // user has to remember about until they next open the app is an ad
