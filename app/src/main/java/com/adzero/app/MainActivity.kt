@@ -3343,7 +3343,15 @@ class MainActivity : Activity() {
     private var currentSheet: android.app.Dialog? = null
 
     private fun sheet(content: View) {
-        val holder = LinearLayout(this).apply {
+        val cap = (resources.displayMetrics.heightPixels * 0.70f).toInt()
+        val holder = object : LinearLayout(this) {
+            override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+                super.onMeasure(
+                    widthSpec,
+                    MeasureSpec.makeMeasureSpec(cap, MeasureSpec.AT_MOST)
+                )
+            }
+        }.apply {
             orientation = LinearLayout.VERTICAL
             background = android.graphics.drawable.GradientDrawable(
                 android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM,
@@ -3352,7 +3360,30 @@ class MainActivity : Activity() {
                 cornerRadius = d(20).toFloat()
                 setStroke(d(1), Ui.BORDER)
             }
-            addView(content)
+            // Le contenu defile, le bouton de fermeture non.
+            //
+            // Aucune de ces popups n'etait defilante : tant qu'elles tenaient
+            // en trois lignes personne ne s'en apercevait, mais des qu'une
+            // liste s'y installe, le bas devient inatteignable — et c'est
+            // precisement au bas d'une liste de suspects que se trouve ce
+            // qu'on cherchait.
+            //
+            // Plafonnee a 70 % de l'ecran : au-dela, le panneau couvre tout et
+            // on ne sait plus qu'on peut le fermer.
+            addView(
+                ScrollView(this@MainActivity).apply {
+                    addView(content)
+                    isVerticalScrollBarEnabled = false
+                    // Sans ca, un ScrollView dans un Dialog s'etire a la
+                    // hauteur de son contenu et annule tout l'interet.
+                    isFillViewport = false
+                },
+                LinearLayout.LayoutParams(
+                    MATCH_PARENT, WRAP_CONTENT
+                ).apply {
+                    weight = 1f
+                }
+            )
         }
         val dialog = android.app.Dialog(this)
         dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
