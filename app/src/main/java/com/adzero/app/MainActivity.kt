@@ -1317,12 +1317,12 @@ class MainActivity : Activity() {
         fixContent.addView(Ui.spacer(this, 10))
         fixContent.addView(troubleRow(R.drawable.ic_bug, R.string.fix_broken_title,
                                       R.string.fix_broken_body) {
-            showPage(2)
+            showCulprit(broken = true)
         })
         fixContent.addView(Ui.spacer(this, 8))
         fixContent.addView(troubleRow(R.drawable.ic_no_banner, R.string.fix_leaked_title,
                                       R.string.fix_leaked_body) {
-            Report.offer(this)
+            showCulprit(broken = false)
         })
 
         // Everything below is server names and domains. Nobody outside this
@@ -3022,6 +3022,183 @@ class MainActivity : Activity() {
      * concluded their game engine was spying on them. It was half right, and
      * the half that mattered was wrong.
      */
+    /**
+     * Le journal des cinq dernieres minutes, avec un coupable designe.
+     *
+     * Un seul ecran pour deux questions opposees. "Une pub est passee" cherche
+     * ce qu'AdZero a laisse passer ; "un jeu ne marche plus" cherche ce qu'il
+     * a fait taire. Meme donnee, meme presentation, score inverse — et une
+     * seule action par ligne, celle qui a du sens dans ce sens-la.
+     *
+     * Le premier de la liste est mis en avant plutot que simplement premier :
+     * une liste ou tout se ressemble redemande a l'utilisateur de faire le tri
+     * qu'on venait de faire pour lui.
+     */
+    private fun showCulprit(broken: Boolean, app: String? = null) {
+        val target = app
+            ?: if (broken) Recent.silencedApps(1).firstOrNull() else Recent.busiestApp()
+
+        // Pour un jeu casse, l'utilisateur sait lequel et nous non : plusieurs
+        // apps ont pu etre silencees pendant qu'il jouait.
+        val silenced = if (broken) Recent.silencedApps(6) else emptyList()
+        if (broken && app == null && silenced.size > 1) {
+            val pick = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                setPadding(d(24), d(22), d(24), d(12))
+            }
+            pick.addView(TextView(this).apply {
+                text = getString(R.string.culprit_pick_app)
+                setTextColor(Ui.TEXT)
+                textSize = 19f
+                typeface = Ui.BOLD
+            })
+            pick.addView(Ui.spacer(this, 14))
+            for (pkg in silenced) {
+                val row = LinearLayout(this).apply {
+                    orientation = LinearLayout.HORIZONTAL
+                    gravity = Gravity.CENTER_VERTICAL
+                    background = Ui.softPill(this@MainActivity)
+                    setPadding(d(12), d(10), d(12), d(10))
+                    isClickable = true
+                    setOnClickListener {
+                        buzz(); currentSheet?.dismiss(); showCulprit(true, pkg)
+                    }
+                }
+                AppsCatalog.iconFor(this, pkg)?.let { icon ->
+                    row.addView(ImageView(this).apply {
+                        setImageDrawable(icon.constantState?.newDrawable()?.mutate() ?: icon)
+                        layoutParams = LinearLayout.LayoutParams(d(28), d(28))
+                            .apply { marginEnd = d(12) }
+                        Ui.circleClip(this)
+                    })
+                }
+                row.addView(TextView(this).apply {
+                    text = appLabel(pkg)
+                    setTextColor(Ui.TEXT)
+                    textSize = 15f
+                    typeface = Ui.REGULAR
+                }, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f))
+                pick.addView(row)
+                pick.addView(Ui.spacer(this, 6))
+            }
+            sheet(pick)
+            return
+        }
+
+        val rows = when {
+            target == null -> emptyList()
+            broken -> Recent.breakers(target)
+            else -> Recent.suspects(target)
+        }
+
+        val box = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(d(24), d(22), d(24), d(12))
+        }
+        box.addView(TextView(this).apply {
+            text = getString(
+                if (broken) R.string.culprit_broken_title else R.string.culprit_ad_title
+            )
+            setTextColor(Ui.TEXT)
+            textSize = 19f
+            typeface = Ui.BOLD
+        })
+        box.addView(Ui.spacer(this, 6))
+        box.addView(Ui.body(this, getString(
+            if (broken) R.string.culprit_broken_intro else R.string.culprit_ad_intro
+        )).apply { textSize = 13f })
+
+        if (target != null) {
+            box.addView(Ui.spacer(this, 10))
+            box.addView(TextView(this).apply {
+                text = appLabel(target)
+                setTextColor(Ui.LIME_A)
+                textSize = 13f
+                typeface = Ui.BOLD
+            })
+        }
+        box.addView(Ui.spacer(this, 16))
+
+        if (rows.isEmpty()) {
+            box.addView(Ui.body(this, getString(R.string.culprit_none)))
+            sheet(box)
+            return
+        }
+
+        for ((index, suspect) in rows.withIndex()) {
+            box.addView(culpritRow(suspect, broken, index == 0))
+            box.addView(Ui.spacer(this, 8))
+        }
+        sheet(box)
+    }
+
+    /** Une ligne du journal : le domaine, pourquoi il est suspect, et le geste. */
+    private fun culpritRow(
+        suspect: Recent.Suspect, broken: Boolean, leading: Boolean,
+    ): LinearLayout {
+        val card = Explain.cardFor(suspect.domain)
+        val box = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            background = Ui.softPill(this@MainActivity)
+            setPadding(d(14), d(12), d(14), d(12))
+        }
+        if (leading) {
+            box.addView(TextView(this).apply {
+                text = getString(R.string.culprit_likely)
+                setTextColor(Ui.LIME_A)
+                textSize = 10f
+                letterSpacing = 0.16f
+                typeface = Ui.BOLD
+            })
+            box.addView(Ui.spacer(this@MainActivity, 6))
+        }
+        box.addView(TextView(this).apply {
+            text = suspect.domain
+            setTextColor(Ui.TEXT)
+            textSize = 14f
+            typeface = Typeface.MONOSPACE
+        })
+        val who = if (card.owner.isNotEmpty()) card.owner
+        else Explain.kindLabel(this, card.kind)
+        box.addView(TextView(this).apply {
+            text = who + "  ·  " + getString(R.string.culprit_seen, suspect.hits)
+            setTextColor(Ui.GREY)
+            textSize = 12f
+            setPadding(0, d(3), 0, 0)
+        })
+        for (reason in suspect.reasons.take(2)) {
+            box.addView(TextView(this).apply {
+                text = if (reason.arg != null) getString(reason.text, reason.arg)
+                else getString(reason.text)
+                setTextColor(Ui.DIM)
+                textSize = 11f
+                setPadding(0, d(4), 0, 0)
+            })
+        }
+        box.addView(Ui.spacer(this, 10))
+        box.addView(TextView(this).apply {
+            text = getString(if (broken) R.string.culprit_allow else R.string.culprit_block)
+            setTextColor(Ui.BG_TOP)
+            textSize = 12f
+            typeface = Ui.BOLD
+            gravity = Gravity.CENTER
+            setPadding(0, d(10), 0, d(10))
+            background = Ui.gradientPill(this@MainActivity, Ui.LIME_A, Ui.LIME_B)
+            setOnClickListener {
+                buzz()
+                if (broken) AdNetworks.allow(suspect.domain)
+                else AdNetworks.add(suspect.domain)
+                drawn.clear()
+                paint()
+                // Le panneau se referme : le geste est fait, et laisser la
+                // liste ouverte invite a relacher un domaine de plus "au cas
+                // ou", ce qui est exactement comment on casse la protection.
+                currentSheet?.dismiss()
+            }
+        }, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+        return box
+    }
+
     private fun explainHost(host: String) {
         val card = Explain.cardFor(host)
         val box = LinearLayout(this).apply {

@@ -185,6 +185,59 @@ object Recent {
     )
 
     /** Apps AdZero has silenced something for lately, busiest first. */
+    /**
+     * Ce qui a ete bloque pour cette app et lui manque probablement.
+     *
+     * Le miroir de [suspects]. La ou celui-ci cherche un serveur de pub qui
+     * est passe, celui-ci cherche un serveur ordinaire qu'on a fait taire :
+     * meme fenetre, meme regroupement par domaine, score inverse.
+     *
+     * Le signal le plus fort est la repetition. Une app dont une requete reste
+     * sans reponse reessaie, encore et encore — alors qu'un SDK publicitaire
+     * qu'on a coupe abandonne et passe au suivant. Un domaine bloque et
+     * redemande dix fois est presque toujours celui qui manque.
+     */
+    fun breakers(app: String, max: Int = 8): List<Suspect> {
+        val now = System.currentTimeMillis()
+        val byDomain = LinkedHashMap<String, MutableList<Hit>>()
+        synchronized(ring) {
+            for (h in ring) {
+                if (now - h.at > WINDOW_MS) continue
+                if (!h.blocked) continue
+                if (h.app != app) continue
+                byDomain.getOrPut(Stats.rootOf(h.host)) { mutableListOf() }.add(h)
+            }
+        }
+        return byDomain.entries.map { (domain, hits) ->
+            var score = 0
+            val why = mutableListOf<Reason>()
+
+            if (hits.size >= 3) {
+                score += minOf(hits.size, 12) * 6
+                why.add(Reason(R.string.reason_retried, hits.size))
+            }
+            if (Learning.isInfrastructure(domain)) {
+                score += 45
+                why.add(Reason(R.string.reason_shared))
+            }
+            val card = Explain.cardFor(domain)
+            if (card.owner.isEmpty() && card.kind == Explain.Kind.UNKNOWN) {
+                score += 30
+                why.add(Reason(R.string.reason_not_an_ad_network))
+            }
+            // Une regie reconnue n'est presque jamais ce qui casse un jeu, et
+            // la relacher est la facon dont la protection se demonte en douce.
+            if (card.owner.isNotEmpty() && card.kind != Explain.Kind.ENGINE) score -= 50
+            if (looksLikeAnAd(domain)) score -= 40
+            if (card.kind == Explain.Kind.ENGINE) {
+                score += 40
+                why.add(Reason(R.string.reason_engine))
+            }
+            if (why.isEmpty()) why.add(Reason(R.string.reason_nothing))
+            Suspect(domain, app, score, hits.size, why)
+        }.sortedByDescending { it.score }.take(max)
+    }
+
     fun silencedApps(max: Int = 5): List<String> {
         val now = System.currentTimeMillis()
         val counts = LinkedHashMap<String, Int>()

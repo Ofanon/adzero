@@ -330,4 +330,18 @@
     <string name="level_unknown_text">AdZero n\'a jamais vu ce serveur. Il peut être inoffensif, ou un serveur de pub que personne n\'a encore répertorié. Si une pub est passée, commence par là.</string>
     <string name="leaderboard_no_usage">AdZero bloque bien les pubs, le compteur au-dessus le prouve. Mais il ne peut pas savoir quelle app les demandait, donc cette liste reste vide. Une permission suffit à tout débloquer.</string>
     <string name="leaderboard_grant">Autoriser AdZero à nommer les apps</string>
+    <string name="reason_retried">Cette app l\'a redemande %1$d fois sans reponse</string>
+    <string name="reason_shared">Partage avec beaucoup d\'autres apps, donc rarement un serveur de pub</string>
+    <string name="reason_not_an_ad_network">Ce n\'est pas une regie connue</string>
+    <string name="reason_engine">Appartient au moteur sur lequel tourne le jeu</string>
+    <string name="culprit_ad_title">Ce qui vient de passer</string>
+    <string name="culprit_ad_intro">Tout ce que cette app a demande depuis cinq minutes et qu\'AdZero a laisse passer. Le plus probable est en premier.</string>
+    <string name="culprit_broken_title">Ce qu\'AdZero a fait taire</string>
+    <string name="culprit_broken_intro">Tout ce qu\'AdZero a bloque pour cette app depuis cinq minutes. Celui qui la casse le plus probablement est en premier.</string>
+    <string name="culprit_likely">LE PLUS PROBABLE</string>
+    <string name="culprit_block">Le bloquer</string>
+    <string name="culprit_allow">Le laisser passer</string>
+    <string name="culprit_none">Rien depuis cinq minutes. Ouvre l\'app, laisse-la faire, puis reviens tout de suite ici.</string>
+    <string name="culprit_pick_app">C\'est quelle app ?</string>
+    <string name="culprit_seen">%1$d fois</string>
 </resources>

@@ -328,4 +328,18 @@
     <string name="level_unknown_text">AdZero has never seen this server. It may be harmless, or an ad server nobody has listed yet. If an ad got through, start here.</string>
     <string name="leaderboard_no_usage">AdZero is blocking ads — the counter above proves it. But it cannot tell which app asked for them, so this list stays empty. One permission fixes it.</string>
     <string name="leaderboard_grant">Let AdZero name the apps</string>
+    <string name="reason_retried">This app asked for it %1$d times and got no answer</string>
+    <string name="reason_shared">Shared with many other apps, so probably not an ad server</string>
+    <string name="reason_not_an_ad_network">Not a known ad network</string>
+    <string name="reason_engine">Belongs to the engine the game runs on</string>
+    <string name="culprit_ad_title">What just got through</string>
+    <string name="culprit_ad_intro">Everything this app asked for in the last five minutes that AdZero let through. The most likely one is first.</string>
+    <string name="culprit_broken_title">What AdZero silenced</string>
+    <string name="culprit_broken_intro">Everything AdZero blocked for this app in the last five minutes. The one most likely to be breaking it is first.</string>
+    <string name="culprit_likely">MOST LIKELY</string>
+    <string name="culprit_block">Block it</string>
+    <string name="culprit_allow">Let it through</string>
+    <string name="culprit_none">Nothing recorded in the last five minutes. Open the app, let it do its thing, then come straight back.</string>
+    <string name="culprit_pick_app">Which app is it?</string>
+    <string name="culprit_seen">%1$d times</string>
 </resources>
