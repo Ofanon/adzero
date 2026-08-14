@@ -21,6 +21,18 @@ IssueTracker: https://github.com/Ofanon/adzero/issues
 RepoType: git
 Repo: https://github.com/Ofanon/adzero.git
 
+# Compilation reproductible. F-Droid recompile depuis les sources, compare le
+# resultat a cet APK, et s'ils sont identiques il distribue celui d'Oscar avec
+# SA signature plutot que la leur.
+#
+# C'est ce qui permet a quelqu'un qui a installe l'APK a la main de passer a la
+# version F-Droid sans desinstaller — donc sans perdre ses statistiques. Et
+# c'est un choix definitif : une app publiee avec la cle de F-Droid ne peut
+# plus repasser a la signature de son auteur.
+#
+# %v est remplace par versionName, d'ou l'URL de la release GitHub.
+Binaries: https://github.com/Ofanon/adzero/releases/download/v%v/AdZero-%v.apk
+
 Builds:
   - versionName: '1.0'
     versionCode: 2
