@@ -1,0 +1,21 @@
+# AdZero — latest published version
+#
+# The app reads this once a day and tells the user when a newer build exists.
+#
+# This is not a nicety: an app installed by hand has no update mechanism at
+# all. Somebody who received AdZero over WhatsApp has whatever version was
+# current that day, for ever, and will never learn that anything changed —
+# including the fix for the bug that annoys them.
+#
+# Three lines, in this order. Anything else is ignored.
+#
+#   code=<versionCode>    must match app/build.gradle.kts exactly
+#   name=<versionName>    what the banner shows the user
+#   url=<download page>   where tapping the banner sends them
+#
+# Bump this only once the build is actually downloadable at that URL. A banner
+# pointing at a 404 is worse than no banner.
+
+code=2
+name=1.0
+url=https://github.com/Ofanon/adzero/releases/latest

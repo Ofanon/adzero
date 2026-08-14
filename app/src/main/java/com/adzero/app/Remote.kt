@@ -1,6 +1,7 @@
 package com.adzero.app
 
 import android.content.Context
+import android.os.Build
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
@@ -34,6 +35,9 @@ object Remote {
     private const val URL_LIST =
         "https://raw.githubusercontent.com/Ofanon/adzero/main/blocklist.txt"
 
+    private const val URL_VERSION =
+        "https://raw.githubusercontent.com/Ofanon/adzero/main/version.txt"
+
     /** Une fois par jour : les regies n'apparaissent pas a l'heure. */
     private const val EVERY_MS = 24 * 60 * 60_000L
 
@@ -54,6 +58,59 @@ object Remote {
     @Volatile private var updatedAt = 0L
 
     fun lastUpdate(): Long = updatedAt
+
+    /**
+     * La derniere version publiee, si elle est plus recente que celle-ci.
+     *
+     * Le nom et l'adresse, pas le numero : c'est ce que la banniere affiche et
+     * ce qu'elle ouvre. Null quand on est a jour, ce qui est le cas courant.
+     */
+    class Update(val name: String, val url: String)
+
+    @Volatile private var update: Update? = null
+
+    fun available(): Update? = update
+
+    /** Combien la derniere mise a jour a ajoute de serveurs. */
+    @Volatile private var added = 0
+
+    fun added(): Int = added
+
+    private fun checkVersion(ctx: Context) {
+        try {
+            val conn = (URL(URL_VERSION).openConnection() as HttpURLConnection).apply {
+                connectTimeout = 15_000
+                readTimeout = 15_000
+                setRequestProperty("User-Agent", "AdZero")
+            }
+            if (conn.responseCode != 200) return
+            val fields = HashMap<String, String>()
+            conn.inputStream.bufferedReader().useLines { seq ->
+                for (raw in seq.take(20)) {
+                    val line = raw.trim().substringBefore('#').trim()
+                    val i = line.indexOf('=')
+                    if (i > 0) fields[line.take(i).trim()] = line.substring(i + 1).trim()
+                }
+            }
+            val code = fields["code"]?.toIntOrNull() ?: return
+            val name = fields["name"] ?: return
+            val url = fields["url"] ?: return
+            // Seules les adresses du depot d'AdZero sont suivies : une banniere
+            // qui ouvre n'importe quelle URL est une porte d'entree, pas une
+            // fonctionnalite.
+            if (!url.startsWith("https://github.com/Ofanon/adzero/")) return
+
+            val mine = try {
+                val info = ctx.packageManager.getPackageInfo(ctx.packageName, 0)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                    info.longVersionCode.toInt() else @Suppress("DEPRECATION") info.versionCode
+            } catch (_: Exception) {
+                return
+            }
+            update = if (code > mine) Update(name, url) else null
+        } catch (_: Exception) {
+        }
+    }
 
     fun init(ctx: Context) {
         if (file != null) return
@@ -109,11 +166,14 @@ object Remote {
                 // Une liste vide est un depot casse, pas une instruction de
                 // tout debloquer : on garde ce qu'on avait.
                 if (lines.isEmpty()) return@Thread
+                val before = AdNetworks.remoteCount()
 
+                added = (lines.size - before).coerceAtLeast(0)
                 AdNetworks.setRemote(lines)
                 file?.writeText(lines.joinToString("\n", postfix = "\n"))
                 updatedAt = System.currentTimeMillis()
                 stamp.writeText(updatedAt.toString())
+                checkVersion(ctx)
             } catch (_: Exception) {
                 // Pas de reseau, pas de GitHub, pas de probleme : la liste
                 // integree et l'apprentissage local continuent seuls.

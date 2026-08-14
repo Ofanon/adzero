@@ -363,4 +363,6 @@
     <string name="setting_remote">Garder la liste à jour</string>
     <string name="setting_remote_body">Télécharge une fois par jour la liste des serveurs publicitaires depuis le dépôt public d\'AdZero. Rien te concernant n\'est envoyé, et elle ne peut qu\'ajouter des serveurs, jamais en débloquer un. %1$d ajoutés, mise à jour %2$s.</string>
     <string name="remote_never">jamais encore</string>
+    <string name="news_update">AdZero %1$s est sorti. Touche pour l\'installer.</string>
+    <string name="news_list">Liste mise à jour : %1$d nouveaux serveurs de pub</string>
 </resources>

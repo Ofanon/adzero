@@ -139,6 +139,7 @@ class MainActivity : Activity() {
     private lateinit var sessionRow: TextView
     private lateinit var rewardRow: TextView
     private lateinit var remoteRow: TextView
+    private lateinit var newsBar: TextView
     private lateinit var shieldRow: TextView
     private lateinit var shapeRow: TextView
     private lateinit var trackerValue: TextView
@@ -1030,6 +1031,40 @@ class MainActivity : Activity() {
         box.addView(answers, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
     }
 
+    /** La cle de la nouvelle affichee, ou null quand il n'y en a pas. */
+    private fun newsKey(): String? {
+        Remote.available()?.let { return "v" + it.name }
+        if (Remote.added() > 0) return "list" + Remote.lastUpdate()
+        return null
+    }
+
+    private fun paintNews() {
+        val key = newsKey()
+        if (key == null || Stats.newsWasSeen(key)) {
+            newsBar.visibility = View.GONE
+            return
+        }
+        val update = Remote.available()
+        newsBar.text = if (update != null)
+            getString(R.string.news_update, update.name)
+        else getString(R.string.news_list, Remote.added())
+        newsBar.visibility = View.VISIBLE
+    }
+
+    private fun onNewsTapped() {
+        newsKey()?.let { Stats.newsSeen(it) }
+        val update = Remote.available()
+        if (update != null) {
+            // Vers la page de telechargement, et nulle part ailleurs :
+            // Remote refuse deja toute adresse hors du depot d'AdZero.
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse(update.url)))
+            } catch (_: Exception) {
+            }
+        }
+        paintNews()
+    }
+
     private fun buildHome(): ScrollView {
         // Centred vertically: the button is the whole screen's subject, and a
         // block of content pinned to the top with dead space below reads as
@@ -1040,6 +1075,21 @@ class MainActivity : Activity() {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER
         }
+
+        newsBar = TextView(this).apply {
+            visibility = View.GONE
+            textSize = 13f
+            typeface = Ui.BOLD
+            setTextColor(Ui.BG_TOP)
+            gravity = Gravity.CENTER
+            setPadding(d(16), d(13), d(16), d(13))
+            background = Ui.gradientPill(this@MainActivity, Ui.LIME_A, Ui.LIME_B)
+            isClickable = true
+            setOnClickListener { buzz(); onNewsTapped() }
+        }
+        Ui.lift(newsBar, 16, 5)
+        page.addView(newsBar, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+        page.addView(Ui.spacer(this, 14))
 
         setupCard = Ui.card(this).apply { visibility = View.GONE }
         setupCard.addView(Ui.sectionLabel(this@MainActivity, getString(R.string.setup_title)))
@@ -2628,6 +2678,7 @@ class MainActivity : Activity() {
         // the screen does not blink off while the service comes back; the live
         // one cannot outlive the tunnel. Requiring both means the app stops
         // claiming to protect somebody after an install killed the service.
+        paintNews()
         val on = Stats.running && SilenceVpnService.alive
 
         stateLabel.text = getString(if (on) R.string.state_on else R.string.state_off)

@@ -90,6 +90,21 @@ object Stats {
      * La mise a jour de la liste depuis GitHub. Allumee par defaut : une liste
      * gelee vieillit des le jour de sa sortie.
      */
+    /**
+     * Les nouvelles deja lues, une par ligne.
+     *
+     * Une banniere qui revient apres avoir ete lue devient un decor : on cesse
+     * de la voir, y compris le jour ou elle dit quelque chose d'important.
+     */
+    fun newsSeen(key: String) {
+        val seen = prefs?.getStringSet("news_seen", emptySet())?.toMutableSet()
+            ?: return
+        if (seen.add(key)) prefs?.edit()?.putStringSet("news_seen", seen)?.apply()
+    }
+
+    fun newsWasSeen(key: String): Boolean =
+        prefs?.getStringSet("news_seen", emptySet())?.contains(key) == true
+
     var remoteList: Boolean = true
         set(value) {
             field = value
