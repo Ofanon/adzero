@@ -28,7 +28,12 @@
 # Keep entries specific. "unity3d.com" would break every Unity game on earth;
 # "unityads.unity3d.com" is what you actually want. When in doubt, narrower.
 
-# ------------------------------------------------------------------ pending
-#
-# Nothing yet. The built-in list in AdNetworks.kt covers what the test bench
-# and real play sessions have found so far; this file carries what comes next.
+# ------------------------------------------------------------------ entries
+
+# A deliberate duplicate of something AdNetworks.kt already blocks. It changes
+# nothing for anybody, and it proves the whole chain works on a real device:
+# downloaded, validated, counted, announced in the banner. A pipeline that has
+# never carried anything is a pipeline nobody has tested.
+applovin
+
+# Below: what the built-in list does not cover yet.

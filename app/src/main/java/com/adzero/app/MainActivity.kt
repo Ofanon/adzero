@@ -1835,6 +1835,10 @@ class MainActivity : Activity() {
         // laisse passer, pas un reglage de confort.
         remoteRow = settingRow(R.drawable.ic_globe) {
             Stats.remoteList = !Stats.remoteList
+            // Allumer le reglage verifie tout de suite : attendre le lendemain
+            // pour qu'il se passe quelque chose donne l'impression que
+            // l'interrupteur ne fait rien.
+            if (Stats.remoteList) Remote.refresh(this, force = true)
             paintToggles()
         }
         body.addView(remoteRow, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))

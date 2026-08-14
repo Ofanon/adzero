@@ -138,7 +138,7 @@ object Remote {
      * Sur son propre fil : c'est du reseau, et il est appele depuis le
      * demarrage du service.
      */
-    fun refresh(ctx: Context) {
+    fun refresh(ctx: Context, force: Boolean = false) {
         if (!Stats.remoteList) return
         val stamp = stampFile ?: return
         val last = try {
@@ -146,7 +146,7 @@ object Remote {
         } catch (_: Exception) {
             0L
         }
-        if (System.currentTimeMillis() - last < EVERY_MS) return
+        if (!force && System.currentTimeMillis() - last < EVERY_MS) return
 
         Thread({
             try {
