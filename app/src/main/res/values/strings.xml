@@ -28,7 +28,7 @@
     <string name="leaderboard_empty">Nothing yet. Turn AdZero on and play a game.</string>
     <string name="leaderboard_line">%1$d ads blocked</string>
 
-    <string name="section_learned">NEW AD SERVERS SPOTTED</string>
+    <string name="section_learned">WORTH A LOOK</string>
     <string name="learned_hint">Seen in several unrelated apps, so probably ads. Tap to block.</string>
     <string name="learned_empty">Nothing new. Play a few different games and AdZero will spot
         the servers they have in common.</string>
@@ -41,7 +41,7 @@
     <string name="custom_empty">Nothing yet. Servers you block appear here, so you can undo it.</string>
     <string name="action_unblock">UNBLOCK</string>
 
-    <string name="section_domains">MOST BLOCKED SERVERS</string>
+    <string name="section_domains">EVERYTHING BLOCKED</string>
     <string name="domains_empty">Nothing yet. Turn AdZero on and play a game.</string>
 
     <!-- Warnings -->
@@ -208,7 +208,7 @@
     <string name="language_desc">By default, the one your phone is set to.</string>
     <string name="pause_hint">Lets ads through for 5 minutes without turning anything off. For when a game gives you a bonus in exchange for watching one.</string>
     <string name="pause_hint_active">Ads are getting through. Tap to protect again.</string>
-    <string name="section_shield">CAUGHT BY THE SHIELD</string>
+    <string name="section_shield">BLOCKED AUTOMATICALLY</string>
     <string name="shield_empty">Nothing yet. The shield needs to have watched your apps working normally before it can judge anything.</string>
     <string name="shield_caught_hint">Silenced because they turned up while an ad was loading, from an app that had never used them. Tap one to see what it is, or release it.</string>
     <string name="data_saved">About %1$s of ads never downloaded</string>
@@ -318,4 +318,10 @@
     <string name="promo_desc">An image explaining AdZero, to send just before the installer.</string>
     <string name="repair_manual">Release it myself</string>
     <string name="repair_manual_body">Release the one you think is at fault. Ordered the same way: most likely needed by the game first.</string>
+    <string name="tab_fix">Fix</string>
+    <string name="fix_trouble">SOMETHING WRONG?</string>
+    <string name="fix_broken_title">A game stopped working</string>
+    <string name="fix_broken_body">Pick it in the list and AdZero will find what to let through, one server at a time.</string>
+    <string name="fix_leaked_title">An ad got through</string>
+    <string name="fix_leaked_body">Tell AdZero now, while it still remembers what that app just asked for.</string>
 </resources>

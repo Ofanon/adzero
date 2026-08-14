@@ -28,7 +28,7 @@
     <string name="leaderboard_empty">Rien pour l\'instant. Active AdZero et lance un jeu.</string>
     <string name="leaderboard_line">%1$d pubs bloquées</string>
 
-    <string name="section_learned">NOUVEAUX SERVEURS DE PUB REPÉRÉS</string>
+    <string name="section_learned">À EXAMINER</string>
     <string name="learned_hint">Vus dans plusieurs apps sans rapport, donc probablement de la pub.
         Appuie pour bloquer.</string>
     <string name="learned_empty">Rien de nouveau. Joue à plusieurs jeux différents et AdZero
@@ -38,12 +38,12 @@
     <string name="learned_line">Vu dans %1$d apps · %2$s</string>
     <string name="action_block">BLOQUER</string>
 
-    <string name="section_custom">BLOQUÉS PAR TOI</string>
+    <string name="section_custom">BLOQUÉ PAR TOI</string>
     <string name="custom_empty">Rien pour l\'instant. Les serveurs que tu bloques apparaîtront ici,
         pour pouvoir revenir en arrière.</string>
     <string name="action_unblock">DÉBLOQUER</string>
 
-    <string name="section_domains">SERVEURS LES PLUS BLOQUÉS</string>
+    <string name="section_domains">TOUT CE QUI EST BLOQUÉ</string>
     <string name="domains_empty">Rien pour l\'instant. Active AdZero et lance un jeu.</string>
 
     <!-- Avertissements -->
@@ -210,7 +210,7 @@
     <string name="language_desc">Par défaut, celle de ton téléphone.</string>
     <string name="pause_hint">Laisse passer les pubs 5 minutes sans rien désactiver. Pour les fois où un jeu t’offre un bonus si tu en regardes une.</string>
     <string name="pause_hint_active">Les pubs passent. Appuie pour reprendre la protection.</string>
-    <string name="section_shield">ATTRAPÉS PAR LE BOUCLIER</string>
+    <string name="section_shield">BLOQUÉ AUTOMATIQUEMENT</string>
     <string name="shield_empty">Rien pour l’instant. Le bouclier a besoin d’avoir vu tes apps fonctionner normalement avant de pouvoir juger quoi que ce soit.</string>
     <string name="shield_caught_hint">Mis en silence parce qu’ils sont arrivés pendant qu’une pub se chargeait, depuis une app qui ne les avait jamais utilisés. Touche pour voir ce que c’est, ou relâche.</string>
     <string name="data_saved">Environ %1$s de pubs jamais téléchargées</string>
@@ -320,4 +320,10 @@
     <string name="promo_desc">Une image qui explique AdZero, à envoyer juste avant le fichier.</string>
     <string name="repair_manual">Choisir moi-même</string>
     <string name="repair_manual_body">Relâche celui que tu penses fautif. Même ordre : le plus probablement nécessaire au jeu en premier.</string>
+    <string name="tab_fix">Régler</string>
+    <string name="fix_trouble">UN PROBLÈME ?</string>
+    <string name="fix_broken_title">Un jeu ne marche plus</string>
+    <string name="fix_broken_body">Choisis-le dans la liste et AdZero cherchera quoi laisser passer, un serveur à la fois.</string>
+    <string name="fix_leaked_title">Une pub est passée</string>
+    <string name="fix_leaked_body">Dis-le maintenant, tant qu\'AdZero se souvient de ce que cette app vient de demander.</string>
 </resources>
