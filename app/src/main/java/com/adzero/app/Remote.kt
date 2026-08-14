@@ -72,9 +72,9 @@ object Remote {
     fun available(): Update? = update
 
     /** Combien la derniere mise a jour a ajoute de serveurs. */
-    @Volatile private var added = 0
+    @Volatile private var addedCount = 0
 
-    fun added(): Int = added
+    fun added(): Int = addedCount
 
     private fun checkVersion(ctx: Context) {
         try {
@@ -168,7 +168,7 @@ object Remote {
                 if (lines.isEmpty()) return@Thread
                 val before = AdNetworks.remoteCount()
 
-                added = (lines.size - before).coerceAtLeast(0)
+                addedCount = (lines.size - before).coerceAtLeast(0)
                 AdNetworks.setRemote(lines)
                 file?.writeText(lines.joinToString("\n", postfix = "\n"))
                 updatedAt = System.currentTimeMillis()

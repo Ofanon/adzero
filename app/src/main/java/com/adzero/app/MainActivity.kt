@@ -3,6 +3,7 @@ package com.adzero.app
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
 import android.net.Uri
@@ -139,7 +140,11 @@ class MainActivity : Activity() {
     private lateinit var sessionRow: TextView
     private lateinit var rewardRow: TextView
     private lateinit var remoteRow: TextView
-    private lateinit var newsBar: TextView
+    private lateinit var newsBar: LinearLayout
+    private lateinit var newsIcon: ImageView
+    private lateinit var newsTitle: TextView
+    private lateinit var newsBody: TextView
+    private lateinit var newsClose: ImageView
     private lateinit var shieldRow: TextView
     private lateinit var shapeRow: TextView
     private lateinit var trackerValue: TextView
@@ -1045,9 +1050,29 @@ class MainActivity : Activity() {
             return
         }
         val update = Remote.available()
-        newsBar.text = if (update != null)
-            getString(R.string.news_update, update.name)
-        else getString(R.string.news_list, Remote.added())
+
+        // Deux poids : une nouvelle version merite d'interrompre le regard,
+        // un serveur de plus dans la liste ne le merite pas. Une app qui crie
+        // pour tout n'est plus entendue quand elle a quelque chose a dire.
+        if (update != null) {
+            newsBar.background = Ui.gradientPill(this, Ui.LIME_A, Ui.LIME_B)
+            newsIcon.setImageResource(R.drawable.ic_bell)
+            newsIcon.imageTintList = ColorStateList.valueOf(Ui.BG_TOP)
+            newsClose.imageTintList = ColorStateList.valueOf(Ui.BG_TOP)
+            newsTitle.setTextColor(Ui.BG_TOP)
+            newsBody.setTextColor(0x99000000.toInt())
+            newsTitle.text = getString(R.string.news_update, update.name)
+            newsBody.text = getString(R.string.news_update_body)
+        } else {
+            newsBar.background = Ui.softPill(this)
+            newsIcon.setImageResource(R.drawable.ic_globe)
+            newsIcon.imageTintList = ColorStateList.valueOf(Ui.LIME_A)
+            newsClose.imageTintList = ColorStateList.valueOf(Ui.DIM)
+            newsTitle.setTextColor(Ui.TEXT)
+            newsBody.setTextColor(Ui.GREY)
+            newsTitle.text = getString(R.string.news_list, Remote.added())
+            newsBody.text = getString(R.string.news_list_body)
+        }
         newsBar.visibility = View.VISIBLE
     }
 
@@ -1076,17 +1101,50 @@ class MainActivity : Activity() {
             gravity = Gravity.CENTER
         }
 
-        newsBar = TextView(this).apply {
+        newsBar = LinearLayout(this).apply {
             visibility = View.GONE
-            textSize = 13f
-            typeface = Ui.BOLD
-            setTextColor(Ui.BG_TOP)
-            gravity = Gravity.CENTER
-            setPadding(d(16), d(13), d(16), d(13))
-            background = Ui.gradientPill(this@MainActivity, Ui.LIME_A, Ui.LIME_B)
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(d(14), d(12), d(8), d(12))
             isClickable = true
             setOnClickListener { buzz(); onNewsTapped() }
         }
+        newsIcon = ImageView(this).apply {
+            layoutParams = LinearLayout.LayoutParams(d(20), d(20))
+                .apply { marginEnd = d(12) }
+        }
+        newsBar.addView(newsIcon)
+
+        val newsTexts = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+        }
+        newsTitle = TextView(this).apply {
+            textSize = 13f
+            typeface = Ui.BOLD
+        }
+        newsBody = TextView(this).apply {
+            textSize = 11f
+            typeface = Ui.REGULAR
+            setPadding(0, d(2), 0, 0)
+        }
+        newsTexts.addView(newsTitle)
+        newsTexts.addView(newsBody)
+        newsBar.addView(newsTexts, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f))
+
+        // La croix manquait : toucher la banniere ouvrait le telechargement,
+        // donc rien ne permettait de la faire taire sans agir.
+        newsClose = ImageView(this).apply {
+            setImageResource(R.drawable.ic_close)
+            layoutParams = LinearLayout.LayoutParams(d(34), d(34))
+            setPadding(d(8), d(8), d(8), d(8))
+            isClickable = true
+            setOnClickListener {
+                tick()
+                newsKey()?.let { Stats.newsSeen(it) }
+                paintNews()
+            }
+        }
+        newsBar.addView(newsClose)
         Ui.lift(newsBar, 16, 5)
         page.addView(newsBar, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
         page.addView(Ui.spacer(this, 14))

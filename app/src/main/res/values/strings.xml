@@ -361,6 +361,8 @@
     <string name="setting_remote">Keep the blocklist up to date</string>
     <string name="setting_remote_body">Downloads the list of ad servers from AdZero\'s public repository once a day. It sends nothing about you, and it can only ever add servers, never unblock one. %1$d added, updated %2$s.</string>
     <string name="remote_never">never yet</string>
-    <string name="news_update">AdZero %1$s is out. Tap to get it.</string>
+    <string name="news_update">AdZero %1$s is available</string>
     <string name="news_list">Blocklist updated: %1$d new ad servers</string>
+    <string name="news_update_body">Tap to open the download page</string>
+    <string name="news_list_body">Downloaded from AdZero\'s public list</string>
 </resources>
