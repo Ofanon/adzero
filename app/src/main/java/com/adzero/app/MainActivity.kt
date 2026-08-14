@@ -1282,7 +1282,10 @@ class MainActivity : Activity() {
         }
         statsContent.addView(leaderboardList)
 
-        statsContent.addView(troubleBlock())
+        // Le bloc "un souci ?" vivait ici aussi. Il est sur l'accueil, qui est
+        // la page ou l'on arrive quand quelque chose cloche ; le repeter au
+        // milieu des chiffres n'ajoutait qu'une occasion de le lire deux fois.
+        // Les statistiques redeviennent ce qu'elles disent etre.
 
         // Everything below is server names and domains. Nobody outside this
         // project knows what that means, so it hides behind one line.
