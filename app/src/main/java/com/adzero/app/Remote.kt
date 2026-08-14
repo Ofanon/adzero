@@ -71,10 +71,23 @@ object Remote {
 
     fun available(): Update? = update
 
-    /** Combien la derniere mise a jour a ajoute de serveurs. */
-    @Volatile private var addedCount = 0
+    /**
+     * Combien de serveurs de plus que ce que cette personne a deja vu annonce.
+     *
+     * Compare a un nombre ecrit sur le disque plutot qu'a l'etat du processus :
+     * le telechargement a lieu au demarrage du tunnel, souvent app fermee, et
+     * un compteur en memoire perdait la nouvelle avant qu'elle soit lue.
+     */
+    fun added(): Int {
+        val seen = Stats.listSeen
+        if (seen < 0) return 0
+        return (AdNetworks.remoteCount() - seen).coerceAtLeast(0)
+    }
 
-    fun added(): Int = addedCount
+    /** Marque l'etat actuel comme connu : la nouvelle ne reviendra pas. */
+    fun markSeen() {
+        Stats.listSeen = AdNetworks.remoteCount()
+    }
 
     private fun checkVersion(ctx: Context) {
         try {
@@ -125,6 +138,9 @@ object Remote {
         if (!f.exists()) return
         try {
             AdNetworks.setRemote(f.readLines().mapNotNull { clean(it) })
+            // Premiere liste jamais chargee : elle devient la reference sans
+            // rien annoncer.
+            if (Stats.listSeen < 0) Stats.listSeen = AdNetworks.remoteCount()
             updatedAt = stampFile
                 ?.takeIf { it.exists() }
                 ?.readText()?.trim()?.toLongOrNull() ?: 0L
@@ -166,9 +182,7 @@ object Remote {
                 // Une liste vide est un depot casse, pas une instruction de
                 // tout debloquer : on garde ce qu'on avait.
                 if (lines.isEmpty()) return@Thread
-                val before = AdNetworks.remoteCount()
 
-                addedCount = (lines.size - before).coerceAtLeast(0)
                 AdNetworks.setRemote(lines)
                 file?.writeText(lines.joinToString("\n", postfix = "\n"))
                 updatedAt = System.currentTimeMillis()

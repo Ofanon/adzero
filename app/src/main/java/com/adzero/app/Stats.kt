@@ -78,6 +78,19 @@ object Stats {
      * Une banniere qui revient apres avoir ete lue devient un decor : on cesse
      * de la voir, y compris le jour ou elle dit quelque chose d'important.
      */
+    /**
+     * Combien de serveurs distants cette personne a deja vus annonces.
+     *
+     * -1 tant qu'elle n'en a jamais vu : la premiere liste chargee devient
+     * alors la reference en silence, parce qu'une premiere installation n'a
+     * rien appris — la liste n'a pas grandi pour elle, elle etait deja la.
+     */
+    var listSeen: Int
+        get() = prefs?.getInt("list_seen", -1) ?: -1
+        set(value) {
+            prefs?.edit()?.putInt("list_seen", value)?.apply()
+        }
+
     fun newsSeen(key: String) {
         val seen = prefs?.getStringSet("news_seen", emptySet())?.toMutableSet()
             ?: return

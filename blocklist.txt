@@ -36,4 +36,10 @@
 # never carried anything is a pipeline nobody has tested.
 applovin
 
+# A second one, added a few minutes after the first, to check the part that
+# matters most: that the app notices a list has *grown* since the user last
+# looked. The first entry alone could not prove it — a first list is a
+# baseline, not news.
+mintegral
+
 # Below: what the built-in list does not cover yet.

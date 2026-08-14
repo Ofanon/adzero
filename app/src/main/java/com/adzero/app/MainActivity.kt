@@ -1038,7 +1038,7 @@ class MainActivity : Activity() {
     /** La cle de la nouvelle affichee, ou null quand il n'y en a pas. */
     private fun newsKey(): String? {
         Remote.available()?.let { return "v" + it.name }
-        if (Remote.added() > 0) return "list" + Remote.lastUpdate()
+        if (Remote.added() > 0) return "list" + AdNetworks.remoteCount()
         return null
     }
 
@@ -1077,6 +1077,7 @@ class MainActivity : Activity() {
 
     private fun onNewsTapped() {
         newsKey()?.let { Stats.newsSeen(it) }
+        Remote.markSeen()
         val update = Remote.available()
         if (update != null) {
             // Vers la page de telechargement, et nulle part ailleurs :
@@ -1140,6 +1141,7 @@ class MainActivity : Activity() {
             setOnClickListener {
                 tick()
                 newsKey()?.let { Stats.newsSeen(it) }
+                Remote.markSeen()
                 paintNews()
             }
         }
@@ -1733,10 +1735,13 @@ class MainActivity : Activity() {
         else android.text.format.DateUtils.getRelativeTimeSpanString(
             updated, System.currentTimeMillis(),
             android.text.format.DateUtils.MINUTE_IN_MILLIS
-        ).toString()
+        ).toString().replaceFirstChar { it.lowercase() }
         remoteRow.text = rowText(
             getString(R.string.setting_remote),
-            getString(R.string.setting_remote_body, AdNetworks.remoteCount(), since)
+            resources.getQuantityString(
+                R.plurals.setting_remote_body, AdNetworks.remoteCount(),
+                AdNetworks.remoteCount(), since
+            )
         )
         tintRow(remoteRow, if (Stats.remoteList) Ui.LIME_A else Ui.GREY)
 
@@ -1880,6 +1885,17 @@ class MainActivity : Activity() {
         bubbleButton = settingRow(R.drawable.ic_bubble) { toggleBubble() }
         body.addView(bubbleButton, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
         body.addView(Ui.spacer(this, 8))
+        remoteRow = settingRow(R.drawable.ic_globe) {
+            Stats.remoteList = !Stats.remoteList
+            // Allumer le reglage verifie tout de suite : attendre le lendemain
+            // pour qu'il se passe quelque chose donne l'impression que
+            // l'interrupteur ne fait rien.
+            if (Stats.remoteList) Remote.refresh(this, force = true)
+            paintToggles()
+        }
+        body.addView(remoteRow, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+        body.addView(Ui.spacer(this, 8))
+
         // Le rapport de fin de partie. Coupable ici, sinon les gens le
         // coupent au niveau d'Android et perdent aussi les alertes utiles.
         sessionRow = settingRow(R.drawable.ic_clock) {
