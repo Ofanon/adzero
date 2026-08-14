@@ -3029,8 +3029,21 @@ class MainActivity : Activity() {
     private fun showCulprit(broken: Boolean, app: String? = null) {
         // Les candidates : celles qu'on a fait taire pour un jeu casse, celles
         // qui ont parle pour une pub passee. Jamais un service du systeme.
-        val choices = (if (broken) Recent.silencedApps(6) else Recent.activeApps(6))
-            .filterNot { Shield.isSystemService(it) }
+        // Deux sources, et il faut les deux. Le journal ne couvre que cinq
+        // minutes : une partie jouee il y a un quart d'heure en est deja
+        // sortie, alors que c'est precisement le jeu auquel on pense. Le
+        // classement, lui, est cumulatif — il garde la memoire des apps qui
+        // servent des pubs, meme quand elles se sont tues depuis.
+        //
+        // Les recentes d'abord : ce sont les seules pour lesquelles il reste
+        // quelque chose a analyser. Les autres sont proposees quand meme, et
+        // l'ecran dira honnetement qu'il n'a rien vu.
+        val recent = (if (broken) Recent.silencedApps(6) else Recent.activeApps(6))
+        val known = Leaderboard.ranking(8).map { it.app }
+        val choices = (recent + known)
+            .filterNot { Shield.isSystemService(it) || it == "?" }
+            .distinct()
+            .take(8)
         val target = app ?: choices.firstOrNull()
 
         // L'utilisateur sait de quelle app il parle et nous non : plusieurs ont
