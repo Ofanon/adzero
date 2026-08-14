@@ -61,7 +61,20 @@ object Recent {
     }
 
     private val ring = LinkedHashMap<String, Hit>()
+
+    /**
+     * Quand chaque app a parle pour la derniere fois.
+     *
+     * Separe du journal, et garde bien plus longtemps. Le journal stocke des
+     * requetes, donc il coute cher et s'oublie vite ; ceci est une ligne par
+     * app. Une semaine de memoire tient dans quelques centaines d'octets, et
+     * c'est ce qui permet de proposer un jeu auquel on a joue hier soir.
+     */
+    private val played = HashMap<String, Long>()
+    private const val PLAYED_MS = 7 * 24 * 60 * 60_000L
+    private const val PLAYED_MAX = 40
     private var file: File? = null
+    private var playedFile: File? = null
     @Volatile private var dirty = false
 
     private fun key(app: String, host: String) = app + "|" + Stats.rootOf(host)
@@ -78,6 +91,10 @@ object Recent {
                 ring[k] = seen          // remis en queue : le plus recent en dernier
             } else {
                 ring[k] = Hit(Stats.rootOf(host), app, now, blocked)
+            }
+            if (app != "?" && app != "com.adzero.app") played[app] = now
+            if (played.size > PLAYED_MAX) {
+                played.entries.minByOrNull { it.value }?.let { played.remove(it.key) }
             }
             dirty = true
             while (ring.size > CAPACITY) ring.remove(ring.keys.first())
@@ -96,6 +113,19 @@ object Recent {
      */
     fun init(ctx: Context) {
         if (file != null) return
+        val pf = File(ctx.applicationContext.filesDir, "played.txt")
+        playedFile = pf
+        if (pf.exists()) try {
+            val cutoff = System.currentTimeMillis() - PLAYED_MS
+            pf.forEachLine { line ->
+                val parts = line.split("|")
+                if (parts.size == 2) {
+                    val at = parts[1].toLongOrNull() ?: return@forEachLine
+                    if (at >= cutoff) synchronized(ring) { played[parts[0]] = at }
+                }
+            }
+        } catch (_: Exception) {
+        }
         val f = File(ctx.applicationContext.filesDir, "recent.txt")
         file = f
         if (!f.exists()) return
@@ -131,6 +161,13 @@ object Recent {
             dirty = false
         } catch (_: Exception) {
         }
+        try {
+            val copy = synchronized(ring) { played.toMap() }
+            playedFile?.bufferedWriter()?.use { w ->
+                for ((app, at) in copy) w.write(app + "|" + at + "\n")
+            }
+        } catch (_: Exception) {
+        }
     }
 
     /** The app that resolved the most names recently: the one on screen. */
@@ -142,6 +179,25 @@ object Recent {
      * de publicite a personne. Les proposer comme coupable, c'est designer le
      * temoin le plus bruyant de la piece.
      */
+    /**
+     * Les apps vues recemment, la derniere en premier.
+     *
+     * Bien plus large que [activeApps] : ici on cherche a proposer un choix,
+     * pas a analyser. Une app dont il ne reste aucune requete a examiner
+     * merite quand meme d'etre proposee — l'ecran dira honnetement qu'il n'a
+     * rien vu, ce qui vaut mieux que de la cacher.
+     */
+    fun playedApps(max: Int = 12): List<String> {
+        val cutoff = System.currentTimeMillis() - PLAYED_MS
+        return synchronized(ring) {
+            played.entries
+                .filter { it.value >= cutoff && !Shield.isSystemService(it.key) }
+                .sortedByDescending { it.value }
+                .take(max)
+                .map { it.key }
+        }
+    }
+
     fun activeApps(max: Int = 8): List<String> {
         val now = System.currentTimeMillis()
         val counts = HashMap<String, Int>()

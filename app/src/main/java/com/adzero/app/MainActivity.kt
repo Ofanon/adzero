@@ -1106,7 +1106,11 @@ class MainActivity : Activity() {
 
         page.addView(Ui.spacer(this, 18))
 
-
+        // Le meme bloc que dans les statistiques. C'est ici qu'on arrive quand
+        // quelque chose cloche — bien avant de penser a ouvrir un onglet de
+        // chiffres.
+        page.addView(troubleBlock())
+        page.addView(Ui.spacer(this, 18))
 
         return ScrollView(this).apply {
             addView(page, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
@@ -1278,17 +1282,7 @@ class MainActivity : Activity() {
         }
         statsContent.addView(leaderboardList)
 
-        statsContent.addView(Ui.sectionLabel(this, getString(R.string.fix_trouble)))
-        statsContent.addView(Ui.spacer(this, 10))
-        statsContent.addView(troubleRow(R.drawable.ic_bug, R.string.fix_broken_title,
-                                      R.string.fix_broken_body) {
-            showCulprit(broken = true)
-        })
-        statsContent.addView(Ui.spacer(this, 8))
-        statsContent.addView(troubleRow(R.drawable.ic_no_banner, R.string.fix_leaked_title,
-                                      R.string.fix_leaked_body) {
-            showCulprit(broken = false)
-        })
+        statsContent.addView(troubleBlock())
 
         // Everything below is server names and domains. Nobody outside this
         // project knows what that means, so it hides behind one line.
@@ -1391,6 +1385,19 @@ class MainActivity : Activity() {
      * une page qui commence par un graphique de fierte ne se lit pas quand on
      * cherche pourquoi un jeu ne demarre plus.
      */
+    /** Les deux depannages, identiques sur l'accueil et dans les statistiques. */
+    private fun troubleBlock(): LinearLayout {
+        val box = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        box.addView(Ui.sectionLabel(this, getString(R.string.fix_trouble)))
+        box.addView(Ui.spacer(this, 10))
+        box.addView(troubleRow(R.drawable.ic_bug, R.string.fix_broken_title,
+                               R.string.fix_broken_body) { showCulprit(broken = true) })
+        box.addView(Ui.spacer(this, 8))
+        box.addView(troubleRow(R.drawable.ic_no_banner, R.string.fix_leaked_title,
+                               R.string.fix_leaked_body) { showCulprit(broken = false) })
+        return box
+    }
+
     /** Une grande ligne cliquable : une icone, un titre, une explication. */
     private fun troubleRow(
         icon: Int, title: Int, body: Int, onTap: () -> Unit,
@@ -3040,7 +3047,9 @@ class MainActivity : Activity() {
         // l'ecran dira honnetement qu'il n'a rien vu.
         val recent = (if (broken) Recent.silencedApps(6) else Recent.activeApps(6))
         val known = Leaderboard.ranking(8).map { it.app }
-        val choices = (recent + known)
+        // Puis les apps vues dans la semaine : le jeu d'hier soir est celui
+        // auquel on pense, et il n'a plus aucune requete dans le journal.
+        val choices = (recent + known + Recent.playedApps(12))
             .filterNot { Shield.isSystemService(it) || it == "?" }
             .distinct()
             .take(8)
