@@ -175,8 +175,31 @@ class SilenceVpnService : VpnService() {
     @Volatile private var rewardUntil = 0L
     @Volatile private var rewardApp: String? = null
 
+    /**
+     * Combien de serveurs publicitaires la fenetre a deja laisses passer.
+     *
+     * Le chrono seul ne suffit pas, et c'est le defaut qu'Oscar a vu : une
+     * minute de porte ouverte n'est pas "une pub", c'est une minute pendant
+     * laquelle le SDK precharge tout ce qu'il peut. Les interstitielles ainsi
+     * mises en cache se joueront plus tard, alors qu'AdZero a repris son
+     * travail — et seul un redemarrage du jeu vide ce cache.
+     *
+     * On compte donc les requetes autorisees et on referme des qu'un
+     * chargement de pub est passe. Le chrono ne sert plus que de plafond, pour
+     * le cas ou la personne appuie sans qu'aucune pub n'arrive.
+     */
+    @Volatile private var rewardBudget = 0
+
+    /**
+     * Un chargement de pub resout une dizaine de noms : la cascade de
+     * mediation, le gagnant, ses traceurs. Quinze laisse passer la premiere
+     * confortablement et arrete la deuxieme.
+     */
+    private val REWARD_BUDGET = 15
+
     private fun rewarding(who: String): Boolean {
         if (System.currentTimeMillis() > rewardUntil) return false
+        if (rewardBudget <= 0) return false
         val target = rewardApp ?: return true
         return who == target || who == "?"
     }
@@ -205,6 +228,7 @@ class SilenceVpnService : VpnService() {
         if (intent?.action == ACTION_REWARD) {
             rewardApp = attribution?.foreground()
             rewardUntil = System.currentTimeMillis() + 60_000L
+            rewardBudget = REWARD_BUDGET
             lastNotice = 0L
             refreshNotice()
             return START_STICKY
@@ -331,8 +355,19 @@ class SilenceVpnService : VpnService() {
             val byTiming = kind == AdNetworks.Kind.NONE &&
                     Shield.shouldSilence(app, Stats.rootOf(host))
             // A pause lets everything through without dropping the tunnel.
-            val wanted = rewarding(app)
-            val isAd = (kind != AdNetworks.Kind.NONE || byTiming) && !wanted
+            val wouldBlock = kind != AdNetworks.Kind.NONE || byTiming
+            val wanted = wouldBlock && rewarding(app)
+            // Chaque serveur publicitaire laisse passer entame le budget. La
+            // fenetre se referme sur la premiere pub, pas sur le chrono.
+            if (wanted) {
+                rewardBudget--
+                if (rewardBudget <= 0) {
+                    rewardUntil = 0L
+                    lastNotice = 0L
+                    refreshNotice()
+                }
+            }
+            val isAd = wouldBlock && !wanted
 
             // Every query feeds the learning, including the ones we let
             // through: that is precisely where unknown ad networks hide.
