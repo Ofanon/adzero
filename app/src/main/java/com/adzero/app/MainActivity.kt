@@ -134,7 +134,7 @@ class MainActivity : Activity() {
     private lateinit var dataLine: TextView
     private lateinit var moneyLine: TextView
     private lateinit var shareStatsRow: TextView
-    private lateinit var helpButton: TextView
+    private lateinit var troubleCard: LinearLayout
     private lateinit var reportRow: TextView
     private lateinit var shieldRow: TextView
     private lateinit var shapeRow: TextView
@@ -561,70 +561,6 @@ class MainActivity : Activity() {
      * where it belongs, but the other two have nowhere else to live and
      * somebody whose game just broke should not have to hunt through settings.
      */
-    private fun showHelp() {
-        val box = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(d(20), d(22), d(20), d(8))
-        }
-        box.addView(TextView(this).apply {
-            text = getString(R.string.help_title)
-            typeface = Ui.BOLD
-            setTextColor(Ui.TEXT)
-            textSize = 20f
-            setPadding(d(4), 0, d(4), 0)
-        })
-        box.addView(Ui.spacer(this, 14))
-
-        val entries = listOf(
-            Triple(R.drawable.ic_flag, R.string.report_action, R.string.help_report),
-            Triple(R.drawable.ic_bug, R.string.broken_action, R.string.help_broken),
-            Triple(R.drawable.ic_activity, R.string.test_action, R.string.help_test),
-        )
-        for ((index, entry) in entries.withIndex()) {
-            val (icon, title, detail) = entry
-            val row = Ui.card(this).apply {
-                orientation = LinearLayout.HORIZONTAL
-                gravity = Gravity.CENTER_VERTICAL
-                isClickable = true
-                setOnClickListener {
-                    buzz()
-                    currentSheet?.dismiss()
-                    when (index) {
-                        0 -> showReport()
-                        1 -> showBroken()
-                        else -> runSelfTest()
-                    }
-                }
-            }
-            row.addView(ImageView(this).apply {
-                setImageResource(icon)
-                setColorFilter(Ui.LIME_A)
-                layoutParams = LinearLayout.LayoutParams(d(22), d(22))
-                    .apply { marginEnd = d(16) }
-            })
-            val label = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-            label.addView(TextView(this).apply {
-                text = getString(title)
-                typeface = Ui.BOLD
-                setTextColor(Ui.TEXT)
-                textSize = 15f
-            })
-            label.addView(TextView(this).apply {
-                typeface = Ui.REGULAR
-                text = getString(detail)
-                setTextColor(Ui.GREY)
-                textSize = 12f
-            })
-            row.addView(label, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f))
-            box.addView(
-                row,
-                LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
-                    .apply { bottomMargin = d(8) }
-            )
-        }
-        sheet(box)
-    }
-
     private fun runSelfTest() {
         val box = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -1088,22 +1024,6 @@ class MainActivity : Activity() {
         // whose job is to say that nothing is. Below the watched apps rather
         // than above them, so it is not the only thing under the counter.
         page.addView(Ui.spacer(this, 22))
-        helpButton = TextView(this).apply {
-            text = getString(R.string.help_action)
-            typeface = Ui.BOLD
-            setTextColor(Ui.GREY)
-            textSize = 13f
-            gravity = Gravity.CENTER
-            setPadding(d(26), d(14), d(26), d(14))
-            background = Ui.softPill(this@MainActivity)
-            isClickable = true
-            setOnClickListener { buzz(); showHelp() }
-        }
-        Ui.lift(helpButton, 16, 5)
-        page.addView(helpButton, LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
-            gravity = Gravity.CENTER_HORIZONTAL
-        })
-
         page.addView(Ui.spacer(this, 18))
 
         // Le meme bloc que dans les statistiques. C'est ici qu'on arrive quand
@@ -1398,6 +1318,12 @@ class MainActivity : Activity() {
         box.addView(Ui.spacer(this, 8))
         box.addView(troubleRow(R.drawable.ic_no_banner, R.string.fix_leaked_title,
                                R.string.fix_leaked_body) { showCulprit(broken = false) })
+        box.addView(Ui.spacer(this, 8))
+        // Le troisieme outil de l'ancien panneau d'aide. Il n'etait joignable
+        // que par la, donc supprimer le bouton l'aurait fait disparaitre.
+        box.addView(troubleRow(R.drawable.ic_activity, R.string.test_action,
+                               R.string.help_test) { runSelfTest() })
+        troubleCard = box
         return box
     }
 
@@ -1901,7 +1827,7 @@ class MainActivity : Activity() {
             Tour.Step(power, getString(R.string.tour1_title), getString(R.string.tour1_body)),
             Tour.Step(stateLabel, getString(R.string.tour2_title), getString(R.string.tour2_body)),
             Tour.Step(statsRow, getString(R.string.tour3_title), getString(R.string.tour3_body)),
-            Tour.Step(helpButton, getString(R.string.tour4_title), getString(R.string.tour4_body)),
+            Tour.Step(troubleCard, getString(R.string.tour4_title), getString(R.string.tour4_body)),
             tabs.getOrNull(1)?.let {
                 Tour.Step(it, getString(R.string.tour5_title), getString(R.string.tour5_body))
             },
