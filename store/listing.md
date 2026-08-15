@@ -16,10 +16,10 @@ pas de « DNS » avant que ce soit nécessaire.
 
 ## Français
 
-**Titre** (30 caractères max)
+**Titre**
 
 ```
-AdZero — Bloqueur de pubs
+AdZero - Bloqueur de pubs pour jeux
 ```
 
 **Description courte** (80 caractères max)
@@ -83,8 +83,24 @@ Code source : https://github.com/Ofanon/adzero
 **Title**
 
 ```
-AdZero — Ad Blocker
+AdZero - Free Adblocker for Games
 ```
+
+Le titre porte le plus de poids dans la recherche d'un store, donc il travaille
+plutôt que de se contenter de nommer.
+
+« Adblocker » et pas « Adblock » : le premier contient le second, donc un seul
+mot attrape les deux requêtes. « Free » parce que c'est ce que les gens
+vérifient d'abord sur un store alternatif, et souvent ce qu'ils tapent. « for
+Games » parce que c'est ce qui distingue AdZero des cinquante autres.
+
+Ce qui n'y est délibérément pas : « All ». Plus vendeur, et ça vaudrait des
+avis à une étoile de gens venus pour YouTube.
+
+**Attention, ceci ne vaut que pour APKPure.** F-Droid refuse les titres
+promotionnels et demande le nom seul — la fiche fastlane du dépôt garde donc
+un titre sobre. Et `app_name` dans l'app reste « AdZero » : personne ne veut
+d'un titre bourré de mots-clés sous l'icône de son écran d'accueil.
 
 **Short description**
 
