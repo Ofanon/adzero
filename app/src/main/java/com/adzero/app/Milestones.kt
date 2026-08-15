@@ -45,7 +45,9 @@ object Milestones {
         val f = File(ctx.applicationContext.filesDir, "milestones.txt")
         file = f
         if (f.exists()) try {
-            f.forEachLine { line -> line.trim().toIntOrNull()?.let { reached.add(it) } }
+            f.forEachLine { line ->
+                line.trim().toIntOrNull()?.let { synchronized(reached) { reached.add(it) } }
+            }
         } catch (_: Exception) {
         }
 
@@ -53,12 +55,14 @@ object Milestones {
         // quelqu'un qui a deja bloque trois mille pubs ne doit pas recevoir
         // huit celebrations d'affilee pour des paliers franchis il y a des
         // semaines. On les marque atteints sans rien annoncer.
-        if (reached.isEmpty()) {
-            val total = Leaderboard.totalAttempts()
-            val done = STEPS.filter { it <= total }
-            if (done.isNotEmpty()) {
-                reached.addAll(done)
-                save()
+        synchronized(reached) {
+            if (reached.isEmpty()) {
+                val total = Leaderboard.totalAttempts()
+                val done = STEPS.filter { it <= total }
+                if (done.isNotEmpty()) {
+                    reached.addAll(done)
+                    save()
+                }
             }
         }
     }
@@ -70,10 +74,16 @@ object Milestones {
      * l'ouverture. Rien ne s'affiche pendant qu'on joue.
      */
     fun check(total: Int) {
-        for (step in STEPS) {
-            if (total >= step && reached.add(step)) {
-                pending = maxOf(pending, step)
-                save()
+        // Appelee depuis le fil du tunnel, alors qu'init() peut encore lire le
+        // fichier depuis un autre. Un HashSet modifie pendant qu'on le parcourt
+        // ne se plaint pas : il rend des resultats faux, ce qui ici voudrait
+        // dire un palier annonce deux fois ou jamais.
+        synchronized(reached) {
+            for (step in STEPS) {
+                if (total >= step && reached.add(step)) {
+                    pending = maxOf(pending, step)
+                    save()
+                }
             }
         }
     }

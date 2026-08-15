@@ -119,7 +119,16 @@ object Session {
         if (FirstParty.hopeless(who)) return
         lastReport[who] = now
 
-        notify(ctx, who, minutes, blocked)
+        // Hors du verrou et hors du fil du tunnel.
+        //
+        // note() est appelee sur chaque requete DNS du telephone, et elle est
+        // synchronisee. Publier la notification ici retenait ce verrou pendant
+        // que le PackageManager repondait et que le canal se creait — soit des
+        // dizaines de millisecondes ou toutes les requetes DNS attendaient.
+        // Une fois par partie seulement, mais exactement le genre de chose qui
+        // se raconte plus tard comme "internet a hoquete".
+        val app = ctx.applicationContext
+        Thread({ notify(app, who, minutes, blocked) }, "adzero-session").start()
     }
 
     private fun notify(ctx: Context, who: String, minutes: Int, blocked: Int) {
