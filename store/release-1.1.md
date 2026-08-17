@@ -1,33 +1,33 @@
-🎮 **AdZero te dit enfin ce qu'il a fait**
+🎮 **AdZero now tells you what it did**
 
-Quand tu fermes un jeu, un message résume ta partie : combien de pubs il a stoppées pendant que tu jouais, et combien de minutes tu n'as pas passées à les regarder. Touche-le, tu obtiens une carte à partager.
+When you close a game, a notice sums up your session: how many ads it stopped while you played, and how many minutes you did not spend watching them. Tap it for a card you can share.
 
-🏆 **Des paliers.** 100 pubs bloquées, 1 000, 10 000 — l'app te le fête.
+🏆 **Milestones.** 100 ads blocked, 1,000, 10,000 — the app celebrates when you get there.
 
-🔧 **Un problème ? Deux nouveaux écrans**
+🔧 **Something wrong? Two new screens**
 
-« Un jeu ne marche plus » et « Une pub est passée » ouvrent les dernières heures d'activité de cette app, coupable le plus probable en tête, et un seul geste pour régler. Fini de deviner quel serveur toucher.
+"A game stopped working" and "An ad got through" now open the last few hours of activity for that app, with the most likely culprit first and one tap to fix it. No more guessing which server to touch.
 
-🔄 **La liste se met à jour toute seule**
+🔄 **The blocklist updates itself**
 
-Les nouvelles régies arrivent sans attendre une mise à jour de l'app. Elle ne peut qu'ajouter des serveurs, jamais en débloquer un, et rien te concernant n'est envoyé.
+New ad servers arrive without waiting for an app update. It can only ever add servers, never unblock one, and nothing about you is ever sent.
 
-✨ **Aussi**
+✨ **Also**
 
-- L'app prévient quand une nouvelle version sort — utile si tu l'as installée à la main
-- Les fenêtres défilent, donc les longues listes sont enfin atteignables
-- Un serveur inconnu n'est plus déclaré inoffensif : AdZero dit quand il ne sait pas
-- Plus fluide : les écritures disque n'interrompent plus l'affichage
-- L'icône apparaît sur Android 7, où il n'y en avait aucune
+- The app tells you when a new version is out — handy when you installed by hand
+- Popups scroll, so long lists are reachable
+- Unknown servers are no longer called harmless: AdZero says when it does not know
+- Faster: disk writes no longer interrupt the interface
+- The icon now shows up on Android 7, where it was missing entirely
 
 ---
 
-**Installation**
+**Installing**
 
-Télécharge `AdZero.apk` ci-dessous et ouvre-le. Android demandera l'autorisation d'installer depuis cette source : c'est normal pour une app distribuée hors du Play Store, et tu peux retirer l'autorisation juste après.
+Download `AdZero.apk` below and open it. Android will ask permission to install from this source — that is normal for an app distributed outside the Play Store, and you can withdraw the permission straight afterwards.
 
-Si tu as déjà AdZero, l'installation par-dessus garde tes statistiques et tes réglages.
+If you already have AdZero, installing over it keeps your stats and settings.
 
-**Ce qu'AdZero ne fait pas**
+**What AdZero does not do**
 
-Aucun compte, aucun serveur, aucune donnée qui quitte le téléphone. Le trafic ne passe pas par un intermédiaire : seules les requêtes DNS entrent dans le tunnel, et elles repartent vers le résolveur de ton opérateur. Le code est ici, en entier.
+No account, no server, nothing about you leaving the phone. Your traffic does not travel through a middleman: only DNS queries enter the tunnel, and they go out to your own network's resolver. The source is all here.
