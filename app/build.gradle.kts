@@ -24,8 +24,8 @@ android {
         // versionCode is what the store compares to decide an update is an
         // update; it only ever goes up, and never goes back down for any
         // reason. versionName is what a human reads.
-        versionCode = 2
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "1.1"
     }
 
     signingConfigs {
