@@ -11,7 +11,13 @@
 #
 #   code=<versionCode>    must match app/build.gradle.kts exactly
 #   name=<versionName>    what the banner shows the user
-#   url=<download page>   where tapping the banner sends them
+#   url=<link>            where tapping the banner sends them
+#
+# url can be the releases page, or the .apk asset itself — in that case the
+# browser starts the download straight away, and the user opens the file when
+# it lands. AdZero never installs anything: asking Android for permission to
+# install packages is the single loudest thing a small app can put in its
+# manifest, and it buys one tap.
 #
 # Bump this only once the build is actually downloadable at that URL. A banner
 # pointing at a 404 is worse than no banner.
