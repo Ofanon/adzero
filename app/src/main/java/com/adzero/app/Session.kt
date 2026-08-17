@@ -6,6 +6,9 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.Icon
 import android.os.Build
 
 /**
@@ -131,6 +134,29 @@ object Session {
         Thread({ notify(app, who, minutes, blocked) }, "adzero-session").start()
     }
 
+    /**
+     * L'icone de l'app, en Icon pour la notification.
+     *
+     * Passe par un Bitmap parce qu'une icone adaptative n'est pas un simple
+     * dessin : Icon.createWithResource ne sait pas la rendre pour une AUTRE
+     * app, et createWithBitmap prend n'importe quel Drawable une fois peint.
+     */
+    private fun gameIcon(ctx: Context, pkg: String): Icon? = try {
+        AppsCatalog.iconFor(ctx, pkg)?.let { shared ->
+            // Copie obligatoire : ces Drawable sont partages, et leur poser des
+            // bounds ici deformerait l'icone partout ailleurs dans l'app.
+            val icon = shared.constantState?.newDrawable()?.mutate() ?: shared
+            val size = (64 * ctx.resources.displayMetrics.density).toInt()
+                .coerceAtLeast(1)
+            val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+            icon.setBounds(0, 0, size, size)
+            icon.draw(Canvas(bitmap))
+            Icon.createWithBitmap(bitmap)
+        }
+    } catch (_: Exception) {
+        null
+    }
+
     private fun notify(ctx: Context, who: String, minutes: Int, blocked: Int) {
         if (!Stats.sessionReports) return
         val manager = ctx.getSystemService(NotificationManager::class.java) ?: return
@@ -177,6 +203,9 @@ object Session {
                 .setContentText(body.replace("\n", "  ·  "))
                 .setStyle(Notification.BigTextStyle().bigText(body))
                 .setSmallIcon(R.drawable.ic_mark)
+                // L'icone du jeu, pas celle d'AdZero : la notification parle
+                // de MyHotel, elle doit se reconnaitre sans etre lue.
+                .apply { gameIcon(ctx, who)?.let { setLargeIcon(it) } }
                 .setAutoCancel(true)
                 .setContentIntent(open)
                 .addAction(

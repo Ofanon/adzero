@@ -304,7 +304,19 @@ class SilenceVpnService : VpnService() {
             val byTiming = kind == AdNetworks.Kind.NONE &&
                     Shield.shouldSilence(app, Stats.rootOf(host))
             // A pause lets everything through without dropping the tunnel.
-            val isAd = kind != AdNetworks.Kind.NONE || byTiming
+            // Les services du systeme ne sont jamais reduits au silence.
+            //
+            // Play Services, le Play Store, l'installeur, l'interface systeme :
+            // ils n'ont pas d'icone de lanceur, donc ils n'apparaissent pas
+            // dans l'onglet Apps. La protection par app ne peut pas les
+            // epargner, et quelqu'un dont le telephone se met a mal fonctionner
+            // n'a aucun moyen de comprendre ni de reparer.
+            //
+            // Le cout est faible : un SDK publicitaire tourne dans le processus
+            // du jeu, pas dans celui de Play Services. Ce qu'on epargne ici est
+            // donc presque toujours de l'infrastructure, pas de la pub.
+            val isAd = (kind != AdNetworks.Kind.NONE || byTiming) &&
+                    !Shield.isSystemService(app)
 
             // Every query feeds the learning, including the ones we let
             // through: that is precisely where unknown ad networks hide.

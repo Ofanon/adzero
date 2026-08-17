@@ -99,6 +99,14 @@ class MainActivity : Activity() {
     private var expandedCard: LinearLayout? = null
 
     /**
+     * Demande de defiler jusqu'a l'app qu'on vient d'ouvrir depuis l'accueil.
+     *
+     * Consommee a la premiere repeinte : ouvrir un panneau qu'il faut ensuite
+     * aller chercher plus bas n'est pas l'avoir ouvert.
+     */
+    private var scrollToExpanded = false
+
+    /**
      * What each section of the statistics last drew.
      *
      * The page is asked to repaint on every tick of the counter, which is once
@@ -1270,6 +1278,7 @@ class MainActivity : Activity() {
                     setOnClickListener {
                         buzz()
                         expandedApp = pkg
+                        scrollToExpanded = true
                         showPage(1, slideFrom = 1)
                     }
                 }
@@ -2934,6 +2943,20 @@ class MainActivity : Activity() {
         return card
     }
 
+    /** Amene [target] en haut de la page des statistiques. */
+    private fun scrollTo(target: View) {
+        var y = 0
+        var view: View? = target
+        // On remonte les parents jusqu'au ScrollView en cumulant les
+        // decalages : la ligne est enfouie de plusieurs niveaux, et son top
+        // seul ne dit rien de sa position dans la page.
+        while (view != null && view !== statsPage) {
+            y += view.top
+            view = view.parent as? View
+        }
+        statsPage.smoothScrollTo(0, (y - d(12)).coerceAtLeast(0))
+    }
+
     private fun paintLeaderboard() {
         if (unchanged("leaderboard", Leaderboard.ranking().joinToString {
                 it.app + it.attempts
@@ -3049,6 +3072,12 @@ class MainActivity : Activity() {
                     LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
                         .apply { bottomMargin = d(10) }
                 )
+                if (scrollToExpanded) {
+                    scrollToExpanded = false
+                    // Apres la passe de mesure : avant, la ligne n'a pas encore
+                    // de position et on defilerait vers zero.
+                    statsPage.post { scrollTo(line) }
+                }
             }
         }
     }
