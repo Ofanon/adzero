@@ -7,21 +7,32 @@
 # current that day, for ever, and will never learn that anything changed —
 # including the fix for the bug that annoys them.
 #
-# Three lines, in this order. Anything else is ignored.
+# Two lines to change per release. Anything else is ignored.
 #
 #   code=<versionCode>    must match app/build.gradle.kts exactly
 #   name=<versionName>    what the banner shows the user
-#   url=<link>            where tapping the banner sends them
 #
-# url can be the releases page, or the .apk asset itself — in that case the
-# browser starts the download straight away, and the user opens the file when
-# it lands. AdZero never installs anything: asking Android for permission to
-# install packages is the single loudest thing a small app can put in its
-# manifest, and it buys one tap.
+# There is deliberately no address to keep in step. The banner opens
 #
-# Bump this only once the build is actually downloadable at that URL. A banner
-# pointing at a 404 is worse than no banner.
+#   github.com/Ofanon/adzero/releases/latest/download/AdZero.apk
+#
+# which GitHub redirects to the newest release on its own. It holds no version
+# number, so it never goes stale — that is why it lives in Remote.kt and not
+# here. Attaching the build to the release under the name AdZero.apk, exactly,
+# is the whole of what makes it work; the build produces that name by itself.
+#
+# The browser downloads the file and the user opens it. AdZero does not ask
+# Android for permission to install applications: that permission is the first
+# thing an antivirus looks at on an app distributed outside a store, and it
+# would have saved a single tap.
+#
+# url=<link>  overrides the address above, and normally stays absent. It is the
+# way out if a release ever has to be pulled or the repository moves, since
+# older copies of the app cannot be edited. Only github.com/Ofanon/adzero/ is
+# accepted.
+#
+# Bump code only once the release is actually published. A banner pointing at a
+# 404 is worse than no banner.
 
 code=2
 name=1.0
-url=https://github.com/Ofanon/adzero/releases/latest

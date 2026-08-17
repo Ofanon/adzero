@@ -39,6 +39,22 @@ object Remote {
         "https://raw.githubusercontent.com/Ofanon/adzero/main/version.txt"
 
     /**
+     * Ou la banniere envoie, et ce n'est pas une donnee.
+     *
+     * GitHub redirige cette adresse vers le fichier de la derniere release
+     * publiee, quelle qu'elle soit. Elle ne contient donc aucun numero de
+     * version et n'a jamais a changer — ce qui la rend meilleure ici, en dur,
+     * que dans version.txt ou il aurait fallu la reecrire a chaque sortie.
+     *
+     * Le navigateur telecharge le fichier ; l'utilisateur l'ouvre. AdZero ne
+     * demande pas la permission d'installer des applications : c'est ce qu'un
+     * antivirus regarde en premier sur une app distribuee hors store, et cela
+     * n'aurait economise qu'un seul appui.
+     */
+    private const val URL_DOWNLOAD =
+        "https://github.com/Ofanon/adzero/releases/latest/download/AdZero.apk"
+
+    /**
      * Toutes les six heures, et a chaque ouverture de l'app.
      *
      * C'etait une fois par jour, et uniquement au demarrage du tunnel — donc un
@@ -118,10 +134,16 @@ object Remote {
             }
             val code = fields["code"]?.toIntOrNull() ?: return
             val name = fields["name"] ?: return
-            val url = fields["url"] ?: return
-            // Seules les adresses du depot d'AdZero sont suivies : une banniere
-            // qui ouvre n'importe quelle URL est une porte d'entree, pas une
-            // fonctionnalite.
+            // url= est facultatif, et vide dans le cas normal : [URL_DOWNLOAD]
+            // vise deja la derniere release. Il reste accepte comme porte de
+            // sortie — un depot renomme, une release retiree en urgence —
+            // parce que sans lui il faudrait publier une nouvelle version de
+            // l'app pour corriger un lien casse dans l'ancienne.
+            //
+            // Et seules les adresses du depot d'AdZero sont suivies : une
+            // banniere qui ouvre n'importe quelle URL est une porte d'entree,
+            // pas une fonctionnalite.
+            val url = fields["url"]?.takeIf { it.isNotEmpty() } ?: URL_DOWNLOAD
             if (!url.startsWith("https://github.com/Ofanon/adzero/")) return
 
             val mine = try {

@@ -41,11 +41,22 @@ android {
 
     // What lands in the download is what somebody reads before tapping it.
     // "app-release.apk" says nothing and looks like a build artefact that
-    // escaped; the name and the version belong in it.
+    // escaped.
+    //
+    // The version used to be in the name, and it had to come out. GitHub serves
+    // a permanent link to the newest release at
+    //
+    //   /releases/latest/download/<file name>
+    //
+    // which resolves only if that file name never changes. With the version in
+    // it, the update banner's address had to be edited by hand at every
+    // release — one more thing to get wrong on the day everything else is
+    // already being changed. The version is in the release title, in the app,
+    // and in the installer screen; it does not need to be in the file name too.
     applicationVariants.all {
         outputs.all {
             (this as com.android.build.gradle.internal.api.BaseVariantOutputImpl)
-                .outputFileName = "AdZero-$versionName.apk"
+                .outputFileName = "AdZero.apk"
         }
     }
 
