@@ -65,6 +65,19 @@ object Session {
 
     private const val COOLDOWN_MS = 60 * 60_000L
 
+    /**
+     * Le reveil qui constate la fin d'une partie.
+     *
+     * Un seul fil, en demon, et au plus une tache en vol : armee a l'ouverture
+     * d'une partie, elle se re-arme tant que celle-ci dure. Pendant qu'on joue
+     * cela fait un reveil toutes les quatre-vingt-quinze secondes ; le reste du
+     * temps, rien du tout.
+     */
+    private val timer = java.util.concurrent.Executors.newSingleThreadScheduledExecutor { r ->
+        Thread(r, "adzero-session-timer").apply { isDaemon = true }
+    }
+    private var armed: java.util.concurrent.ScheduledFuture<*>? = null
+
     private var app: String? = null
     private var startedAt = 0L
     private var lastSeenAt = 0L
@@ -97,6 +110,38 @@ object Session {
         }
         lastSeenAt = now
         if (blockedAd) ads++
+        arm(ctx.applicationContext)
+    }
+
+    /** Programme la prochaine verification, si aucune n'attend deja. */
+    private fun arm(ctx: Context) {
+        if (armed?.isDone == false) return
+        armed = timer.schedule(
+            { sweep(ctx) },
+            QUIET_MS + 5_000L,
+            java.util.concurrent.TimeUnit.MILLISECONDS
+        )
+    }
+
+    /**
+     * Ferme la partie si elle s'est tue, sinon reprogramme.
+     *
+     * C'est ce qui permet a une partie de se terminer alors que le telephone
+     * est pose et que plus aucune requete n'arrive — le cas normal, et celui
+     * qui ne marchait pas.
+     */
+    @Synchronized
+    private fun sweep(ctx: Context) {
+        val now = System.currentTimeMillis()
+        when {
+            app == null -> {}
+            now - lastSeenAt > QUIET_MS -> close(ctx, now)
+            else -> armed = timer.schedule(
+                { sweep(ctx) },
+                QUIET_MS + 5_000L,
+                java.util.concurrent.TimeUnit.MILLISECONDS
+            )
+        }
     }
 
     /**
