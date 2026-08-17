@@ -11,8 +11,7 @@
 #
 #   code=<versionCode>    must match app/build.gradle.kts exactly
 #   name=<versionName>    what the banner shows the user
-#   url=<download page>   fallback, opened when apk= is missing
-#   apk=<direct .apk link> what the banner downloads and installs
+#   url=<download page>   where tapping the banner sends them
 #
 # Bump this only once the build is actually downloadable at that URL. A banner
 # pointing at a 404 is worse than no banner.
@@ -20,4 +19,3 @@
 code=2
 name=1.0
 url=https://github.com/Ofanon/adzero/releases/latest
-apk=

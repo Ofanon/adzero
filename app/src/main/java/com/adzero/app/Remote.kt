@@ -76,7 +76,7 @@ object Remote {
      * Le nom et l'adresse, pas le numero : c'est ce que la banniere affiche et
      * ce qu'elle ouvre. Null quand on est a jour, ce qui est le cas courant.
      */
-    class Update(val name: String, val url: String, val apk: String)
+    class Update(val name: String, val url: String)
 
     @Volatile private var update: Update? = null
 
@@ -131,12 +131,7 @@ object Remote {
             } catch (_: Exception) {
                 return
             }
-            // apk= peut etre vide : on retombe alors sur la page, ce qui
-            // marchait avant et marche toujours.
-            val apk = fields["apk"].orEmpty()
-                .takeIf { it.startsWith("https://github.com/Ofanon/adzero/") }
-                .orEmpty()
-            update = if (code > mine) Update(name, url, apk) else null
+            update = if (code > mine) Update(name, url) else null
         } catch (_: Exception) {
         }
     }
