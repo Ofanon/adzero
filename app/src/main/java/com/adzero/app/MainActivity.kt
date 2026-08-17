@@ -2937,10 +2937,11 @@ class MainActivity : Activity() {
     private fun paintLeaderboard() {
         if (unchanged("leaderboard", Leaderboard.ranking().joinToString {
                 it.app + it.attempts
-            })) return
-        // The panel lives inside this list; a rebuild takes it away.
+            } + expandedApp)) return
+        // Le panneau vit dans la liste qu'on vide : sa reference ne vaut plus
+        // rien. expandedApp, lui, survit — c'est une intention de
+        // l'utilisateur, pas un morceau de vue.
         expandedCard = null
-        expandedApp = null
         val rows = Leaderboard.ranking()
         pauseAnimation(leaderboardList)
         leaderboardList.removeAllViews()
@@ -3037,6 +3038,18 @@ class MainActivity : Activity() {
             }
             leaderboardList.addView(line)
 
+            // Reinsere le panneau sous sa ligne. Sans ca, deplier une app puis
+            // laisser le compteur bouger la refermait toute seule — et arriver
+            // depuis l'accueil n'ouvrait jamais rien.
+            if (expandedApp == row.app) {
+                val panel = networksPanel(row.app)
+                expandedCard = panel
+                leaderboardList.addView(
+                    panel,
+                    LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+                        .apply { bottomMargin = d(10) }
+                )
+            }
         }
     }
 
