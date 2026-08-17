@@ -34,5 +34,5 @@
 # Bump code only once the release is actually published. A banner pointing at a
 # 404 is worse than no banner.
 
-code=2
-name=1.0
+code=3
+name=1.1
