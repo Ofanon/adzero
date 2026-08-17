@@ -2174,6 +2174,13 @@ class MainActivity : Activity() {
         // qu'on ne rallume la protection, et c'est ce qui fait qu'un domaine
         // pousse sur GitHub arrive en minutes plutot qu'en jours.
         Remote.refresh(this)
+        // La version, elle, est relue a chaque fois : le fichier est minuscule
+        // et l'attente de six heures rendait la banniere imprevisible — on
+        // pouvait ouvrir l'app toute la journee sans jamais apprendre qu'une
+        // nouvelle version etait sortie.
+        Remote.peekVersion(this) {
+            runOnUiThread { if (!isFinishing && !isDestroyed) paintNews() }
+        }
         if (Milestones.pending > 0) root.postDelayed({ celebrate() }, 600)
         // The counters kept moving while the app was away, so nothing on the
         // statistics page can be assumed still current. Forgetting what was

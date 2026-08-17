@@ -116,6 +116,36 @@ object Remote {
         Stats.listSeen = AdNetworks.remoteCount()
     }
 
+    /**
+     * Relit le fichier de version, sans toucher a la liste.
+     *
+     * La verification de version etait accrochee au telechargement de la
+     * liste, donc plafonnee a [EVERY_MS] : quelqu'un pouvait ouvrir l'app dix
+     * fois dans l'apres-midi et n'apprendre qu'une nouvelle version existe que
+     * le lendemain. Or ce sont deux choses de tailles differentes — version.txt
+     * fait moins d'un kilo-octet, la liste en fait des dizaines — et seule la
+     * seconde justifiait d'etre espacee.
+     *
+     * Inutile d'aller plus vite : GitHub met ce fichier en cache cinq minutes,
+     * et deux ouvertures rapprochees liront de toute facon la meme reponse.
+     *
+     * Suit le meme reglage que la liste. C'est le seul interrupteur par lequel
+     * on refuse qu'AdZero parle a GitHub, et il doit tout couvrir, sinon il
+     * ment.
+     */
+    fun peekVersion(ctx: Context, then: () -> Unit) {
+        if (!Stats.remoteList) return
+        val app = ctx.applicationContext
+        Thread({
+            val before = update?.name
+            checkVersion(app)
+            // Ne reveille l'interface que si la reponse a change : le cas
+            // courant est "rien de neuf", et repeindre la banniere a chaque
+            // retour dans l'app pour rien la ferait clignoter.
+            if (update?.name != before) then()
+        }, "adzero-version").start()
+    }
+
     private fun checkVersion(ctx: Context) {
         try {
             val conn = (URL(URL_VERSION).openConnection() as HttpURLConnection).apply {
