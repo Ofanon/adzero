@@ -1088,11 +1088,27 @@ class MainActivity : Activity() {
         Remote.markSeen()
         val update = Remote.available()
         if (update != null) {
-            // Vers la page de telechargement, et nulle part ailleurs :
-            // Remote refuse deja toute adresse hors du depot d'AdZero.
-            try {
-                startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse(update.url)))
-            } catch (_: Exception) {
+            if (update.apk.isNotEmpty()) {
+                // Telechargement puis ecran d'installation d'Android. Rien de
+                // silencieux : c'est l'utilisateur qui confirme.
+                toast(getString(R.string.update_downloading))
+                Updater.fetchAndInstall(this, update.apk) { state ->
+                    runOnUiThread {
+                        if (isFinishing || isDestroyed) return@runOnUiThread
+                        when (state) {
+                            Updater.State.FAILED ->
+                                toast(getString(R.string.update_failed))
+                            Updater.State.WRONG_SIGNATURE ->
+                                toast(getString(R.string.update_bad_signature))
+                            else -> {}
+                        }
+                    }
+                }
+            } else {
+                try {
+                    startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse(update.url)))
+                } catch (_: Exception) {
+                }
             }
         }
         paintNews()

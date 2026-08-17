@@ -366,4 +366,7 @@
         <item quantity="one">Télécharge une fois par jour la liste des serveurs publicitaires depuis le dépôt public d\'AdZero. Rien te concernant n\'est envoyé, et elle ne peut qu\'ajouter des serveurs, jamais en débloquer un. %1$d ajouté, mise à jour %2$s.</item>
         <item quantity="other">Télécharge une fois par jour la liste des serveurs publicitaires depuis le dépôt public d\'AdZero. Rien te concernant n\'est envoyé, et elle ne peut qu\'ajouter des serveurs, jamais en débloquer un. %1$d ajoutés, mise à jour %2$s.</item>
     </plurals>
+    <string name="update_downloading">Téléchargement de la nouvelle version…</string>
+    <string name="update_failed">Téléchargement impossible. Réessaie plus tard.</string>
+    <string name="update_bad_signature">Ce fichier n\'est pas signé par AdZero. Il a été supprimé et rien n\'a été installé.</string>
 </resources>

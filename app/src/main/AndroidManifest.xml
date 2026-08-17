@@ -13,6 +13,18 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!--
+      Pour proposer la nouvelle version au moment ou la banniere l'annonce.
+      Une app installee a la main n'a aucun mecanisme de mise a jour : sans
+      cela, il faut passer par le navigateur, retrouver le fichier dans les
+      telechargements et l'ouvrir soi-meme.
+
+      Rien n'est installe en silence — Android affiche son propre ecran et
+      l'utilisateur confirme. Et AdZero refuse d'aller plus loin si la
+      signature du fichier telecharge ne correspond pas a celle de la version
+      installee : voir Updater.kt.
+    -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!-- Android stops background services to save power, and a VPN that gets
          stopped protects nobody. Not for Play Store distribution anyway. -->

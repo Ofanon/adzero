@@ -364,4 +364,7 @@
         <item quantity="one">Downloads the list of ad servers from AdZero\'s public repository once a day. It sends nothing about you, and it can only ever add servers, never unblock one. %1$d added, updated %2$s.</item>
         <item quantity="other">Downloads the list of ad servers from AdZero\'s public repository once a day. It sends nothing about you, and it can only ever add servers, never unblock one. %1$d added, updated %2$s.</item>
     </plurals>
+    <string name="update_downloading">Downloading the new version…</string>
+    <string name="update_failed">Download failed. Try again later.</string>
+    <string name="update_bad_signature">That file is not signed by AdZero. It has been deleted and nothing was installed.</string>
 </resources>
