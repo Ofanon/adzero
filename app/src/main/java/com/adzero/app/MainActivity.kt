@@ -2170,6 +2170,10 @@ class MainActivity : Activity() {
         // The user may have granted something in Settings and come back.
         Ui.animating = true
         stack.invalidate()
+        // Une verification a l'ouverture : on ouvre AdZero bien plus souvent
+        // qu'on ne rallume la protection, et c'est ce qui fait qu'un domaine
+        // pousse sur GitHub arrive en minutes plutot qu'en jours.
+        Remote.refresh(this)
         if (Milestones.pending > 0) root.postDelayed({ celebrate() }, 600)
         // The counters kept moving while the app was away, so nothing on the
         // statistics page can be assumed still current. Forgetting what was

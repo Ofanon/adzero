@@ -38,8 +38,19 @@ object Remote {
     private const val URL_VERSION =
         "https://raw.githubusercontent.com/Ofanon/adzero/main/version.txt"
 
-    /** Une fois par jour : les regies n'apparaissent pas a l'heure. */
-    private const val EVERY_MS = 24 * 60 * 60_000L
+    /**
+     * Toutes les six heures, et a chaque ouverture de l'app.
+     *
+     * C'etait une fois par jour, et uniquement au demarrage du tunnel — donc un
+     * domaine ajoute le matin pouvait n'arriver que le lendemain, voire jamais
+     * chez quelqu'un qui ne redemarre jamais la protection. Six heures plus une
+     * verification a l'ouverture ramene ca a quelques minutes en pratique : on
+     * ouvre AdZero bien plus souvent qu'on ne rallume son VPN.
+     *
+     * Le cout reste ridicule : quatre requetes par jour sur un fichier de
+     * quelques centaines d'octets, et GitHub repond 304 quand rien n'a change.
+     */
+    private const val EVERY_MS = 6 * 60 * 60_000L
 
     /** Une liste plausible fait quelques centaines de lignes, pas un million. */
     private const val MAX_LINES = 5_000
