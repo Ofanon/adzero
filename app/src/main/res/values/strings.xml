@@ -364,4 +364,9 @@
         <item quantity="one">Downloads the list of ad servers from AdZero\'s public repository once a day. It sends nothing about you, and it can only ever add servers, never unblock one. %1$d added, updated %2$s.</item>
         <item quantity="other">Downloads the list of ad servers from AdZero\'s public repository once a day. It sends nothing about you, and it can only ever add servers, never unblock one. %1$d added, updated %2$s.</item>
     </plurals>
+    <string name="channel_incompatible">Apps that refuse a VPN</string>
+    <string name="channel_incompatible_body">Warns you when an app on this phone is known to stop working while protection is on.</string>
+    <string name="incompatible_title">%1$s will not work right now</string>
+    <string name="incompatible_body">%1$s refuses to run while any VPN is active, and AdZero counts as one. It is not being blocked — it stops on its own. Leave it out of the tunnel and it works again; everything else stays protected.</string>
+    <string name="incompatible_exclude">Leave it out</string>
 </resources>

@@ -366,4 +366,9 @@
         <item quantity="one">Télécharge une fois par jour la liste des serveurs publicitaires depuis le dépôt public d\'AdZero. Rien te concernant n\'est envoyé, et elle ne peut qu\'ajouter des serveurs, jamais en débloquer un. %1$d ajouté, mise à jour %2$s.</item>
         <item quantity="other">Télécharge une fois par jour la liste des serveurs publicitaires depuis le dépôt public d\'AdZero. Rien te concernant n\'est envoyé, et elle ne peut qu\'ajouter des serveurs, jamais en débloquer un. %1$d ajoutés, mise à jour %2$s.</item>
     </plurals>
+    <string name="channel_incompatible">Apps qui refusent un VPN</string>
+    <string name="channel_incompatible_body">Prévient quand une app de ce téléphone est connue pour cesser de fonctionner pendant que la protection est active.</string>
+    <string name="incompatible_title">%1$s ne marchera pas</string>
+    <string name="incompatible_body">%1$s refuse de démarrer quand un VPN est actif, et AdZero en est un. Elle n\'est pas bloquée : elle s\'arrête d\'elle-même. Sors-la du tunnel et elle remarche ; tout le reste continue d\'être protégé.</string>
+    <string name="incompatible_exclude">La sortir du tunnel</string>
 </resources>

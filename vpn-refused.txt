@@ -1,0 +1,15 @@
+# Apps that refuse to run while a VPN is active.
+#
+# These are not blocked by AdZero. They detect that a tunnel exists and stop
+# by themselves, usually before making a single request, so no blocklist
+# change can fix them. The only fix is to leave them out of the tunnel, and
+# AdZero offers exactly that in a notification when it finds one installed.
+#
+# One package name per line. Prefixes are matched, so com.toyota.oneapp also
+# covers com.toyota.oneapp.eu and the other regional builds.
+#
+# Add a name here when somebody reports an app that stopped working and came
+# back once excluded. Guessing does not help: a name that is wrong never
+# triggers anything, and nobody finds out.
+#
+# com.toyota.oneapp is already built into the app.

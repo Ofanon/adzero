@@ -35,6 +35,9 @@ object Remote {
     private const val URL_LIST =
         "https://raw.githubusercontent.com/Ofanon/adzero/main/blocklist.txt"
 
+    private const val URL_BROKEN =
+        "https://raw.githubusercontent.com/Ofanon/adzero/main/vpn-refused.txt"
+
     private const val URL_VERSION =
         "https://raw.githubusercontent.com/Ofanon/adzero/main/version.txt"
 
@@ -188,6 +191,41 @@ object Remote {
         }
     }
 
+    /**
+     * Les apps qui refusent de tourner sous VPN.
+     *
+     * Meme trajet que la liste des regies, et pour la meme raison : ces noms
+     * ne se devinent pas a la compilation, ils arrivent quand quelqu'un
+     * signale que son app ne marche plus. Attendre une version d'AdZero pour
+     * chacun rendrait le signalement inutile.
+     *
+     * Un echec ne change rien : la liste integree continue seule.
+     */
+    private fun fetchBroken() {
+        try {
+            val conn = (URL(URL_BROKEN).openConnection() as HttpURLConnection).apply {
+                connectTimeout = 15_000
+                readTimeout = 15_000
+                setRequestProperty("User-Agent", "AdZero")
+            }
+            if (conn.responseCode != 200) return
+            val names = conn.inputStream.bufferedReader().useLines { seq ->
+                seq.take(500).mapNotNull { raw ->
+                    val line = raw.trim().lowercase().substringBefore('#').trim()
+                    // Un nom de paquet, et rien d'autre : lettres, chiffres,
+                    // points et tirets bas.
+                    line.takeIf {
+                        it.length in 3..120 &&
+                            it.all { c -> c.isLetterOrDigit() || c == '.' || c == '_' } &&
+                            it.contains('.')
+                    }
+                }.toList()
+            }
+            if (names.isNotEmpty()) Incompatible.setRemote(names)
+        } catch (_: Exception) {
+        }
+    }
+
     fun init(ctx: Context) {
         if (file != null) return
         val dir = ctx.applicationContext.filesDir
@@ -250,6 +288,7 @@ object Remote {
                 file?.writeText(lines.joinToString("\n", postfix = "\n"))
                 updatedAt = System.currentTimeMillis()
                 stamp.writeText(updatedAt.toString())
+                fetchBroken()
                 checkVersion(ctx)
             } catch (_: Exception) {
                 // Pas de reseau, pas de GitHub, pas de probleme : la liste

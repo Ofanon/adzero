@@ -214,6 +214,11 @@ class SilenceVpnService : VpnService() {
             Shield.openWindow(app)
         }
         AppFilter.init(this)
+        // Prevenir avant la panne. Une app qui refuse les VPN cassera des que
+        // le tunnel monte, et la personne concernee ne fera jamais le lien
+        // toute seule.
+        Incompatible.init(this)
+        Incompatible.scan(this)
         attribution = Attribution(this)
 
         val builder = Builder()
