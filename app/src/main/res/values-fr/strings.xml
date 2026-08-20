@@ -368,7 +368,16 @@
     </plurals>
     <string name="channel_incompatible">Apps qui refusent un VPN</string>
     <string name="channel_incompatible_body">Prévient quand une app de ce téléphone est connue pour cesser de fonctionner pendant que la protection est active.</string>
-    <string name="incompatible_title">%1$s ne marchera pas</string>
-    <string name="incompatible_body">%1$s refuse de démarrer quand un VPN est actif, et AdZero en est un. Elle n\'est pas bloquée : elle s\'arrête d\'elle-même. Sors-la du tunnel et elle remarche ; tout le reste continue d\'être protégé.</string>
+    <string name="incompatible_title">%1$s ne marchera pas tant qu\'AdZero est actif</string>
+    <string name="incompatible_body">%1$s refuse de démarrer quand elle trouve un VPN, et AdZero en est un. Elle n\'est pas bloquée : elle s\'arrête d\'elle-même, donc aucune liste de domaines n\'y changera rien. Coupe la protection quelques minutes pour t\'en servir, elle revient toute seule. La sortir du tunnel suffit pour certaines apps, ça vaut le coup d\'essayer aussi.</string>
     <string name="incompatible_exclude">La sortir du tunnel</string>
+    <string name="incompatible_aside">Couper %1$d min</string>
+    <string name="aside_title">Protection coupée %1$d minutes</string>
+    <string name="aside_body">Elle se rallume toute seule. Rien n\'est bloqué en attendant.</string>
+    <string name="aside_now">Rallumer maintenant</string>
+    <string name="trophies_title">Trophées</string>
+    <string name="trophies_body">Tous les paliers que tu as franchis. Touche-en un pour retrouver sa carte.</string>
+    <string name="trophies_share">Touche pour partager</string>
+    <string name="trophies_left">encore %1$,d pubs</string>
+    <string name="trophies_count">%1$d sur %2$d</string>
 </resources>

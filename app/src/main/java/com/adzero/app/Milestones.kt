@@ -32,6 +32,17 @@ object Milestones {
         100, 250, 500, 1_000, 2_500, 5_000, 10_000, 25_000, 50_000, 100_000
     )
 
+    /**
+     * Tous les paliers, franchis ou non.
+     *
+     * L'ecran des trophees montre aussi ceux qui restent : une liste ou tout
+     * est deja obtenu n'a plus rien a promettre, et voir le prochain est la
+     * moitie de l'interet.
+     */
+    fun steps(): IntArray = STEPS.copyOf()
+
+    fun isReached(step: Int): Boolean = synchronized(reached) { step in reached }
+
     private val reached = mutableSetOf<Int>()
     private var file: File? = null
 

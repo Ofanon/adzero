@@ -130,9 +130,18 @@ object Incompatible {
 
         val exclude = PendingIntent.getBroadcast(
             ctx, pkg.hashCode(),
-            Intent(ctx, ExcludeReceiver::class.java)
-                .setAction(ExcludeReceiver.ACTION_EXCLUDE)
-                .putExtra(ExcludeReceiver.EXTRA_PKG, pkg),
+            Intent(ctx, RescueReceiver::class.java)
+                .setAction(RescueReceiver.ACTION_EXCLUDE)
+                .putExtra(RescueReceiver.EXTRA_PKG, pkg),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // Le bouton qui marche a tous les coups, et le seul pour une app qui
+        // cherche l'interface plutot que son propre trafic.
+        val aside = PendingIntent.getBroadcast(
+            ctx, pkg.hashCode() + 1,
+            Intent(ctx, RescueReceiver::class.java)
+                .setAction(RescueReceiver.ACTION_STEP_ASIDE),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
@@ -147,6 +156,15 @@ object Incompatible {
                 .setContentText(ctx.getString(R.string.incompatible_body, label))
                 .setSmallIcon(R.drawable.ic_mark)
                 .setAutoCancel(true)
+                .addAction(
+                    Notification.Action.Builder(
+                        null,
+                        ctx.getString(
+                            R.string.incompatible_aside, RescueReceiver.ASIDE_MINUTES
+                        ),
+                        aside
+                    ).build()
+                )
                 .addAction(
                     Notification.Action.Builder(
                         null, ctx.getString(R.string.incompatible_exclude), exclude

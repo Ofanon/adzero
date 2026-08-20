@@ -366,7 +366,16 @@
     </plurals>
     <string name="channel_incompatible">Apps that refuse a VPN</string>
     <string name="channel_incompatible_body">Warns you when an app on this phone is known to stop working while protection is on.</string>
-    <string name="incompatible_title">%1$s will not work right now</string>
-    <string name="incompatible_body">%1$s refuses to run while any VPN is active, and AdZero counts as one. It is not being blocked — it stops on its own. Leave it out of the tunnel and it works again; everything else stays protected.</string>
+    <string name="incompatible_title">%1$s will not work while AdZero is on</string>
+    <string name="incompatible_body">%1$s refuses to run when it finds a VPN, and AdZero is one. It is not being blocked — it stops on its own, so no blocklist change can fix it. Turn protection off for a few minutes to use it; it comes back by itself. Leaving it out of the tunnel helps with some apps, so it is worth a try too.</string>
     <string name="incompatible_exclude">Leave it out</string>
+    <string name="incompatible_aside">Turn off %1$d min</string>
+    <string name="aside_title">Protection off for %1$d minutes</string>
+    <string name="aside_body">It switches back on by itself. Nothing is being blocked until then.</string>
+    <string name="aside_now">Turn back on now</string>
+    <string name="trophies_title">Trophies</string>
+    <string name="trophies_body">Every milestone you have passed. Tap one to get its card back.</string>
+    <string name="trophies_share">Tap to share</string>
+    <string name="trophies_left">%1$,d ads to go</string>
+    <string name="trophies_count">%1$d of %2$d</string>
 </resources>

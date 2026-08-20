@@ -140,15 +140,18 @@
              sitting in another app would want. The launcher fires a
              PendingIntent AdZero built, which carries AdZero's own identity, so
              closing the door costs the button nothing. -->
-        <!-- Le bouton "Exclure" de l'alerte sur les apps qui refusent un
-             VPN. Non exporte pour la meme raison que celui du widget : une
-             action diffusable de l'exterieur laisserait n'importe quelle app
-             se retirer elle-meme du tunnel. -->
+        <!-- Les boutons de l'alerte sur les apps qui refusent un VPN, et
+             l'alarme qui rallume la protection ensuite. Non exporte pour la
+             meme raison que celui du widget : une action diffusable de
+             l'exterieur laisserait n'importe quelle app du telephone couper la
+             protection ou se retirer du tunnel. -->
         <receiver
-            android:name=".ExcludeReceiver"
+            android:name=".RescueReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.adzero.app.EXCLUDE_APP" />
+                <action android:name="com.adzero.app.STEP_ASIDE" />
+                <action android:name="com.adzero.app.RESUME_PROTECTION" />
             </intent-filter>
         </receiver>
 

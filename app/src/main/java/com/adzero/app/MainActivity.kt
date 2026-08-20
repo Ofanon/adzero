@@ -147,6 +147,8 @@ class MainActivity : Activity() {
     private lateinit var reportRow: TextView
     private lateinit var sessionRow: TextView
     private lateinit var remoteRow: TextView
+    private lateinit var trophyRow: LinearLayout
+    private lateinit var trophyCount: TextView
     private lateinit var newsBar: LinearLayout
     private lateinit var newsIcon: ImageView
     private lateinit var newsTitle: TextView
@@ -515,6 +517,110 @@ class MainActivity : Activity() {
      * meme instant que la page donne l'impression d'un ecran qui a mal charge,
      * alors qu'une demi-seconde plus tard, c'est une bonne nouvelle.
      */
+    /** La ligne d'entree, avec le compte : "3 sur 10" se lit d'un coup d'oeil. */
+    private fun trophyEntry(): LinearLayout {
+        val row = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(d(14), d(12), d(14), d(12))
+            background = Ui.softPill(this@MainActivity)
+            isClickable = true
+            setOnClickListener { buzz(); showTrophies() }
+        }
+        row.addView(ImageView(this).apply {
+            setImageResource(R.drawable.ic_bell)
+            imageTintList = ColorStateList.valueOf(Ui.LIME_A)
+            layoutParams = LinearLayout.LayoutParams(d(20), d(20))
+                .apply { marginEnd = d(12) }
+        })
+        val texts = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        texts.addView(TextView(this).apply {
+            text = getString(R.string.trophies_title)
+            setTextColor(Ui.TEXT)
+            textSize = 13f
+            typeface = Ui.BOLD
+        })
+        trophyCount = TextView(this).apply {
+            setTextColor(Ui.GREY)
+            textSize = 11f
+            typeface = Ui.REGULAR
+            setPadding(0, d(2), 0, 0)
+        }
+        texts.addView(trophyCount)
+        paintTrophyCount()
+        row.addView(texts, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f))
+        Ui.lift(row, 16, 4)
+        return row
+    }
+
+    private fun paintTrophyCount() {
+        if (!::trophyCount.isInitialized) return
+        val steps = Milestones.steps()
+        trophyCount.text = getString(
+            R.string.trophies_count, steps.count { Milestones.isReached(it) }, steps.size
+        )
+    }
+
+    /**
+     * La liste complete, franchis en clair et suivants en gris.
+     *
+     * Un palier deja obtenu se touche pour retrouver sa carte : c'est la seule
+     * chose de cet ecran qu'on ait envie de montrer a quelqu'un, et elle
+     * n'etait plus atteignable une fois la felicitation fermee.
+     */
+    private fun showTrophies() {
+        val total = Leaderboard.totalAttempts()
+        val box = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(d(20), d(22), d(20), d(10))
+        }
+        box.addView(TextView(this).apply {
+            text = getString(R.string.trophies_title)
+            setTextColor(Ui.TEXT)
+            textSize = 19f
+            typeface = Ui.BOLD
+        })
+        box.addView(Ui.spacer(this, 4))
+        box.addView(Ui.body(this, getString(R.string.trophies_body)))
+        box.addView(Ui.spacer(this, 16))
+
+        val scroll = ScrollView(this)
+        val list = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        for (step in Milestones.steps()) {
+            val got = Milestones.isReached(step)
+            val line = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+                gravity = Gravity.CENTER_VERTICAL
+                setPadding(d(14), d(12), d(14), d(12))
+                background = Ui.softPill(this@MainActivity)
+                if (got) {
+                    isClickable = true
+                    setOnClickListener { buzz(); currentSheet?.dismiss(); shareCard() }
+                }
+            }
+            line.addView(TextView(this).apply {
+                text = step.toString()
+                setTextColor(if (got) Ui.LIME_A else Ui.DIM)
+                textSize = 17f
+                typeface = Ui.BOLD
+            }, LinearLayout.LayoutParams(d(84), WRAP_CONTENT))
+            line.addView(TextView(this).apply {
+                // Un palier non franchi dit ce qu'il reste a faire : sans ca,
+                // la moitie grise de la liste ne raconte rien.
+                text = if (got) getString(R.string.trophies_share)
+                else getString(R.string.trophies_left, step - total)
+                setTextColor(if (got) Ui.GREY else Ui.DIM)
+                textSize = 12f
+                typeface = Ui.REGULAR
+            }, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f))
+            list.addView(line, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+            list.addView(Ui.spacer(this, 8))
+        }
+        scroll.addView(list)
+        box.addView(scroll, LinearLayout.LayoutParams(MATCH_PARENT, d(340)))
+        sheet(box)
+    }
+
     private fun celebrate() {
         val step = Milestones.take()
         if (step <= 0 || isFinishing || isDestroyed) return
@@ -1344,6 +1450,14 @@ class MainActivity : Activity() {
             gravity = Gravity.CENTER
         })
         body.addView(statsEmpty, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+
+        // Les trophees etaient montres une fois, au moment ou ils tombaient,
+        // et disparaissaient ensuite. Une recompense qu'on ne peut plus revoir
+        // n'en est pas une — et la carte a partager, qui est la seule chose
+        // qu'on ait envie de montrer a quelqu'un, partait avec.
+        trophyRow = trophyEntry()
+        body.addView(trophyRow, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+        body.addView(Ui.spacer(this, 10))
 
         statsContent = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -2182,6 +2296,7 @@ class MainActivity : Activity() {
             runOnUiThread { if (!isFinishing && !isDestroyed) paintNews() }
         }
         if (Milestones.pending > 0) root.postDelayed({ celebrate() }, 600)
+        paintTrophyCount()
         // The counters kept moving while the app was away, so nothing on the
         // statistics page can be assumed still current. Forgetting what was
         // last drawn makes the next paint rebuild it for real.
